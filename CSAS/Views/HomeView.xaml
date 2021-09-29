@@ -1,0 +1,234 @@
+﻿<UserControl x:Class="CSAS.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:materialDesign="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+             xmlns:Models="clr-namespace:CSAS.Models"
+             xmlns:viewmodels="clr-namespace:CSAS.ViewModels" 
+             xmlns:val="clr-namespace:CSAS.Validators" d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <materialDesign:Button Width="140" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Pridať študenta" Grid.Row="0" Command="{Binding ShowAddStudentCommand}"/>
+
+        <md:Card Height="500" Width="500" Margin="0,100,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="15"/>
+
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="15"/>
+
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="15"/>
+
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="15"/>
+
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="1" Grid.Column="1" FontSize="17" md:HintAssist.Hint="Titul" HorizontalAlignment="Left" Margin="0,0,10,0">
+                    <TextBox.Text>
+                        <Binding
+                        Path="NewStudent.Title" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Grid.Row="1" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Meno" >
+                    <TextBox.Text>
+                        <Binding
+                        Path="NewStudent.Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Grid.Row="3" Grid.Column="2" Width="60" HorizontalAlignment="Left" FontSize="17" md:HintAssist.Hint="Krúžok">
+                    <TextBox.Text>
+                        <Binding
+                        Path="NewStudent.SubGroup.Id" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Grid.Row="5" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Ročník">
+                    <TextBox.Text>
+                        <Binding
+                        Path="NewStudent.Year" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Grid.Row="7" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Školský email">
+                    <TextBox.Text>
+                        <Binding
+                        Path="NewStudent.SchoolEmail" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Grid.Row="9" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Email" Text="{Binding NewStudent.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Grid.Column="3" Grid.Row="12" HorizontalAlignment="Center" Margin="-40,0,0,0" VerticalAlignment="Bottom" Command="{Binding AddNewStudentCommand}"
+  Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="80"
+  ToolTip="Pridať nového študenta"
+  Content="Pridať" Visibility="{Binding IsModifyStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"/>
+
+                <!--<Button Grid.Column="3" Grid.Row="12" HorizontalAlignment="Center" Margin="-40,0,0,0" VerticalAlignment="Bottom" Command="{Binding ModifyStudentCommand}"
+                        CommandParameter="{Binding NewStudent.Id}"
+  Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="80"
+  ToolTip="Upraviť študenta"
+  Content="Upraviť" Visibility="{Binding IsModifyStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisConverter}}" />-->
+            </Grid>
+
+        </md:Card>
+
+        <DataGrid Grid.Row="1" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
+  ItemsSource="{Binding Students, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+  CanUserAddRows="False"
+  AutoGenerateColumns="False"
+  HeadersVisibility="All">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Odoslať email skupine" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Resources>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <materialDesign:DataGridTextColumn
+      Header="Name"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                    <materialDesign:DataGridTextColumn.Binding>
+                        <Binding
+          Path="Name">
+
+                        </Binding>
+                    </materialDesign:DataGridTextColumn.Binding>
+                </materialDesign:DataGridTextColumn>
+                <!-- set a max length to get an indicator in the editor -->
+                <DataGridTextColumn
+      Header="Celkovo bodov"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                    <DataGridTextColumn.Binding>
+                        <Binding
+          Path="TotalPoints">
+
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <materialDesign:DataGridTextColumn
+      Header="Školský email"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                    <materialDesign:DataGridTextColumn.Binding>
+                        <Binding
+          Path="SchoolEmail">
+
+                        </Binding>
+                    </materialDesign:DataGridTextColumn.Binding>
+                </materialDesign:DataGridTextColumn>
+                <!-- set a max length to get an indicator in the editor -->
+                <DataGridTextColumn
+      Header="Krúžok"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                    <DataGridTextColumn.Binding>
+                        <Binding
+          Path="SubGroup.Name">
+
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <md:PopupBox
+                            DockPanel.Dock="Left"
+                            PlacementMode="BottomAndAlignRightEdges"
+                            StaysOpen="True">
+
+                                <StackPanel>
+                                    <Grid Margin="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock
+                                        Text="Induviduálne štúdium"
+                                        Margin="0 0 10 0"/>
+                                        <ToggleButton
+                                        x:Name="DarkModeToggleButton"
+                                        Grid.Column="1"
+                                            IsChecked="{Binding IndividualStudy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            Command="{Binding Path=DataContext.IndividualStudyCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding Id}"/>
+
+                                    </Grid>
+
+                                    <Separator/>
+
+
+                                    <Button
+                                    Content="Upraviť" Command="{Binding Path=DataContext.OpenModifyStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Id}"/>
+                                    <Button
+                                    Content="Aktivity študenta"/>
+
+                                    <Button
+                                    Content="Odoslať email študentovi"/>
+
+                                    <Separator/>
+
+                                    <Button
+                                    Content="Vymazať študenta" Command="{Binding Path=DataContext.RemoveStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding Id}"/>
+                                </StackPanel>
+                            </md:PopupBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel Grid.Row="0">
+
+        </DockPanel>
+
+    </Grid>
+</UserControl>
