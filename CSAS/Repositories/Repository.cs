@@ -34,7 +34,7 @@ namespace CSAS.Repositories
 
         public IEnumerable<TEntity> GetAll()
         {
-            return Context.Set<TEntity>().ToList();
+             return Context.Set<TEntity>().ToList();
         }
 
         public TEntity Get(int id)

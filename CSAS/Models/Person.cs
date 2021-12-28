@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSAS.Models
 {
-    public class Person : BaseWithNameModel
+    public class Person : BaseWithNameModelBindableBaseBindableBase
     {
         public virtual string Title { get; set; }
         public virtual string Email { get; set; }

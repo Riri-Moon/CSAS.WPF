@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="CSAS.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CSAS.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+    <materialDesign:DialogHost>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="500"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+
+                </Grid.RowDefinitions>
+
+                <materialDesign:Card Grid.Column="1" Grid.Row="1"  Grid.RowSpan="5" Width="500">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="70"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="1" Text="{Binding Settings.Title,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="80" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Titul" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <TextBox Grid.Row="2" Text="{Binding Settings.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="180" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Meno" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <TextBox Grid.Row="3" Text="{Binding Settings.LastName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="200" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Priezvisko" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <TextBox Grid.Row="1" Text="{Binding Settings.TitleAfterName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.ColumnSpan="3" FontSize="20" Width="130" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Titul za menom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-20,0,0,0"/>
+                        <TextBox Grid.Row="5" Text="{Binding Settings.Email,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="250" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Email" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+
+                    </Grid>
+                </materialDesign:Card>
+               
+                <materialDesign:Card  Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" Width="400" HorizontalAlignment="Center" Margin="-200,0,0,0"> 
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="60"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Stupnica hodnotenia predmetu" Grid.Row="0"  Grid.ColumnSpan="4" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                <Label Content="Zadajte spodnú hranicu" Grid.Row="0" Grid.ColumnSpan="4"  FontSize="20" FontWeight="Light" Margin="0 20 0 0" HorizontalAlignment="Center"/>
+
+                <Label Grid.Row="1" Grid.Column="1" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0" Content="A- "/>
+                        <Label Grid.Row="2" Grid.Column="1" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0" Content="B- "/>
+                        <Label Grid.Row="3" Grid.Column="1" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0" Content="C- "/>
+                        <Label Grid.Row="4" Grid.Column="1" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0" Content="D- "/>
+                        <Label Grid.Row="5" Grid.Column="1" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0" Content="E- "/>
+
+                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Settings.A, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="0,0,0,0" MaxLength="3"/>
+                        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Settings.B, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="0,0,0,0" MaxLength="3"/>
+                        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Settings.C, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="50" HorizontalAlignment="Left"  VerticalAlignment="Bottom"  Margin="0,0,0,0" MaxLength="3"/>
+                        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Settings.D, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="0,0,0,0" MaxLength="3"/>
+                        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Settings.E, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="50" HorizontalAlignment="Left"  VerticalAlignment="Bottom"  Margin="0,0,0,0" MaxLength="3"/>
+                    </Grid>
+                </materialDesign:Card>
+                <Button Content="Uložiť nastavenia" Grid.Row="8" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="3" Margin="90,80" />
+
+            </Grid>
+        
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>

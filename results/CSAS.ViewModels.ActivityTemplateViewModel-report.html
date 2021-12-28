@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>CSAS.ViewModels.ActivityTemplateViewModel-20211207-002821</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19043.1348 (21H1/May2021Update)
+Intel Core i7-8565U CPU 1.80GHz (Whiskey Lake), 1 CPU, 8 logical and 4 physical cores
+.NET SDK=6.0.100
+  [Host]     : .NET 6.0.0 (6.0.21.52210), X64 RyuJIT  [AttachedDebugger]
+  Job-VQGXHZ : .NET 6.0.0 (6.0.21.52210), X64 RyuJIT
+  MediumRun  : .NET 6.0.0 (6.0.21.52210), X64 RyuJIT
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>       Method</th><th> Job</th><th>IterationCount</th><th>LaunchCount</th><th>RunStrategy</th><th>UnrollFactor</th><th>WarmupCount</th><th>     Mean</th><th>    Error</th><th>   StdDev</th><th>Skewness</th><th>Kurtosis</th><th>Rank</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>AddNewTaskTemplate</td><td>Job-VQGXHZ</td><td>Default</td><td>Default</td><td>Monitoring</td><td>1</td><td>Default</td><td>14,570.0 ns</td><td>8,108.48 ns</td><td>5,363.26 ns</td><td>0.7755</td><td>1.914</td><td>3</td><td>-</td><td>-</td><td>-</td><td>1,112 B</td>
+</tr><tr><td>AddNewTaskTemplate</td><td>MediumRun</td><td>15</td><td>2</td><td>Default</td><td>16</td><td>10</td><td>749.0 ns</td><td>44.83 ns</td><td>64.30 ns</td><td>-0.0784</td><td>2.120</td><td>2</td><td>0.0248</td><td>0.0105</td><td>0.0010</td><td>152 B</td>
+</tr><tr><td>RemoveSelectedTasks</td><td>Job-VQGXHZ</td><td>Default</td><td>Default</td><td>Monitoring</td><td>1</td><td>Default</td><td>16,490.0 ns</td><td>10,826.99 ns</td><td>7,161.39 ns</td><td>2.0160</td><td>5.773</td><td>3</td><td>-</td><td>-</td><td>-</td><td>1,664 B</td>
+</tr><tr><td>RemoveSelectedTasks</td><td>MediumRun</td><td>15</td><td>2</td><td>Default</td><td>16</td><td>10</td><td>116.3 ns</td><td>9.72 ns</td><td>13.95 ns</td><td>1.0425</td><td>3.285</td><td>1</td><td>0.0305</td><td>-</td><td>-</td><td>128 B</td>
+</tr><tr><td>SaveTaskTemplate</td><td>Job-VQGXHZ</td><td>Default</td><td>Default</td><td>Monitoring</td><td>1</td><td>Default</td><td>5,346,900.0 ns</td><td>2,469,937.68 ns</td><td>1,633,710.84 ns</td><td>-0.2397</td><td>1.779</td><td>4</td><td>-</td><td>-</td><td>-</td><td>61,984 B</td>
+</tr><tr><td>SaveTaskTemplate</td><td>MediumRun</td><td>15</td><td>2</td><td>Default</td><td>16</td><td>10</td><td>15,699,333.2 ns</td><td>2,845,997.23 ns</td><td>4,081,644.19 ns</td><td>0.0149</td><td>1.362</td><td>5</td><td>1406.2500</td><td>93.7500</td><td>31.2500</td><td>5,867,970 B</td>
+</tr></tbody></table>
+</body>
+</html>

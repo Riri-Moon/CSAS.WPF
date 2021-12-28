@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using CSAS.Repositories;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,11 +10,22 @@ using System.Threading.Tasks;
 
 namespace CSAS.ViewModels
 {
-    public class BaseViewModel : BindableBase
+    public class BaseViewModelBindableBase : INotifyPropertyChanged
     {
 
         public int CurrentMainGroupId { get; set; }
-
+        public AppDbContext AppDbContext
+        {
+            get => _appDbContext;
+            set => SetProperty(ref _appDbContext, value);
+        }
+        private AppDbContext _appDbContext;
+        public UnitOfWork _work
+        {
+            get => m_work;
+            set => SetProperty(ref m_work, value);
+        }
+        private UnitOfWork m_work;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

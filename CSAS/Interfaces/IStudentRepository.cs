@@ -10,7 +10,7 @@ namespace CSAS.Interfaces
     public interface IStudentRepository : IRepository<Student>
     {
         IEnumerable<Student> GetStudentsByGroup(MainGroup group);
-        IEnumerable<Student> GetStudentsSubByGroup(SubGroup subGroup);
+        IEnumerable<Student> GetStudentsBySubGroup(SubGroup subGroup);
 
     }
 }

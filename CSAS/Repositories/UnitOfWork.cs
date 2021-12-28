@@ -24,27 +24,69 @@ namespace CSAS.Repositories
             {
                 MainGroup = new MainGroupRepository(_context);
             }
+            if (SubGroup == null)
+            {
+                SubGroup = new SubGroupRepository(_context);
+            }
+            if (Attendance == null)
+            {
+                Attendance = new AttendanceRepository(_context);
+            }
+            if (ActivityTemplate == null)
+            {
+                ActivityTemplate = new ActivityTemplateRepository(_context);
+            }
+            if (Task == null)
+            {
+                Task = new TaskRepository(_context);
+            }
+            if (TasksTemplate == null)
+            {
+                TasksTemplate = new TaskTemplateRepository(_context);
+            }
+            if (Activity == null)
+            {
+                Activity = new ActivityRepository(_context);
+            }
+            if (Attachment == null)
+            {
+                Attachment = new AttachmentRepository(_context);
+            }
+            if (Settings == null)
+            {
+                Settings = new SettingsRepository(_context);
+            }
+            if (FinalAssessment == null)
+            {
+                FinalAssessment = new FinalAssessmentRepository(_context);
+            }
         }
-
+        public IFinalAssessmentRepository FinalAssessment { get; private set; }
         public IStudentRepository Students { get; private set; }
-        public IMainGroupRepository MainGroup {  get; private set; }
+        public IMainGroupRepository MainGroup { get; private set; }
+        public ISubGroupRepository SubGroup { get; private set; }
+        public IAttendanceRepository Attendance { get; private set; }
+        public IActivityTemplateRepository ActivityTemplate { get; private set; }
+        public ITaskRepository Task { get; private set; }
+        public ITaskTemplateRepository TasksTemplate { get; private set; }
+        public IActivityRepository Activity { get; private set; }
+        public IAttachmentRepository Attachment { get; private set; }
+        public ISettingsRepository Settings { get; private set; }
+
         public int Complete()
         {
-            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            using var dbContextTransaction = _context.Database.BeginTransaction();
+            try
             {
-                try
-                {
-                   var result = _context.SaveChanges();
+                var result = _context.SaveChanges();
 
-                    dbContextTransaction.Commit();
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    dbContextTransaction.Rollback();
-                   //var error = new TransactionException($"Transaction - {dbContextTransaction.TransactionId} has been unsuccessfull");
-                    throw ex;
-                }
+                dbContextTransaction.Commit();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                dbContextTransaction.Rollback();
+                throw ex;
             }
         }
 

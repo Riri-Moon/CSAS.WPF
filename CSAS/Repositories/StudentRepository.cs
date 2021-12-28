@@ -17,12 +17,12 @@ namespace CSAS.Repositories
 
         public IEnumerable<Student> GetStudentsByGroup(MainGroup group)
         {
-            throw new NotImplementedException();
+            return Context.Students.Where(x => x.MainGroup == group);
         }
 
-        public IEnumerable<Student> GetStudentsSubByGroup(SubGroup subGroup)
+        public IEnumerable<Student> GetStudentsBySubGroup(SubGroup subGroup)
         {
-            throw new NotImplementedException();
+            return Context.Students.Where(x => x.SubGroup == subGroup);
         }
 
         public AppDbContext GetDbContext { get { return Context; } }

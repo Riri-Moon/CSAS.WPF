@@ -11,10 +11,12 @@ namespace CSAS.Enums
     {
         public enum AttendanceEnums
         {
+            [Description("Novo vytvorená dochádzka")]
+            New,
             [Description("Neprítomný")]
-            False,
+            NotPresent,
             [Description("Prítomný")]
-            True,
+            IsPresent,
             [Description("Nahradené")]
             Subbed,
             [Description("Ospravedlnené")]
@@ -27,6 +29,32 @@ namespace CSAS.Enums
             Daily,
             [Description("Externá forma")]
             Extern,
+        }
+
+        public enum AttendanceFormEnums
+        {
+            [Description("Prednáška")]
+            Lecture,
+            [Description("Cvičenie")]
+            Seminar,
+        }
+
+        public enum Grade
+        {
+            [Description("")]
+            Empty,
+            [Description("A")]
+            A,
+            [Description("B")]
+            B,
+            [Description("C")]
+            C,
+            [Description("D")]
+            D,
+            [Description("E")]
+            E,
+            [Description("Fx")]
+            Fx,
         }
     }
 }

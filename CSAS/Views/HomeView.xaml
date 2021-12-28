@@ -5,230 +5,301 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:materialDesign="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
-             xmlns:Models="clr-namespace:CSAS.Models"
              xmlns:viewmodels="clr-namespace:CSAS.ViewModels" 
-             xmlns:val="clr-namespace:CSAS.Validators" d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
+             xmlns:val="clr-namespace:CSAS.Validators"
+             d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
              mc:Ignorable="d" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
              d:DesignHeight="450" d:DesignWidth="800">
+
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <materialDesign:Button Width="140" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Pridať študenta" Grid.Row="0" Command="{Binding ShowAddStudentCommand}"/>
-
-        <md:Card Height="500" Width="500" Margin="0,100,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+        <md:DialogHost CloseOnClickAway="True">
+            <md:DialogHost.DialogContent>
+                <ListView ItemsSource="{Binding SelectedStudent.ListOfActivities,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="700" Height="600">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="200"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Content="{Binding Name}" FontSize="20" Grid.RowSpan="2" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.Row="0">
+                                        <Run Text="Dátum odovzdania: "/>
+                                    <Run Text="{Binding Created, Converter={StaticResource dateTimeAgoConverter}}"/>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.Row="1">
+                                        <Run Text="Počet bodov: "/>
+                                    <Run Text="{Binding EarnedPoints,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </TextBlock>
+                                    <Button Grid.Column="3" Grid.RowSpan="2" Content="Vybrať aktivitu" Margin="50 0 0 0" 
+                                            Command="{Binding Path=DataContext.OpenActivityCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Id}"/>
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </md:DialogHost.DialogContent>
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="100"/>
-
-                </Grid.ColumnDefinitions>
+                <i1:Interaction.Triggers>
+                    <i1:EventTrigger EventName="Loaded">
+                        <i1:InvokeCommandAction Command="{Binding LoadStudentsCommand}" />
+                    </i1:EventTrigger>
+                </i1:Interaction.Triggers>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="15"/>
-
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="15"/>
-
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="15"/>
-
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="15"/>
-
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
-                    <RowDefinition Height="30"/>
-
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="1" Grid.Column="1" FontSize="17" md:HintAssist.Hint="Titul" HorizontalAlignment="Left" Margin="0,0,10,0">
-                    <TextBox.Text>
-                        <Binding
-                        Path="NewStudent.Title" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <TextBox Grid.Row="1" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Meno" >
-                    <TextBox.Text>
-                        <Binding
-                        Path="NewStudent.Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <TextBox Grid.Row="3" Grid.Column="2" Width="60" HorizontalAlignment="Left" FontSize="17" md:HintAssist.Hint="Krúžok">
-                    <TextBox.Text>
-                        <Binding
-                        Path="NewStudent.SubGroup.Id" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <TextBox Grid.Row="5" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Ročník">
-                    <TextBox.Text>
-                        <Binding
-                        Path="NewStudent.Year" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <TextBox Grid.Row="7" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Školský email">
-                    <TextBox.Text>
-                        <Binding
-                        Path="NewStudent.SchoolEmail" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <TextBox Grid.Row="9" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Email" Text="{Binding NewStudent.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <Button Grid.Column="3" Grid.Row="12" HorizontalAlignment="Center" Margin="-40,0,0,0" VerticalAlignment="Bottom" Command="{Binding AddNewStudentCommand}"
+
+
+                <materialDesign:Button Width="140" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Pridať študenta" Grid.Row="0" Command="{Binding ShowAddStudentCommand}"/>
+
+                <md:Card Height="500" Width="500" Margin="0,100,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="100"/>
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="15"/>
+
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="15"/>
+
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="15"/>
+
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="15"/>
+
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="30"/>
+
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="1" Grid.Column="1" FontSize="17" md:HintAssist.Hint="Titul" HorizontalAlignment="Left" Margin="0,0,10,0">
+                            <TextBox.Text>
+                                <Binding
+                        Path="NewStudent.Title" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox Grid.Row="1" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Meno" >
+                            <TextBox.Text>
+                                <Binding
+                        Path="NewStudent.Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <ComboBox Grid.Row="3" Grid.Column="2" Width="70" HorizontalAlignment="Left" FontSize="17" 
+                          md:HintAssist.Hint="Krúžok" ItemsSource="{Binding SubGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          >
+                            <i1:Interaction.Triggers>
+                                <i1:EventTrigger EventName="SelectionChanged">
+                                    <i1:InvokeCommandAction Command="{Binding SetSubGroupCommand}"/>
+                                </i1:EventTrigger>
+                            </i1:Interaction.Triggers>
+                        </ComboBox>
+
+                        <TextBox Grid.Row="5" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Ročník">
+                            <TextBox.Text>
+                                <Binding
+                        Path="NewStudent.Year" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox Grid.Row="7" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Školský email">
+                            <TextBox.Text>
+                                <Binding
+                        Path="NewStudent.SchoolEmail" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox Grid.Row="9" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Email" Text="{Binding NewStudent.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Button Grid.Column="3" Grid.Row="12" HorizontalAlignment="Center" Margin="-40,0,0,0" VerticalAlignment="Bottom" Command="{Binding AddNewStudentCommand}"
   Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="80"
   ToolTip="Pridať nového študenta"
   Content="Pridať" Visibility="{Binding IsModifyStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"/>
 
-                <!--<Button Grid.Column="3" Grid.Row="12" HorizontalAlignment="Center" Margin="-40,0,0,0" VerticalAlignment="Bottom" Command="{Binding ModifyStudentCommand}"
+                        <Button Grid.Column="3" Grid.Row="12" HorizontalAlignment="Center" Margin="-40,0,0,0" VerticalAlignment="Bottom" Command="{Binding ModifyStudentCommand}"
                         CommandParameter="{Binding NewStudent.Id}"
   Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="80"
   ToolTip="Upraviť študenta"
-  Content="Upraviť" Visibility="{Binding IsModifyStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisConverter}}" />-->
-            </Grid>
+  Content="Upraviť" Visibility="{Binding IsModifyStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisConverter}}" />
+                    </Grid>
 
-        </md:Card>
+                </md:Card>
 
-        <DataGrid Grid.Row="1" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
+                <DataGrid Grid.Row="1" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
   ItemsSource="{Binding Students, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
   CanUserAddRows="False"
   AutoGenerateColumns="False"
   HeadersVisibility="All">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Odoslať email skupine" />
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Resources>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <materialDesign:DataGridTextColumn
-      Header="Name"
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Odoslať email skupine" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Resources>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <materialDesign:DataGridTextColumn
+      Header="Meno"
       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
-                    <materialDesign:DataGridTextColumn.Binding>
-                        <Binding
+                            <materialDesign:DataGridTextColumn.Binding>
+                                <Binding
           Path="Name">
 
-                        </Binding>
-                    </materialDesign:DataGridTextColumn.Binding>
-                </materialDesign:DataGridTextColumn>
-                <!-- set a max length to get an indicator in the editor -->
-                <DataGridTextColumn
+                                </Binding>
+                            </materialDesign:DataGridTextColumn.Binding>
+                        </materialDesign:DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn
+      Header="ISIC"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                            <materialDesign:DataGridTextColumn.Binding>
+                                <Binding
+          Path="Isic">
+
+                                </Binding>
+                            </materialDesign:DataGridTextColumn.Binding>
+                        </materialDesign:DataGridTextColumn>
+                        <!-- set a max length to get an indicator in the editor -->
+                        <DataGridTextColumn
       Header="Celkovo bodov"
       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
-                    <DataGridTextColumn.Binding>
-                        <Binding
+                            <DataGridTextColumn.Binding >
+                                <Binding UpdateSourceTrigger="PropertyChanged"
           Path="TotalPoints">
 
-                        </Binding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
-                <materialDesign:DataGridTextColumn
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn
       Header="Školský email"
       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
-                    <materialDesign:DataGridTextColumn.Binding>
-                        <Binding
+                            <materialDesign:DataGridTextColumn.Binding>
+                                <Binding
           Path="SchoolEmail">
 
-                        </Binding>
-                    </materialDesign:DataGridTextColumn.Binding>
-                </materialDesign:DataGridTextColumn>
-                <!-- set a max length to get an indicator in the editor -->
-                <DataGridTextColumn
+                                </Binding>
+                            </materialDesign:DataGridTextColumn.Binding>
+                        </materialDesign:DataGridTextColumn>
+                        <!-- set a max length to get an indicator in the editor -->
+                        <DataGridTextColumn
       Header="Krúžok"
       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
-                    <DataGridTextColumn.Binding>
-                        <Binding
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
           Path="SubGroup.Name">
 
-                        </Binding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <md:PopupBox
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <md:PopupBox
                             DockPanel.Dock="Left"
                             PlacementMode="BottomAndAlignRightEdges"
                             StaysOpen="True">
 
-                                <StackPanel>
-                                    <Grid Margin="10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
-                                        <TextBlock
+                                        <StackPanel>
+                                            <Grid Margin="10">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock
                                         Text="Induviduálne štúdium"
                                         Margin="0 0 10 0"/>
-                                        <ToggleButton
-                                        x:Name="DarkModeToggleButton"
-                                        Grid.Column="1"
+                                                <ToggleButton x:Name="DarkModeToggleButton" Grid.Column="1"
                                             IsChecked="{Binding IndividualStudy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             Command="{Binding Path=DataContext.IndividualStudyCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                             CommandParameter="{Binding Id}"/>
 
-                                    </Grid>
+                                            </Grid>
 
-                                    <Separator/>
+                                            <Separator/>
 
 
-                                    <Button
-                                    Content="Upraviť" Command="{Binding Path=DataContext.OpenModifyStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Id}"/>
-                                    <Button
-                                    Content="Aktivity študenta"/>
+                                            <Button Content="Upraviť" Command="{Binding Path=DataContext.OpenModifyStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Id}"/>
+                                            <Button Content="Aktivity študenta">
+                                                <i1:Interaction.Triggers>
+                                                    <i1:EventTrigger EventName="Click">
+                                                        <i1:InvokeCommandAction Command="{x:Static md:DialogHost.OpenDialogCommand}" />
+                                                        <i1:InvokeCommandAction Command="{Binding Path=DataContext.ShowActivitiesCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                                                CommandParameter="{Binding Id}" />
+                                                    </i1:EventTrigger>
+                                                </i1:Interaction.Triggers>
+                                            </Button>
 
-                                    <Button
-                                    Content="Odoslať email študentovi"/>
+                                            <Button Content="Odoslať email študentovi" 
+                                                    Command="{Binding Path=DataContext.SendEmailToStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding Id}"/>
+                                            
+                                            <Button Content="Udeliť 1 bod za aktivitu" 
+                                                    Command="{Binding Path=DataContext.GiveOnePointCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding Id}"/>
+                                            <Button Content="Udeliť 2 body za aktivitu" 
+                                                    Command="{Binding Path=DataContext.GiveTwoPointsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding Id}"/>
+                                            <Button Content="Udeliť 3 body za aktivitu" 
+                                                    Command="{Binding Path=DataContext.GiveThreePointsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding Id}"/>
+                                            <Separator/>
 
-                                    <Separator/>
+                                            <Button Content="Vymazať študenta" Command="{Binding Path=DataContext.RemoveStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                    CommandParameter="{Binding Id}"/>
+                                        </StackPanel>
+                                    </md:PopupBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-                                    <Button
-                                    Content="Vymazať študenta" Command="{Binding Path=DataContext.RemoveStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                        CommandParameter="{Binding Id}"/>
-                                </StackPanel>
-                            </md:PopupBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                <DockPanel Grid.Row="0">
 
-        <DockPanel Grid.Row="0">
-
-        </DockPanel>
-
+                </DockPanel>
+            </Grid>
+        </md:DialogHost>
     </Grid>
 </UserControl>

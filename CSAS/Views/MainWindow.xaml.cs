@@ -23,8 +23,7 @@ namespace CSAS
     {
         public MainWindow()
         {
-            InitializeComponent();
-            DataContext = new MainViewModel();
+            InitializeComponent();            
         }
 
     }

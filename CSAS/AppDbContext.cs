@@ -25,7 +25,7 @@ namespace CSAS
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Student>().HasIndex(x => new { x.Email, x.Isic, x.SchoolEmail }).IsUnique(true);
         }
         public DbSet<Student> Students { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
@@ -33,7 +33,10 @@ namespace CSAS
         public DbSet<MainGroup> MainGroups { get; set; }
         public DbSet<SubGroup> SubGroups { get; set; }
         public DbSet<Models.Task> Tasks { get; set; }
-        //public DbSet<Student> Students { get; set; }
+        public DbSet<ActivityTemplate> Templates { get; set; }
+        public DbSet<TaskTemplate> TasksTemplate { get; set; }
+        public DbSet<Settings> Settings { get; set; }
+        public DbSet<FinalAssessment> FinalAssessment { get; set; }
 
 
     }

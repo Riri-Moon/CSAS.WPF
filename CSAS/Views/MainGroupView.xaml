@@ -1,0 +1,87 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CSAS.ViewModels"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://schemas.microsoft.com/netfx/2009/xaml/presentation" xmlns:converters="clr-namespace:CSAS.Converters"
+        xmlns:local1="clr-namespace:CSAS.Views" x:Class="CSAS.Views.MainGroupView"
+        mc:Ignorable="d"
+        Title="MainGroup" Height="400" Width="580" WindowStyle="None" WindowState="Normal" WindowStartupLocation="CenterScreen"
+        DataContext="CSAS.MainGroupViewModel">
+    <Window.Resources>
+        <converters:MultiValueConverter x:Key="MultiValueConverter"/>
+    </Window.Resources>
+    <Grid >
+        <DataGrid Grid.Column="0" 
+                  IsReadOnly="True" Visibility="{Binding IsCreateMainGroup, Converter={StaticResource InverseBoolToVisConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  HorizontalScrollBarVisibility="Disabled" Padding="20,20,0,0"
+                  ItemsSource="{Binding MainGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMainGroup}" CanUserResizeColumns="False" CanUserResizeRows="False"
+                  CanUserAddRows="False"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTextColumn 
+                             Header="Názov skupiny"
+                             ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                             EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" Binding="{Binding Name}"/>
+
+                <DataGridTextColumn
+                        Header="Predmet"
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                        MaxWidth="250"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" Binding="{Binding Subject}"/>
+
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Vybrať" Command="{Binding DataContext.SelectMainGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}">
+                                <Button.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                        <Binding Path="Id"/>
+                                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}"/>
+                                    </MultiBinding>
+                                </Button.CommandParameter>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <md:PopupBox
+                            DockPanel.Dock="Left"
+                            PlacementMode="BottomAndAlignRightEdges"
+                            StaysOpen="True">
+
+                                <StackPanel>
+                                    <Grid Margin="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                    <Button
+                                    Content="Upraviť skupinu" Command="{Binding DataContext.ModifyMainGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Id}"/>
+                                    <Separator/>
+                                    <Button
+                                    Content="Vymazať skupinu" Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Id}"/>
+                                </StackPanel>
+                            </md:PopupBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Column="0"
+                VerticalAlignment="Bottom" Margin="0,0,0,20" HorizontalAlignment="Center" Command="{Binding CreateGroupCommand}" Content="Importovať novú skupinu"/>
+    </Grid>
+</Window>

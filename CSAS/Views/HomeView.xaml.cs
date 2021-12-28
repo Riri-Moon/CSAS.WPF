@@ -24,7 +24,6 @@ namespace CSAS.Views
         public HomeView()
         {
             InitializeComponent();
-            DataContext = new HomeViewModel();
         }
     }
 }

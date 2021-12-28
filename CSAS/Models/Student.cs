@@ -1,6 +1,10 @@
-﻿using Prism.Mvvm;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.PlatformUI;
+using Prism.Mvvm;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using static CSAS.Enums.Enums;
 
 namespace CSAS.Models
@@ -10,7 +14,8 @@ namespace CSAS.Models
         [Key]
         public virtual int Id { get; set; }
         public string _name;
-        public virtual string Name {
+        public virtual string Name
+        {
             get => _name;
             set => SetProperty(ref _name, value);
         }
@@ -24,6 +29,11 @@ namespace CSAS.Models
             get => _email;
             set => SetProperty(ref _email, value);
         }
+        public virtual string? PathToFolder
+        {
+            get => _pathToFolder;
+            set => SetProperty(ref _pathToFolder, value);
+        }
         public virtual MainGroup? MainGroup
         {
             get => _mainGroup;
@@ -36,13 +46,33 @@ namespace CSAS.Models
         }
         public virtual List<Activity>? ListOfActivities
         {
-            get => _listOfActivities;
+            get
+            {
+                if (_listOfActivities != null)
+                {
+                    return _listOfActivities.OrderByDescending(x => x.Created).ToList();
+                }
+                else
+                {
+                    return _listOfActivities;
+                }
+            }
             set => SetProperty(ref _listOfActivities, value);
         }
-        public virtual List<Attendance>? Attendances
+        public virtual List<SubAttendances>? SubAttendances
         {
-            get => _attendances;
-            set => SetProperty(ref _attendances, value);
+            get
+            {
+                if (_subAttendances != null)
+                {
+                    return _subAttendances.OrderByDescending(x => x.Attendance.Date).ToList();
+                }
+                else
+                {
+                    return _subAttendances;
+                }
+            }            
+            set => SetProperty(ref _subAttendances, value);
         }
         public virtual string SchoolEmail
         {
@@ -60,11 +90,42 @@ namespace CSAS.Models
             get => _form;
             set => SetProperty(ref _form, value);
         }
+
+        [DependsOnProperty("ListOfActivities")]
         [MaxLength(3)]
-        public virtual int? TotalPoints
+        public virtual double? TotalPoints
         {
-            get => _totalPoints;
-            set => SetProperty(ref _totalPoints, value);
+            get
+            {
+                double totalPts = 0;
+                foreach (var x in ListOfActivities)
+                {
+                    if (x.EarnedPoints.HasValue)
+                        totalPts += x.EarnedPoints.Value;
+                }
+
+                return totalPts;
+            }
+        }
+        [NotMapped]
+        [DependsOnProperty("SubAttendances")]
+        public virtual int? MissedLectures
+        {
+            get
+            {
+                var attendance = SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Lecture);
+                return attendance.Where(p => p.State == AttendanceEnums.NotPresent).Count();
+            }
+        }
+        [NotMapped]
+        [DependsOnProperty("SubAttendances")]
+        public virtual int? MissedSeminars
+        {            
+            get {
+
+                var attendance = SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Seminar); ;
+                return attendance.Where(p => p.State == AttendanceEnums.NotPresent).Count();
+            }
         }
 
         private bool _individualStudy;
@@ -74,16 +135,23 @@ namespace CSAS.Models
             set => SetProperty(ref _individualStudy, value);
         }
 
+        public virtual string Isic
+        {
+            get => _isic;
+            set => SetProperty(ref _isic, value);
+        }
+
         public string? _title;
         public string? _email;
         public MainGroup? _mainGroup;
         public SubGroup? _subGroup;
         public List<Activity>? _listOfActivities;
-        public List<Attendance>?_attendances;
+        public List<SubAttendances>? _subAttendances;
         public string _schoolEmail;
         public int? _year;
         public FormEnums _form;
         public int? _totalPoints;
-
+        public string _isic;
+        public string? _pathToFolder;
     }
 }

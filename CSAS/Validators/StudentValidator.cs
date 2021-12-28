@@ -11,7 +11,7 @@ namespace CSAS.Validators
     {
         public static bool ValidateStudent(Student student)
         {
-            bool isValid = false;
+            bool isValid;
             if (!IsStringValid(student.Name) && !IsEmailValid(student.SchoolEmail))
             {
                 isValid = false;
