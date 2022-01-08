@@ -99,6 +99,7 @@ namespace CSAS.ViewModels
 					if (isUpdate != null && isUpdate.ReleasesToApply != null && isUpdate.ReleasesToApply.Any())
 					{
 						await UpdateManager.UpdateApp();
+						_logger.InfoAsync("Version has been updated");
 					}
 				}
 			}
