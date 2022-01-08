@@ -98,6 +98,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="IBM.Tools.Common.Helper">
+      <HintPath>IBM.Tools.Common.Helper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="DataAccessLayer.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DataAccessLayer.Context.cs</LastGenOutput>
@@ -136,7 +142,7 @@
 		<NugetTools>$(PkgNuGet_CommandLine)\tools</NugetTools>
 		<SquirrelTools>$(Pkgsquirrel_windows)\tools</SquirrelTools>
 
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 
 		<NuspecFile>$(SolutionDir)CSAS\CSAS.nuspec</NuspecFile>
 	</PropertyGroup>

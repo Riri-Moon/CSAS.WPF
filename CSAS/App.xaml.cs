@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using IBM.Tools.Common.Helper.Logger;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace CSAS

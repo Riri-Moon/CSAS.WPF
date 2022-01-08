@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CSAS"
         mc:Ignorable="d"
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewmodels="clr-namespace:CSAS.ViewModels" xmlns:converters="clr-namespace:CSAS.Converters"
-        Title="MainWindow" Width="1440" Height="810" ResizeMode="CanMinimize"
+        Title="{Binding CurrentVersion}" Width="1440" Height="810" ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow">
     <Window.Resources>

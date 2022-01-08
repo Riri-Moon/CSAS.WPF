@@ -3,10 +3,16 @@ using Microsoft.Win32;
 using System.Data;
 using System.IO;
 using Squirrel;
+using IBM.Tools.Common.Helper;
+using IBM.Tools.Common.Helper.Logger;
+using System.Reflection;
+
 namespace CSAS.ViewModels
 {
 	public class MainGroupViewModel : BaseViewModelBindableBase
 	{
+		Logger _logger = new Logger();
+
 		public DelegateCommand<object?> SelectMainGroupCommand { get; }
 		public DelegateCommand CreateGroupCommand { get; }
 		public DelegateCommand<int?> DeleteGroupCommand { get; }
@@ -62,8 +68,18 @@ namespace CSAS.ViewModels
 		}
 		public MainGroupViewModel()
 		{
-
+			_logger.SetConfiguration(LogTargets.SingleFile, new LogConfiguration
+			{
+				LogToLevel = LogType.Info,
+				MediaName = @"C:\CSAS",
+				MediaRecord = "Log_CSAS_",
+				MediaSize = 500,
+				UseUtcTime = true
+			});
+			_logger.InfoAsync("Log file created");
+#if(RELEASE)
 			CheckForUpdates();
+#endif
 			_work = new UnitOfWork(new AppDbContext());
 			MainGroups = new ObservableCollection<MainGroup>(_work.MainGroup.GetAll().ToList());
 			SelectMainGroupCommand = new DelegateCommand<object?>(SelectGroup);
@@ -73,12 +89,23 @@ namespace CSAS.ViewModels
 
 		private async void CheckForUpdates()
 		{
-			UpdateManager = await UpdateManager.GitHubUpdateManager(@"https://github.com/Riri-Moon/CSAS.WPF");
-
-			var isUpdate = await UpdateManager.CheckForUpdate();
-			if (isUpdate.ReleasesToApply.Count > 0)
+			try
 			{
-				await UpdateManager.UpdateApp();
+				using (UpdateManager = await UpdateManager.GitHubUpdateManager(@"https://github.com/Riri-Moon/CSAS.WPF"))
+				{
+
+					var isUpdate = await UpdateManager.CheckForUpdate();
+
+					if (isUpdate != null && isUpdate.ReleasesToApply != null && isUpdate.ReleasesToApply.Any())
+					{
+						await UpdateManager.UpdateApp();
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				_logger.InfoAsync(ex.Message);
+				_logger.ErrorAsync(ex.StackTrace);
 			}
 		}
 
@@ -175,12 +202,19 @@ namespace CSAS.ViewModels
 		private void SelectGroup(object? id)
 		{
 			object[] param = id as object[];
+#if (!DEBUG)
 			MainWindow window = new()
 			{
-				DataContext = new MainViewModel((int)param[0])
+				DataContext = new MainViewModel((int)param[0],UpdateManager.CurrentlyInstalledVersion().ToString())
 			};
-			window.Show();
+#else
+			MainWindow window = new()
+			{
+				DataContext = new MainViewModel((int)param[0], Assembly.GetExecutingAssembly().GetName().Version.ToString())
+			};
+#endif
 
+			window.Show();
 			MainGroupView view = new();
 			view = (MainGroupView)param[1];
 			view.Close();

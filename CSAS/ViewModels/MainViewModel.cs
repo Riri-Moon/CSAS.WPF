@@ -14,6 +14,7 @@ using MaterialDesignThemes.Wpf;
 using MaterialDesignColors;
 using System.Windows.Media;
 using CSAS.Helpers;
+using Squirrel;
 
 namespace CSAS.ViewModels
 {
@@ -27,6 +28,7 @@ namespace CSAS.ViewModels
 		public DelegateCommand OpenExportCommand { get; }
 		public ApplicationViewModel ApplicationViewModel { get; set; }
 		public HomeViewModel HomeViewModel { get; set; }
+		public string CurrentVersion { get; set; }
 
 		private bool _isDarkTheme;
 		public bool IsDarkTheme
@@ -39,8 +41,9 @@ namespace CSAS.ViewModels
 			} 
 		}
 		//private DispatcherTimer Timer { get; set; }
-		public MainViewModel(int currentGroupId)
+		public MainViewModel(int currentGroupId,string version)
 		{
+			CurrentVersion = $"Komplexné hodnotenie študentov - {version}";
 			ApplicationViewModel = new ApplicationViewModel(currentGroupId);
 			ApplicationViewModel.SetCurrentGroup(currentGroupId);
 			ViewItems = ViewItems = new ObservableCollection<ViewItem>(new[]
