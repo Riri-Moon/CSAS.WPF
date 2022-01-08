@@ -1,14 +1,7 @@
-﻿using CSAS.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CSAS.Interfaces
+﻿namespace CSAS.Interfaces
 {
-    public interface ITaskRepository : IRepository<Models.Task>
-    {
+	public interface ITaskRepository : IRepository<Models.Task>
+	{
 
-    }
+	}
 }

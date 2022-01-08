@@ -3,7 +3,7 @@ using CSAS.Models;
 
 namespace CSAS.Repositories
 {
-    public interface IFinalAssessmentRepository : IRepository<FinalAssessment>
-    {
-    }
+	public interface IFinalAssessmentRepository : IRepository<FinalAssessment>
+	{
+	}
 }

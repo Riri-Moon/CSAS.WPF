@@ -82,9 +82,9 @@
                     </Button>
 
                     <materialDesign:DatePicker
-                SelectedDate="{Binding Activity.Created, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayDateStart="1/1/2020" FontSize="20"
+                SelectedDate="{Binding Activity.Deadline, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayDateStart="1/1/2020" FontSize="20"
                 md:HintAssist.HelperText="Dátum odozvzdania aktivity" Grid.Row="3" Grid.Column="0" md:HintAssist.HelperTextFontSize="15" Grid.ColumnSpan="2" Width="200" HorizontalAlignment="Left" Margin="50,0,0,0"/>
-                    <md:TimePicker SelectedTime="{Binding Activity.Created, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="1"  md:HintAssist.HelperText="Čas odozvzdania" md:HintAssist.HelperTextFontSize="15"
+                    <md:TimePicker SelectedTime="{Binding Activity.Deadline, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="1"  md:HintAssist.HelperText="Čas odozvzdania" md:HintAssist.HelperTextFontSize="15"
                            FontSize="20" Width="150" HorizontalAlignment="Center" />
 
                     <RadioButton Content="Všetky krúžky" Grid.Column="0" Grid.Row="1" GroupName="grp1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold" IsChecked="{Binding IsSelectAll,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>

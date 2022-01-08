@@ -14,6 +14,7 @@
     <UserControl.Resources>
         <converters:LongDateToShortConverter x:Key="LongDateToShortConverter"/>
         <converters:AttendanceEnumConverter x:Key="AttendanceEnumConverter"/>
+        <converters:DateToTimeConverter x:Key="DateToTimeConverter"/>
     </UserControl.Resources>
     <Grid>
         <Button Content="Späť na výber skupín" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,60,0"
@@ -31,7 +32,7 @@
             </Grid.RowDefinitions>
 
             <Label Content="{Binding SelectedAttendance.Date, Converter={StaticResource dateTimeAgoConverter}}" Grid.Row="1" HorizontalAlignment="Center" FontWeight="Heavy" FontSize="20"/>
-            <ListView Style="{StaticResource MaterialDesignListView}" Width="750" ItemsSource="{Binding SelectedAttendance.SubAttendances}" Grid.Row="2" Height="500">
+            <ListView Width="760" ItemsSource="{Binding SelectedAttendance.SubAttendances}" Grid.Row="2" Height="580">
                 <ListView.ItemTemplate>
                     <DataTemplate>
 
@@ -41,8 +42,8 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="380"/>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="400"/>
+                                <ColumnDefinition Width="120"/>
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="100"/>
 
@@ -56,21 +57,21 @@
                                     Command="{Binding Path=DataContext.StudentPresentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
                                     CommandParameter="{Binding Id}">
                                 <StackPanel>
-                                    <md:PackIcon Kind="Done" Height="75" Width="75" Margin="-20,-15,0,0" />
+                                    <md:PackIcon Kind="Done" Height="65" Width="65" Margin="-20,-15,0,0" />
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="2" Background="Transparent" BorderBrush="Transparent" Height="70" Width="90" Grid.RowSpan="2" HorizontalAlignment="Center"
                                     Command="{Binding Path=DataContext.StudentNotPresentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Foreground="Black"
                                     CommandParameter="{Binding Id}">
                                 <StackPanel>
-                                    <md:PackIcon Kind="Close" Height="75" Width="75" Margin="-20,-15,0,0" />
+                                    <md:PackIcon Kind="Close" Height="65" Width="65" Margin="-0,-15,0,0" />
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="3" Background="Transparent" BorderBrush="Transparent" Height="70" Width="90" Grid.RowSpan="2" HorizontalAlignment="Center"
                                     Command="{Binding Path=DataContext.StudentSickCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
                                     CommandParameter="{Binding Id}">
                                 <StackPanel>
-                                    <Image Source="C:\Users\ZZ03XZ693\source\repos\MauiApp1\CSAS\Images\icons8-being-sick-100.png" Height="60" Width="60" Margin="0,-22,0,0"/>
+                                    <Image Source="C:\Users\ZZ03XZ693\source\repos\MauiApp1\CSAS\Images\icons8-being-sick-100.png" Height="50" Width="50" Margin="0,-22,0,0"/>
                                 </StackPanel>
                             </Button>
 
@@ -87,18 +88,20 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
+
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="500"/>
+                <RowDefinition Height="440"/>
 
                 <RowDefinition />
                 <RowDefinition Height="70"/>
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="1" Grid.ColumnSpan="4" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" SelectionMode="Single"
+            <ListBox Grid.Row="1" Grid.ColumnSpan="5" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" SelectionMode="Single"
   Style="{StaticResource MaterialDesignToolToggleListBox}" SelectedIndex="0">
 
 
@@ -128,6 +131,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0" Content="{md:PackIcon Kind=Computer}"/>
@@ -136,7 +140,7 @@
                     </Grid>
                 </ListBoxItem>
             </ListBox>
-            <ListBox Grid.Row="2"  Grid.Column="3" Height="50" VerticalAlignment="Top" Margin="-230,0,0,0" HorizontalContentAlignment="Center" SelectionMode="Single"
+            <ListBox Grid.Row="2"  Grid.Column="4" Height="50" VerticalAlignment="Top" Margin="-230,0,0,0" HorizontalContentAlignment="Center" SelectionMode="Single"
                      Visibility="{Binding IsLectureSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
                      Style="{StaticResource MaterialDesignFilterChipAccentListBox}"
                      ItemsSource="{Binding SubGroups, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
@@ -159,7 +163,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <ListView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" MaxWidth="900" Margin="-10,0 0 0" ItemsSource="{Binding Attendances, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <ListView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" MaxWidth="900" Margin="-10,0 0 0" ItemsSource="{Binding Attendances, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
@@ -174,7 +178,7 @@
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="{Binding Date, Converter={StaticResource LongDateToShortConverter}}" FontSize="16" FontWeight="Bold"/>
                                     <TextBlock Text="{Binding Day}"/>
-                                    <TextBlock Text="{Binding Id}"/>
+                                    <TextBlock Text="{Binding Date, Converter={StaticResource DateToTimeConverter}}"/>
                                 </StackPanel>
                                 <Button HorizontalAlignment="Left" Margin="0,0,20,0"  Grid.Column="2" Content="Vybrať dochádzku"
                                         Command="{Binding Path=DataContext.SelectAttendanceCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
@@ -193,9 +197,12 @@
                 </ItemsControl.ItemTemplate>
 
             </ListView>
+            <md:TimePicker Grid.Column="4" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Left" Margin="120,500,0,0" Width="110" 
+                           md:HintAssist.HelperTextFontSize="15"
+                           md:HintAssist.HelperText="Vybrať čas" SelectedTime="{Binding Time, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20" />
 
-            <Button Grid.Column="3" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom" Command="{Binding AddNewAttendanceCommand}" FontSize="15" FontWeight="Bold"
-  Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+            <Button Grid.Column="4" Grid.Row="3" HorizontalAlignment="Center" Margin="240,390,0,0"  Command="{Binding AddNewAttendanceCommand}" FontSize="15" FontWeight="Bold"
+  Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
   ToolTip="Pridať novú dochádzku"
   Content="Pridať"/>
         </Grid>

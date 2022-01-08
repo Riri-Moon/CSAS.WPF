@@ -17,7 +17,7 @@ namespace CSAS.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -33,6 +33,9 @@ namespace CSAS.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsNotifyMe")
                         .HasColumnType("bit");
 
@@ -41,6 +44,9 @@ namespace CSAS.Migrations
 
                     b.Property<bool>("IsSendNotifications")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -151,7 +157,6 @@ namespace CSAS.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
@@ -261,7 +266,7 @@ namespace CSAS.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Form")
                         .HasColumnType("int");
@@ -271,7 +276,7 @@ namespace CSAS.Migrations
 
                     b.Property<string>("Isic")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("MainGroupId")
                         .HasColumnType("int");
@@ -285,7 +290,7 @@ namespace CSAS.Migrations
 
                     b.Property<string>("SchoolEmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SubGroupId")
                         .HasColumnType("int");
@@ -302,10 +307,6 @@ namespace CSAS.Migrations
                     b.HasIndex("MainGroupId");
 
                     b.HasIndex("SubGroupId");
-
-                    b.HasIndex("Email", "Isic", "SchoolEmail")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Students");
                 });

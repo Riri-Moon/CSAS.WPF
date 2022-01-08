@@ -3,7 +3,7 @@ using CSAS.Models;
 
 namespace CSAS.Repositories
 {
-    public interface IAttachmentRepository : IRepository<Attachments>
-    {
-    }
+	public interface IAttachmentRepository : IRepository<Attachments>
+	{
+	}
 }

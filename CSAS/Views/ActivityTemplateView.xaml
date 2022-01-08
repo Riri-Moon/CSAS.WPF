@@ -38,16 +38,16 @@
                 <Label Content="Nová šablóna" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4"/>
 
                 <TextBox Panel.ZIndex="99"
-                         x:Name="CommentTextBox" Margin="20,-20,30,0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Left" Width="350" FontSize="18" VerticalAlignment="Top"
+                         x:Name="CommentTextBox" Margin="20,-20,30,0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Left" Width="250" FontSize="18" VerticalAlignment="Top"
                          Text="{Binding NewTemplate.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          md:HintAssist.HelperText="Názov aktivity"
                          md:HintAssist.HelperTextFontSize="16"/>
 
-                <TextBox Panel.ZIndex="99" Grid.Column="1" HorizontalAlignment="Stretch" Margin="20,-20,0,0"  Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Top" Width="200" FontSize="18"
+                <TextBox Panel.ZIndex="99" Grid.Column="1" HorizontalAlignment="Stretch" Margin="40,-20,0,0"  Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Top" Width="250" FontSize="18"
                          Text="{Binding NewTemplate.Subject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          md:HintAssist.HelperText="Názov predmetu" 
                          md:HintAssist.HelperTextFontSize="16"/>
-                <materialDesign:CheckBox Grid.Row="1" Grid.ColumnSpan="4" Margin="20,0,20,0"
+                <materialDesign:CheckBox Grid.Row="1" Grid.Column="0"  Margin="10,0,0,0"
                                          FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Left"
                                          Content="Vybrať všetky" IsChecked="{Binding IsSelectAll, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                          Visibility="{Binding IsSelectAllVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisConverter}}"/>
@@ -117,7 +117,6 @@
                             <Button Content="Odstrániť" Width="Auto" Grid.RowSpan="2" Grid.Column="4" 
                                     Command="{Binding Path=DataContext.DeleteTemplateCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
                                     CommandParameter="{Binding Id}"/>
-
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

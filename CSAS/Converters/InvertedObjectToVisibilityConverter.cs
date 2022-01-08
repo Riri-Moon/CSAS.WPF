@@ -5,26 +5,26 @@ using System.Windows.Data;
 
 namespace CSAS.Converters
 {
-    public class InvertedObjectToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null)
-            {
-                return Visibility.Visible;
-            }
+	public class InvertedObjectToVisibilityConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			if (value == null)
+			{
+				return Visibility.Visible;
+			}
 
-            if (value is string input && string.IsNullOrWhiteSpace(input))
-            {
-                return Visibility.Visible;
-            }
+			if (value is string input && string.IsNullOrWhiteSpace(input))
+			{
+				return Visibility.Visible;
+			}
 
-            return Visibility.Collapsed;
-        }
+			return Visibility.Collapsed;
+		}
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -3,10 +3,228 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CSAS.Views"
+             xmlns:local="clr-namespace:CSAS.Views.StatisticsSlides"
              mc:Ignorable="d" 
+              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:md="http://schemas.microsoft.com/netfx/2009/xaml/presentation" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:converters1="clr-namespace:CSAS.Converters"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <UserControl.Resources>
+        <converters1:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+        <converters1:InvertedBoolToBrushConverter x:Key="InvertedBoolToBrushConverter"/>
+    </UserControl.Resources>
+    <materialDesign:DrawerHost>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.RowSpan="2" Grid.Column="0" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20 0 0 0" >
+                    <md:RadioButton 
+                                                Style="{StaticResource MaterialDesignTabRadioButton}"
+                                                IsChecked="{Binding IsAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <Label Content="Všetci" />
+                    </md:RadioButton>
+                    <md:RadioButton
+                                                Style="{StaticResource MaterialDesignTabRadioButton}"
+                                                IsChecked="{Binding IsGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <Label Content="Skupina"/>
+                    </md:RadioButton>
+                    <md:RadioButton Style="{StaticResource MaterialDesignTabRadioButton}"
+                                                IsChecked="{Binding IsStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <Label  Content="Študent"/>
+                    </md:RadioButton>
+                </StackPanel>
+
+                <Grid Visibility="{Binding IsGroup,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource boolToVisibilityConverter}}" Grid.Row="1" Grid.ColumnSpan="2" Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Text="Skupina"
+                               Grid.Row="0" VerticalAlignment="Top" FontSize="16" Width="80" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Grid.Column="1" Margin="-50 0 0 0"
+                              ItemsSource="{Binding Groups}"  DisplayMemberPath="Name" SelectedItem="{Binding SelectedGroup}"/>
+                    <Label Content="Skupina"  FontSize="15" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,3,0,0"/>
+
+                </Grid>
+                <Grid Visibility="{Binding IsStudent,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource boolToVisibilityConverter}}" Grid.Row="1" Grid.ColumnSpan="2" Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Text="Študenti"
+                               Grid.Row="0" VerticalAlignment="Top" FontSize="16" Width="150" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Grid.Column="1" Margin="-50 0 0 0"
+                              ItemsSource="{Binding Students}"  DisplayMemberPath="Name" SelectedItem="{Binding SelectedStudent}"/>
+                    <Label Content="Skupina"  FontSize="15" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,3,0,0"/>
+
+                </Grid>
+            </Grid>
+            <Button Content="Refresh" Command="{Binding RefreshCommand}" Grid.Column="2"/>
+
+            <Grid  Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3" Margin="0 30 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+
+                </Grid.ColumnDefinitions>
+                
+                <materialDesign:Card VerticalAlignment="Center" Grid.Column="0" Height="120" Width="180">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"  Grid.RowSpan="2"  TextWrapping="WrapWithOverflow" FontSize="16" HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
+                            <Run Text="Priemerný počet bodov na aktivitu"/>
+                        </TextBlock>
+
+                        <Label Grid.ColumnSpan="2" Grid.Row="3" FontSize="30" HorizontalAlignment="Center" Margin="0 -15 0 0" Content="{Binding AvgPtsPerAct, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </materialDesign:Card>
+                
+                <materialDesign:Card VerticalAlignment="Center" Grid.Column="1" Height="120" Width="180">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"  Grid.RowSpan="2"  TextWrapping="WrapWithOverflow" FontSize="16" HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
+                            <Run Text="Priemerný počet bodov na úlohu"/>
+                        </TextBlock>
+                        <Label Grid.ColumnSpan="2" Grid.Row="3" FontSize="30" HorizontalAlignment="Center" Margin="0 -15 0 0" Content="{Binding AvgPtsPerTask, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    </Grid>
+                </materialDesign:Card>
+
+                <materialDesign:Card VerticalAlignment="Center" Grid.Column="2" Height="120"  Width="180">
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"  Grid.RowSpan="2"  TextWrapping="Wrap" FontSize="16" HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
+                            <Run Text="Priemerná dochádzka na cvičenie"/>
+                        </TextBlock>
+
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="3" FontSize="30" HorizontalAlignment="Center" Margin="0 -15 0 0" >
+                            <Run Text="{Binding AvgPerSeminar, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Run Text="%"/>
+                        </TextBlock>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card VerticalAlignment="Center" Grid.Column="3" Height="120"  Width="180">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"  Grid.RowSpan="2"  TextWrapping="Wrap" FontSize="16" HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
+                            <Run Text="Priemerná dochádzka na prednášky"/>
+                        </TextBlock>
+
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="3" FontSize="30" HorizontalAlignment="Center" Margin="0 -15 0 0" >
+                            <Run Text="{Binding AvgPerLecture, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Run Text="%"/>
+                        </TextBlock>
+
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card VerticalAlignment="Center" Grid.Column="4" Height="120"  Width="180">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"  Grid.RowSpan="2"  TextWrapping="WrapWithOverflow" FontSize="16" HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
+                            <Run Text="Priemerné finálne hodnotenie študentov"/>
+                        </TextBlock>
+                        <Label Grid.ColumnSpan="2" Grid.Row="3" FontSize="30" HorizontalAlignment="Center" Margin="0 -15 0 0" Content="{Binding AvgGrade, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    </Grid>
+                </materialDesign:Card>
+            </Grid>
+
+            <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Grid.RowSpan="5">
+                <materialDesign:Transitioner.InputBindings>
+                    <KeyBinding Key="Left" Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" />
+                    <KeyBinding Key="Right" Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
+                </materialDesign:Transitioner.InputBindings>
+
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect Kind=ExpandIn}">
+                    <local:ChartSlide 
+                        Labels="{Binding Path=DataContext.XAxes, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                        ChartSeries="{Binding Path=DataContext.Series,Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect Kind=SlideInFromBottom}">
+                    <local:PieChartSlide ChartSeries="{Binding Path=DataContext.PieSeries,Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect Kind=SlideInFromLeft}">
+                    <local:ChartSlide 
+                        Labels="{Binding Path=DataContext.XAxes,Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                        ChartSeries="{Binding Path=DataContext.Series,Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
+            <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Grid.RowSpan="5">
+                <materialDesign:Transitioner.InputBindings>
+                    <KeyBinding Key="Left" Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" />
+                    <KeyBinding Key="Right" Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
+                </materialDesign:Transitioner.InputBindings>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <local:PieChartSlide ChartSeries="{Binding Path=DataContext.PieSeries,Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
+
+        </Grid>
+    </materialDesign:DrawerHost>
 </UserControl>

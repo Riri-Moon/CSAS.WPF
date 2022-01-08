@@ -5,21 +5,21 @@ using System.Windows.Data;
 
 namespace CSAS.Converters
 {
-    public class PathToFileNameConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (!string.IsNullOrEmpty((string)value))
-            {
-                return Path.GetFileName((string)value);
-            }
+	public class PathToFileNameConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			if (!string.IsNullOrEmpty((string)value))
+			{
+				return Path.GetFileName((string)value);
+			}
 
-            return string.Empty;
-        }
+			return string.Empty;
+		}
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

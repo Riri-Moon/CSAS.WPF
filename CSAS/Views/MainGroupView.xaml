@@ -13,7 +13,17 @@
     <Window.Resources>
         <converters:MultiValueConverter x:Key="MultiValueConverter"/>
     </Window.Resources>
-    <Grid >
+    <md:DialogHost CloseOnClickAway="True">
+        <md:DialogHost.DialogContent>
+            <md:Card Height="150" Width="250">
+                <Grid>
+                    <TextBox Text="{Binding Subject,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" md:HintAssist.HelperText="Názov predmetu" Margin="10" VerticalAlignment="Top" md:HintAssist.HelperTextFontSize="15"/>
+                    <Button Grid.Column="0"
+                VerticalAlignment="Bottom" Margin="0,0,0,20" HorizontalAlignment="Center" Command="{Binding CreateGroupCommand}" Content="Vybrať dáta"/>
+                </Grid>
+            </md:Card>
+        </md:DialogHost.DialogContent>
+        <Grid >
         <DataGrid Grid.Column="0" 
                   IsReadOnly="True" Visibility="{Binding IsCreateMainGroup, Converter={StaticResource InverseBoolToVisConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   HorizontalScrollBarVisibility="Disabled" Padding="20,20,0,0"
@@ -82,6 +92,7 @@
         </DataGrid>
 
         <Button Grid.Column="0"
-                VerticalAlignment="Bottom" Margin="0,0,0,20" HorizontalAlignment="Center" Command="{Binding CreateGroupCommand}" Content="Importovať novú skupinu"/>
+                VerticalAlignment="Bottom" Margin="0,0,0,20" HorizontalAlignment="Center" Command="{x:Static md:DialogHost.OpenDialogCommand}" Content="Importovať novú skupinu"/>
     </Grid>
+    </md:DialogHost>
 </Window>

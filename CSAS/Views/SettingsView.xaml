@@ -87,7 +87,7 @@
                         <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Settings.E, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="50" HorizontalAlignment="Left"  VerticalAlignment="Bottom"  Margin="0,0,0,0" MaxLength="3"/>
                     </Grid>
                 </materialDesign:Card>
-                <Button Content="Uložiť nastavenia" Grid.Row="8" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="3" Margin="90,80" />
+                <Button Content="Uložiť nastavenia" Grid.Row="8" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="3" Height="50" Width="150" Margin="150,80" />
 
             </Grid>
         

@@ -109,9 +109,13 @@
                      HorizontalAlignment="Left"
                      Margin="0,-10,0,0"/>
 
-            <CheckBox Content="Odoslať email o hodnotení" FontSize="16" Grid.Row="2" IsChecked="{Binding FinalAssessment.IsSendEmail}"/>
-            <CheckBox Content="Pripojiť výpis aktivít" FontSize="16" Grid.Row="3" IsEnabled="{Binding FinalAssessment.IsSendEmail}" IsChecked="{Binding FinalAssessment.IsSendExport}" />
-            <CheckBox Content="Pripojiť výpis dochádzky" FontSize="16" Grid.Row="4" IsEnabled="{Binding FinalAssessment.IsSendEmail}" IsChecked="{Binding FinalAssessment.IsSendAttendanceExport}" />
+            <CheckBox Content="Odoslať email o hodnotení" FontSize="16" Grid.Row="2" IsChecked="{Binding FinalAssessment.IsSendEmail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+            <CheckBox Content="Pripojiť výpis aktivít" FontSize="16" Grid.Row="3" 
+                      IsChecked="{Binding FinalAssessment.IsSendExport,  Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+
+            <CheckBox Content="Pripojiť výpis dochádzky" FontSize="16" Grid.Row="4"
+                      IsChecked="{Binding FinalAssessment.IsSendAttendanceExport,  Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBox  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 30, 0, 0" FontSize="17" HorizontalAlignment="Left" Text="{Binding FinalAssessment.Comment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
     Style="{StaticResource MaterialDesignFilledTextBox}"

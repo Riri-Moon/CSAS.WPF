@@ -2,8 +2,8 @@
 
 namespace CSAS.Interfaces
 {
-    public interface ITaskTemplateRepository : IRepository<TaskTemplate>
-    {
+	public interface ITaskTemplateRepository : IRepository<TaskTemplate>
+	{
 
-    }
+	}
 }

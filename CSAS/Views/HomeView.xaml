@@ -9,9 +9,12 @@
              xmlns:val="clr-namespace:CSAS.Validators"
              d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
              mc:Ignorable="d" 
+             xmlns:converters="clr-namespace:CSAS.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
              d:DesignHeight="450" d:DesignWidth="800">
-
+    <UserControl.Resources>
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+    </UserControl.Resources>
 
     <Grid>
         <md:DialogHost CloseOnClickAway="True">
@@ -33,7 +36,7 @@
                                     <Label Grid.Column="0" Content="{Binding Name}" FontSize="20" Grid.RowSpan="2" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.Row="0">
                                         <Run Text="Dátum odovzdania: "/>
-                                    <Run Text="{Binding Created, Converter={StaticResource dateTimeAgoConverter}}"/>
+                                    <Run Text="{Binding Deadline}"/>
                                     </TextBlock>
                                     <TextBlock Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.Row="1">
                                         <Run Text="Počet bodov: "/>
@@ -61,6 +64,8 @@
 
 
                 <materialDesign:Button Width="140" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Pridať študenta" Grid.Row="0" Command="{Binding ShowAddStudentCommand}"/>
+                <materialDesign:Button Width="140" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Naspäť" Grid.Row="0" 
+                                       Command="{Binding ShowAddStudentCommand}" Visibility="{Binding IsAddStudent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                 <md:Card Height="500" Width="500" Margin="0,100,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
 
@@ -112,8 +117,7 @@
                         </TextBox>
                         <ComboBox Grid.Row="3" Grid.Column="2" Width="70" HorizontalAlignment="Left" FontSize="17" 
                           md:HintAssist.Hint="Krúžok" ItemsSource="{Binding SubGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"
-                          SelectedItem="{Binding SelectedGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          >
+                          SelectedItem="{Binding SelectedGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <i1:Interaction.Triggers>
                                 <i1:EventTrigger EventName="SelectionChanged">
                                     <i1:InvokeCommandAction Command="{Binding SetSubGroupCommand}"/>
@@ -131,7 +135,17 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBox Grid.Row="7" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Školský email">
+                        <TextBox Grid.Row="7" Grid.Column="2" FontSize="17" md:HintAssist.Hint="ISIC" MaxLength="17">
+                            <TextBox.Text>
+                                <Binding
+                        Path="NewStudent.Isic" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <val:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox Grid.Row="9" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Školský email">
                             <TextBox.Text>
                                 <Binding
                         Path="NewStudent.SchoolEmail" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
@@ -141,7 +155,7 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBox Grid.Row="9" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Email" Text="{Binding NewStudent.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Grid.Row="11" Grid.Column="2" FontSize="17" md:HintAssist.Hint="Email" Text="{Binding NewStudent.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <Button Grid.Column="3" Grid.Row="12" HorizontalAlignment="Center" Margin="-40,0,0,0" VerticalAlignment="Bottom" Command="{Binding AddNewStudentCommand}"
   Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="80"
@@ -157,7 +171,7 @@
 
                 </md:Card>
 
-                <DataGrid Grid.Row="1" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
+                <DataGrid Grid.Row="1" MaxHeight="600" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
   ItemsSource="{Binding Students, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
   CanUserAddRows="False"
   AutoGenerateColumns="False"
@@ -176,7 +190,7 @@
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
                             <materialDesign:DataGridTextColumn.Binding>
                                 <Binding
-          Path="Name">
+          Path="Name"  Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
 
                                 </Binding>
                             </materialDesign:DataGridTextColumn.Binding>
@@ -187,7 +201,7 @@
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
                             <materialDesign:DataGridTextColumn.Binding>
                                 <Binding
-          Path="Isic">
+          Path="Isic"  Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
 
                                 </Binding>
                             </materialDesign:DataGridTextColumn.Binding>
@@ -199,7 +213,7 @@
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
                             <DataGridTextColumn.Binding >
                                 <Binding UpdateSourceTrigger="PropertyChanged"
-          Path="TotalPoints">
+          Path="TotalPoints" Mode="OneWay">
 
                                 </Binding>
                             </DataGridTextColumn.Binding>
@@ -210,11 +224,23 @@
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
                             <materialDesign:DataGridTextColumn.Binding>
                                 <Binding
-          Path="SchoolEmail">
+          Path="SchoolEmail"  Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
 
                                 </Binding>
                             </materialDesign:DataGridTextColumn.Binding>
                         </materialDesign:DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn
+      Header="Email"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                            <materialDesign:DataGridTextColumn.Binding>
+                                <Binding
+          Path="Email"  Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
+
+                                </Binding>
+                            </materialDesign:DataGridTextColumn.Binding>
+                        </materialDesign:DataGridTextColumn>
+
                         <!-- set a max length to get an indicator in the editor -->
                         <DataGridTextColumn
       Header="Krúžok"
@@ -223,11 +249,23 @@
 
                             <DataGridTextColumn.Binding>
                                 <Binding
-          Path="SubGroup.Name">
+          Path="SubGroup.Name" Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
 
                                 </Binding>
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn
+      Header="Známka"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                            <materialDesign:DataGridTextColumn.Binding>
+                                <Binding
+          Path="FinalAssessment.Grade" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" >
+
+                                </Binding>
+                            </materialDesign:DataGridTextColumn.Binding>
+                        </materialDesign:DataGridTextColumn>
+
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

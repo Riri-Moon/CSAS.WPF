@@ -1,50 +1,40 @@
-﻿using CSAS.Models;
-using CSAS.Repositories;
-using Microsoft.VisualStudio.PlatformUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CSAS.ViewModels
+﻿namespace CSAS.ViewModels
 {
-    public class SettingsViewModel : BaseViewModelBindableBase
-    {
-        public DelegateCommand SaveCommand { get; }
+	public class SettingsViewModel : BaseViewModelBindableBase
+	{
+		public DelegateCommand SaveCommand { get; }
 
-        private Settings _settings;
+		private Settings _settings;
 
-        public Settings Settings
-        {
+		public Settings Settings
+		{
 
-            get { return _settings; }
-            set
-            {
-                SetProperty(ref _settings, value);
-            }
-        }
+			get { return _settings; }
+			set
+			{
+				SetProperty(ref _settings, value);
+			}
+		}
 
-        public UnitOfWork _work { get; set; }
-        public SettingsViewModel(int currGroupId, ref AppDbContext context)
-        {
-            _work = new UnitOfWork(context); 
-            Settings = new Settings();
+		public new UnitOfWork Work { get; set; }
+		public SettingsViewModel(int currGroupId, ref AppDbContext context)
+		{
+			Work = new UnitOfWork(context);
+			Settings = new Settings();
 
-            if (_work.Settings.GetAll().FirstOrDefault() == null)
-            {
-                _work.Settings.Add(Settings);
-                _work.Complete();
-            }
-            Settings = _work.Settings.GetAll().FirstOrDefault();
-            SaveCommand = new DelegateCommand(SaveSettings);
-        }
+			if (Work.Settings.GetAll().FirstOrDefault() == null)
+			{
+				Work.Settings.Add(Settings);
+				Work.Complete();
+			}
+			Settings = Work.Settings.GetAll().FirstOrDefault();
+			SaveCommand = new DelegateCommand(SaveSettings);
+		}
 
-        private void SaveSettings()
-        {
-            _work.Settings.Update(Settings);
-            _work.Complete();
-        }
-
-    }
+		private void SaveSettings()
+		{
+			Work.Settings.Update(Settings);
+			Work.Complete();
+		}
+	}
 }
