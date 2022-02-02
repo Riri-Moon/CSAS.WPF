@@ -9,12 +9,12 @@
 
 		public IEnumerable<Student> GetStudentsByGroup(MainGroup group)
 		{
-			return Context.Students.Where(x => x.MainGroup == group);
+			return Context.Students.ToList().Where(x => x.MainGroup == group);
 		}
 
 		public IEnumerable<Student> GetStudentsBySubGroup(SubGroup subGroup)
 		{
-			return Context.Students.Where(x => x.SubGroup == subGroup);
+			return Context.Students.ToList().Where(x => x.SubGroup == subGroup);
 		}
 
 		public AppDbContext GetDbContext { get { return Context; } }

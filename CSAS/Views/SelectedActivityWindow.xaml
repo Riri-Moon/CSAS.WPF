@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSAS.Views"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-             xmlns:md="http://schemas.microsoft.com/netfx/2009/xaml/presentation" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        mc:Ignorable="d"
+        xmlns:md="http://schemas.microsoft.com/netfx/2009/xaml/presentation" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"               
         Title="SelectedActivityWindow" Height="550" Width="800" ResizeMode="NoResize">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding SaveChangesCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
 
         <materialDesign:DialogHost

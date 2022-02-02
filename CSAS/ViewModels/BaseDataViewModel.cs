@@ -1,4 +1,4 @@
-﻿ namespace CSAS.ViewModels
+﻿namespace CSAS.ViewModels
 {
 	public class BaseDataViewModel : BaseViewModelBindableBase
 	{
@@ -20,7 +20,14 @@
 		public Activity SelectedActivity
 		{
 			get => _selectedActivity;
-			set => SetProperty(ref _selectedActivity, value);
+			set
+			{
+				if (value != null)
+				{
+					ActivitiesForExport = new ObservableCollection<Activity>(ActivitiesForExport.Where(x => x.Name == value.Name && x.Deadline == value.Deadline));
+				}
+				SetProperty(ref _selectedActivity, value);
+			}
 		}
 
 		private ObservableCollection<Attendance> _attendances;
@@ -41,7 +48,14 @@
 		public Attendance SelectedAttendance
 		{
 			get => _SelectAdattendance;
-			set => SetProperty(ref _SelectAdattendance, value);
+			set
+			{
+				if (value != null && value.SubAttendances != null)
+				{
+					AttendancesForExport = new ObservableCollection<Attendance>(AttendancesForExport.Where(x => x.Date == value.Date && x.SubAttendances == value.SubAttendances));
+				}
+				SetProperty(ref _SelectAdattendance, value);
+			}
 		}
 
 		private SubGroup _selectedGroup;
@@ -70,9 +84,16 @@
 		public Student SelectedStudent
 		{
 			get => _selectedStudent;
-			set => SetProperty(ref _selectedStudent, value);
+			set
+			{
+				if (IsActivity)
+				{
+					SelectedActivity = new();
+					IsSelectActivity = false;
+				}
+				SetProperty(ref _selectedStudent, value);
+			}
 		}
-
 
 		private bool _isAll = true;
 		public bool IsAll
@@ -82,19 +103,15 @@
 			{
 				if (IsAll && IsActivity)
 				{
-					var activities = Work.Activity.GetAll().Where(x => x.Student.MainGroup == Work.MainGroup.Get(CurrentMainGroupId));
+					var activities = GetActivities(Work.Activity.GetAll().Where(x => x.Student.MainGroup == Work.MainGroup.Get(CurrentMainGroupId)));
+
 					ActivitiesForExport = new ObservableCollection<Activity>(activities);
 					Activities = new ObservableCollection<Activity>(activities.DistinctBy(x => new { x.Name, x.Deadline }));
 					SetProperty(ref _isSelectActivity, value);
 				}
-				if (IsAllAttendances && IsAll)
+				if (IsAttendance)
 				{
-					var att = Work.Attendance.GetAll()
-					.Where(x => x.MainGroup == Work.MainGroup.Get(CurrentMainGroupId));
-
-					AttendancesForExport = new ObservableCollection<Attendance>(att);
-					Attendances = new ObservableCollection<Attendance>(att
-					.DistinctBy(x => new { x.Date }));
+					SetAttendance();					
 				}
 				Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(Work.MainGroup.Get(CurrentMainGroupId)));
 				SetProperty(ref _isAll, value);
@@ -129,7 +146,7 @@
 			get => _isAssessment;
 			set => SetProperty(ref _isAssessment, value);
 		}
-	
+
 		private bool _isAllAttendances = true;
 		public bool IsAllAttendances
 		{
@@ -139,9 +156,10 @@
 				IsSelectAttendance = false;
 				SelectedAttendance = new();
 				SetProperty(ref _isAllAttendances, value);
+				SetAttendance();
 			}
 		}
-
+	
 		private bool _isSeminar;
 		public bool IsSeminar
 		{
@@ -151,6 +169,7 @@
 				IsSelectAttendance = false;
 				SelectedAttendance = null;
 				SetProperty(ref _isSeminar, value);
+				SetAttendance();
 			}
 		}
 		private bool _isLecture;
@@ -162,119 +181,21 @@
 				IsSelectAttendance = false;
 				SelectedAttendance = null;
 				SetProperty(ref _isLecture, value);
+				SetAttendance();
 			}
 		}
 
 		private bool _isAssessment;
-
+		
 		public bool IsSelectAttendance
 		{
 			get => _isSelectAttendance;
 			set
 			{
-				if (value)
-				{
-					if (IsAll)
-					{
-						if (IsLecture)
-						{
-							var att = Work.Attendance.GetAll()
-								   .Where(x => x.MainGroup == Work.MainGroup.Get(CurrentMainGroupId) && x.Form == Enums.Enums.AttendanceFormEnums.Lecture);
-							AttendancesForExport = new ObservableCollection<Attendance>(att);
+				SetProperty(ref _isSelectAttendance, value);
+				SetAttendance();
 
-							Attendances = new ObservableCollection<Attendance>(att.DistinctBy(x => new { x.Date }));
-						}
-						else
-						{
-							var att = Work.Attendance.GetAll()
-								.Where(x => x.MainGroup == Work.MainGroup.Get(CurrentMainGroupId) && x.Form == Enums.Enums.AttendanceFormEnums.Seminar);
-							AttendancesForExport = new ObservableCollection<Attendance>(att);
-							Attendances = new ObservableCollection<Attendance>(att.DistinctBy(x => new { x.Date }));
-						}
-						SetProperty(ref _isSelectAttendance, value);
-					}
-					else if (IsGroup && SelectedGroup != null)
-					{
-						if (IsLecture)
-						{
-							List<Attendance>? att2 = new(Work.Attendance.GetAll()
-								.Where(x => x.SubGroup == null));
-							IEnumerable<SubAttendances>? att3 = att2.SelectMany(x => x.SubAttendances
-							.Where(y => y.Student.SubGroup == SelectedGroup));
-							AttendancesForExport = new ObservableCollection<Attendance>(att3.Select(x => x.Attendance));
-
-							Attendances = new ObservableCollection<Attendance>(att3
-								.Select(x => x.Attendance)
-								.DistinctBy(y => y.Date));
-						}
-						else
-						{
-							IEnumerable<Attendance>? att = Work.Attendance.GetAll()
-								 .Where(x => x.SubGroup == Work.SubGroup.Get(SelectedGroup.Id));
-							AttendancesForExport = new ObservableCollection<Attendance>(att);
-							Attendances = new ObservableCollection<Attendance>(att
-								.DistinctBy(x => new { x.Date }));
-						}
-
-						SetProperty(ref _isSelectAttendance, value);
-					}
-					else if (SelectedStudent != null)
-					{
-						if (IsLecture)
-						{
-							IEnumerable<Attendance>? att = SelectedStudent.SubAttendances.Where(x => x.Attendance.Form == Enums.Enums.AttendanceFormEnums.Lecture).Select(x => x.Attendance);
-							AttendancesForExport = new ObservableCollection<Attendance>(att);
-							Attendances = new ObservableCollection<Attendance>(att);
-						}
-						else if (IsSeminar)
-						{
-							IEnumerable<Attendance>? att = SelectedStudent.SubAttendances.Where(x => x.Attendance.Form == Enums.Enums.AttendanceFormEnums.Seminar).Select(x => x.Attendance);
-							AttendancesForExport = new ObservableCollection<Attendance>(att);
-							Attendances = new ObservableCollection<Attendance>(att);
-						}
-						SetProperty(ref _isSelectAttendance, value);
-					}
-					else
-					{
-						SetProperty(ref _isSelectAttendance, false);
-					}
-				}
-				else
-				{
-					if (IsAllAttendances && IsGroup && SelectedGroup != null)
-					{
-						var atte = new List<Attendance>(Work.Attendance.GetAll()
-						.Where(x => x.SubGroup == Work.SubGroup.Get(SelectedGroup.Id)));
-						var atte1 = Work.Attendance.GetAll().Where(x => x.SubGroup == null && x.MainGroup.Id == CurrentMainGroupId).SelectMany(x => x.SubAttendances.Where(y => y.Student.SubGroup == SelectedGroup)).Select(x => x.Attendance);
-
-						foreach (var att in atte1)
-						{
-							atte.Add(att);
-						}
-						AttendancesForExport = new ObservableCollection<Attendance>(atte);
-
-						var att1 = new List<Attendance>(atte.DistinctBy(x => new { x.Date }));
-
-						var att2 = atte1.DistinctBy(s => s.Date);
-
-						foreach (var att in att2)
-						{
-							att1.Add(att);
-						}
-						Attendances = Attendances = new ObservableCollection<Attendance>(att1);
-					}
-					//All Lectures and Seminars for All students
-
-					if (IsAllAttendances && IsStudent && SelectedStudent != null)
-					{
-						var att = SelectedStudent.SubAttendances.Select(x => x.Attendance);
-
-						AttendancesForExport = new ObservableCollection<Attendance>(att);
-						Attendances = new ObservableCollection<Attendance>(att);
-					}
-					value = false;
-					SetProperty(ref _isSelectAttendance, value);
-				}
+				Attendances = new ObservableCollection<Attendance>(AttendancesForExport.DistinctBy(x => new { x.Date }));
 			}
 		}
 		private bool _isSelectAttendance = false;
@@ -285,21 +206,25 @@
 			get => _isSelectActivity;
 			set
 			{
+				List<Activity> newActivities = new();
 				if (IsGroup && SelectedGroup != null)
 				{
-					var activities = Work.Activity.GetAll().Where(x => x.Student.SubGroup == Work.SubGroup.Get(SelectedGroup.Id));
-					ActivitiesForExport = new ObservableCollection<Activity>(activities);
-					Activities = new ObservableCollection<Activity>(activities.DistinctBy(x => new { x.Name, x.Deadline }));
+					 newActivities = GetActivities(Work.Activity.GetAll().Where(x => x.Student.SubGroup == SelectedGroup));
+				
 					SetProperty(ref _isSelectActivity, value);
 				}
 				else if (IsStudent && SelectedStudent != null)
 				{
-					var activities = Work.Activity.GetAll().Where(x => x.Student == Work.Students.Get(SelectedStudent.Id));
-					ActivitiesForExport = new ObservableCollection<Activity>(activities);
-					Activities = new ObservableCollection<Activity>(activities.DistinctBy(x => new { x.Name, x.Deadline }));
+					 newActivities = Work.Activity.GetAll().Where(x => x.Student == SelectedStudent).ToList();
+
 					SetProperty(ref _isSelectActivity, value);
 				}
-
+				else if (IsAll)
+				{
+					 newActivities = GetActivities(Work.Activity.GetAll().Where(x => x.Student.MainGroup == Work.MainGroup.Get(CurrentMainGroupId)));
+				}
+				ActivitiesForExport = new ObservableCollection<Activity>(newActivities);
+				Activities = new ObservableCollection<Activity>(newActivities.DistinctBy(x => new { x.Name, x.Deadline }));
 				SetProperty(ref _isSelectActivity, value);
 			}
 		}
@@ -316,7 +241,22 @@
 
 			return list;
 		}
+		private static List<Activity> GetActivities(IEnumerable<Activity> activities)
+		{
+			List<Activity> newActivities = new();
 
+			var temp = activities.GroupBy(x => new { x.Name, x.Deadline }).Where(y => y.Count() != 1);
+
+			foreach (var grp in temp)
+			{
+				var act = activities.Where(x => x.Name == grp.Key.Name && x.Deadline == grp.Key.Deadline);
+				if (act.Any())
+				{
+					newActivities.AddRange(act);
+				}
+			}
+			return newActivities;
+		}
 		protected List<Student> GetStudents()
 		{
 			if (IsAll)
@@ -337,6 +277,50 @@
 			}
 
 			return null;
+		}
+		private void SetAttendance() 
+		{
+			if (IsAll)
+			{
+				AttendancesForExport = new ObservableCollection<Attendance>(GetAttendances(Work.Students.GetStudentsByGroup(Work.MainGroup.Get(CurrentMainGroupId)).ToList()));
+			}
+			else if (IsGroup && SelectedGroup != null)
+			{
+				AttendancesForExport = new ObservableCollection<Attendance>(GetAttendances(Work.Students.GetStudentsBySubGroup(SelectedGroup).ToList()));
+			}
+			else if (IsStudent && SelectedStudent != null && SelectedStudent.Name != null)
+			{
+				var list = new List<Student>
+				{
+					SelectedStudent
+				};
+				AttendancesForExport = new ObservableCollection<Attendance>(GetAttendances(list));
+			}
+
+			if(AttendancesForExport!=null)
+			Attendances = new ObservableCollection<Attendance>(AttendancesForExport
+					.DistinctBy(x => new { x.Date }));
+		}
+		private List<Attendance> GetAttendances(List<Student> students)
+		{
+			var atte = new List<Attendance>();
+			if (IsAllAttendances)
+			{
+				foreach (var stud in students)
+				{
+					atte.AddRange(stud.SubAttendances.Select(x => x.Attendance).ToList());
+				}
+			}
+			else
+			{
+				var form = IsLecture ? Enums.Enums.AttendanceFormEnums.Lecture:Enums.Enums.AttendanceFormEnums.Seminar;
+				foreach (var stud in students)
+				{
+					atte.AddRange(stud.SubAttendances.Select(x => x.Attendance).Where(x => x.Form == form).ToList());
+				}
+			}
+			
+			return atte;
 		}
 	}
 }

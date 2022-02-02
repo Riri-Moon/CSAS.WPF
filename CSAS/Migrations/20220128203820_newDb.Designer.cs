@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSAS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220105211927_migration")]
-    partial class migration
+    [Migration("20220128203820_newDb")]
+    partial class newDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,13 +26,14 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.Activity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsNotifyMe")
@@ -44,12 +45,15 @@ namespace CSAS.Migrations
                     b.Property<bool>("IsSendNotifications")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -60,11 +64,9 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.ActivityTemplate", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -87,14 +89,13 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.Attachments", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
+                    b.Property<string>("ActivityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PathToFile")
                         .IsRequired()
@@ -109,11 +110,9 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.Attendance", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -125,15 +124,15 @@ namespace CSAS.Migrations
                     b.Property<int>("Form")
                         .HasColumnType("int");
 
-                    b.Property<int>("MainGroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("MainGroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StudyForm")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubGroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("SubGroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -146,11 +145,9 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.FinalAssessment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
@@ -173,8 +170,9 @@ namespace CSAS.Migrations
                     b.Property<bool>("IsSendExport")
                         .HasColumnType("bit");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -185,11 +183,12 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.MainGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Form")
                         .IsRequired()
@@ -212,11 +211,9 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.Settings", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("A")
                         .HasColumnType("int");
@@ -239,6 +236,12 @@ namespace CSAS.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MainGroupId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("MaxPoints")
+                        .HasColumnType("float");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -250,16 +253,16 @@ namespace CSAS.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MainGroupId");
+
                     b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("CSAS.Models.Student", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -274,8 +277,12 @@ namespace CSAS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MainGroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainGroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -288,8 +295,8 @@ namespace CSAS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubGroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("SubGroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -309,20 +316,19 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.SubAttendances", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AttendanceId")
-                        .HasColumnType("int");
+                    b.Property<string>("AttendanceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -335,14 +341,13 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.SubGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("MainGroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("MainGroupId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -360,14 +365,13 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.Task", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
+                    b.Property<string>("ActivityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
@@ -393,14 +397,12 @@ namespace CSAS.Migrations
 
             modelBuilder.Entity("CSAS.Models.TaskTemplate", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ActivityTemplateId")
-                        .HasColumnType("int");
+                    b.Property<string>("ActivityTemplateId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("MaxPoints")
                         .HasMaxLength(3)
@@ -417,13 +419,83 @@ namespace CSAS.Migrations
                     b.ToTable("TasksTemplate");
                 });
 
+            modelBuilder.Entity("CSAS.Models.UserInfo", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("MachineName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("as")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("city")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("countryCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("isp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("lat")
+                        .HasColumnType("float");
+
+                    b.Property<double>("lon")
+                        .HasColumnType("float");
+
+                    b.Property<string>("org")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("query")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("region")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("regionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("timezone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("zip")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserInfo");
+                });
+
             modelBuilder.Entity("CSAS.Models.Activity", b =>
                 {
                     b.HasOne("CSAS.Models.Student", "Student")
                         .WithMany("ListOfActivities")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Student");
                 });
@@ -443,9 +515,7 @@ namespace CSAS.Migrations
                 {
                     b.HasOne("CSAS.Models.MainGroup", "MainGroup")
                         .WithMany()
-                        .HasForeignKey("MainGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MainGroupId");
 
                     b.HasOne("CSAS.Models.SubGroup", "SubGroup")
                         .WithMany()
@@ -465,6 +535,15 @@ namespace CSAS.Migrations
                         .IsRequired();
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("CSAS.Models.Settings", b =>
+                {
+                    b.HasOne("CSAS.Models.MainGroup", "MainGroup")
+                        .WithMany()
+                        .HasForeignKey("MainGroupId");
+
+                    b.Navigation("MainGroup");
                 });
 
             modelBuilder.Entity("CSAS.Models.Student", b =>
@@ -492,9 +571,7 @@ namespace CSAS.Migrations
 
                     b.HasOne("CSAS.Models.Student", "Student")
                         .WithMany("SubAttendances")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Attendance");
 
@@ -527,9 +604,7 @@ namespace CSAS.Migrations
                 {
                     b.HasOne("CSAS.Models.ActivityTemplate", "ActivityTemplate")
                         .WithMany("TasksTemplate")
-                        .HasForeignKey("ActivityTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ActivityTemplateId");
 
                     b.Navigation("ActivityTemplate");
                 });

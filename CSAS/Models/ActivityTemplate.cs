@@ -32,7 +32,6 @@ namespace CSAS.Models
 		{
 			get => _maxPoints;
 			set => SetProperty(ref _maxPoints, value);
-
 		}
 		public ActivityTemplate Clone()
 		{

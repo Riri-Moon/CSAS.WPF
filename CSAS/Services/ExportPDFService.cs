@@ -25,7 +25,7 @@ namespace CSAS.Services
 		public string ExportActivity(IList<Activity> activities)
 		{
 			Type = "Aktivita";
-			CreateDocument(Type, GetPath(Type));
+			CreateDocument(GetPath(Type));
 			float[] x = { 150, 100, 100, 50, 50, 400 };
 
 			Table table = new(UnitValue.CreatePointArray(x));
@@ -35,18 +35,18 @@ namespace CSAS.Services
 				if (AnonymizeData)
 				{
 					table = IsBasic
-						? InsertCell(table, 6, student.Isic, student.SchoolEmail)
+						? InsertCell(table, 6, student.Isic)
 						: InsertCell(table, 6, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(), Enums.EnumExtension.GetDescriptionValue<Enums.Enums.FormEnums>(student.Form.ToString()));
 				}
 				else
 				{
 					table = IsBasic
-						? InsertCell(table, 6, student.Name, student.Isic, student.SchoolEmail)
-						: InsertCell(table, 6, student.Name, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(), Enums.EnumExtension.GetDescriptionValue<Enums.Enums.FormEnums>(student.Form.ToString()));
+						? InsertCell(table, 6, student.FullName, student.Isic)
+						: InsertCell(table, 6, student.FullName, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(), Enums.EnumExtension.GetDescriptionValue<Enums.Enums.FormEnums>(student.Form.ToString()));
 				}
 				foreach (var activity in activities.Where(x => x.Student == student))
 				{
-					table = InsertCell(table, 6, string.Empty, activity.Name, activity.Deadline.ToShortDateString(), activity.TotalPoints.ToString(), activity.EarnedPoints.ToString());
+					table = InsertCell(table, 6, string.Empty, activity.Name, activity.Deadline.ToShortDateString() + " " + activity.Deadline.ToShortTimeString(), activity.TotalPoints.ToString(), activity.EarnedPoints.ToString());
 
 					foreach (var task in activity.Tasks)
 					{
@@ -65,7 +65,7 @@ namespace CSAS.Services
 		{
 			Type = "Hodnotenie";
 
-			CreateDocument(Type, GetPath(Type));
+			CreateDocument(GetPath(Type));
 			Document.SetFontSize(9);
 
 			Table table = null;			
@@ -83,13 +83,13 @@ namespace CSAS.Services
 				{
 					if (IsBasic)
 					{
-						table = InsertCell(table, 8, student.Isic, student.SchoolEmail,
+						table = InsertCell(table, 8, student.Isic,
 							finalAssessment.Created.ToShortDateString(), student.TotalPoints.ToString(), student.MissedLectures.ToString(), student.MissedSeminars.ToString(),
 							EnumExtension.GetDescriptionValue<Enums.Enums.Grade>(finalAssessment.Grade.ToString()), finalAssessment.Comment);
 					}
 					else
 					{
-						table = InsertCell(table, 11, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(), student.Form.ToString(),
+						table = InsertCell(table, 11, student.Isic, student.SubGroup.Name, student.Year.ToString(), student.Form.ToString(),
 							finalAssessment.Created.ToShortDateString(), student.TotalPoints.ToString(), student.MissedLectures.ToString(), student.MissedSeminars.ToString(),
 							EnumExtension.GetDescriptionValue<Enums.Enums.Grade>(finalAssessment.Grade.ToString()), finalAssessment.Comment);
 					}
@@ -98,14 +98,13 @@ namespace CSAS.Services
 				{
 					if (IsBasic)
 					{
-						table = InsertCell(table, 9, student.Name, student.Isic, student.SchoolEmail,
+						table = InsertCell(table, 9, student.FullName, student.Isic, student.SchoolEmail,
 							finalAssessment.Created.ToShortDateString(), student.TotalPoints.ToString(), student.MissedLectures.ToString(), student.MissedSeminars.ToString(),
 							EnumExtension.GetDescriptionValue<Enums.Enums.Grade>(finalAssessment.Grade.ToString()), finalAssessment.Comment);
-
 					}
 					else
 					{
-						table = InsertCell(table, 12, student.Name, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(), student.Form.ToString(),
+						table = InsertCell(table, 12, student.FullName, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(), student.Form.ToString(),
 							finalAssessment.Created.ToShortDateString(), student.TotalPoints.ToString(), student.MissedLectures.ToString(), student.MissedSeminars.ToString(),
 							EnumExtension.GetDescriptionValue<Enums.Enums.Grade>(finalAssessment.Grade.ToString()), finalAssessment.Comment);
 					}
@@ -121,34 +120,33 @@ namespace CSAS.Services
 		public string ExportAttendances(IList<Attendance> attendances)
 		{
 			Type = "Dochadzka";
-			CreateDocument(Type, GetPath(Type));
+			CreateDocument(GetPath(Type));
 			Table table = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
 
 			foreach (var student in Students)
 			{
 				table = AnonymizeData
 					? IsBasic
-						? InsertCell(table,
-										   6,
-										   student.Isic,
-										   student.SchoolEmail)
+						? InsertCell(table,6,student.Isic)
 						: InsertCell(table,
 										   6,
 										   student.Isic,
-										   student.SchoolEmail,
 										   student.SubGroup.Name,
 										   student.Year.ToString(),
 										   EnumExtension.GetDescriptionValue<Enums.Enums.FormEnums>(student.Form.ToString()))
 					: IsBasic
-						? InsertCell(table, 6, student.Name, student.Isic, student.SchoolEmail)
-						: InsertCell(table, 6, student.Name, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(), EnumExtension.GetDescriptionValue<Enums.Enums.FormEnums>(student.Form.ToString()));
+						? InsertCell(table, 6, student.FullName, student.Isic, student.SchoolEmail)
+						: InsertCell(table, 6, student.FullName, student.Isic, student.SchoolEmail, student.SubGroup.Name, student.Year.ToString(),
+						EnumExtension.GetDescriptionValue<Enums.Enums.FormEnums>(student.Form.ToString()));
 
-				foreach (var attendance in attendances)
+				foreach (var attendance in attendances.Distinct())
 				{
 					var subAtt = attendance.SubAttendances.FirstOrDefault(x => x.Student == student);
 					if (subAtt != null)
 					{
-						table = InsertCell(table, 6, string.Empty, attendance.Date.ToShortDateString(), EnumExtension.GetDescriptionValue<Enums.Enums.AttendanceFormEnums>(attendance.Form.ToString()), EnumExtension.GetDescriptionValue<Enums.Enums.AttendanceEnums>(subAtt.State.ToString()));
+						table = InsertCell(table, 6, string.Empty, attendance.Date.ToShortDateString() + " " + attendance.Date.ToShortTimeString(),
+							EnumExtension.GetDescriptionValue<Enums.Enums.AttendanceFormEnums>(attendance.Form.ToString()),
+							EnumExtension.GetDescriptionValue<Enums.Enums.AttendanceEnums>(subAtt.State.ToString()));
 					}
 				}
 			}
@@ -159,7 +157,7 @@ namespace CSAS.Services
 			return PathToFile;
 		}
 
-		private string CreateDocument(string type, string path)
+		private string CreateDocument(string path)
 		{
 			PdfDocument pdfDoc = new(new PdfWriter(path));
 			Document doc = new(pdfDoc, PageSize.A4.Rotate());
@@ -184,7 +182,7 @@ namespace CSAS.Services
 			}
 			else if (Student != null)
 			{
-				path = System.IO.Path.Combine(Student.PathToFolder, @$"{DateTime.Now.ToString("ddMMyyHHmmss", System.Globalization.CultureInfo.InvariantCulture)}_{type}_{Student.Name}.pdf");
+				path = System.IO.Path.Combine(Student.PathToFolder, @$"{DateTime.Now.ToString("ddMMyyHHmmss", System.Globalization.CultureInfo.InvariantCulture)}_{type}_{Student.FullName}.pdf");
 			}
 			else
 			{
@@ -217,12 +215,12 @@ namespace CSAS.Services
 				if (IsBasic)
 				{
 					table = new Table(UnitValue.CreatePercentArray(8)).UseAllAvailableWidth();
-					table = InsertCell(table, 8, "Isic", "Školský email", "Dátum vytvorenia", "Získané body", "Vymeškané prednášky", "Vymeškané cvičenia", "Známka", "Komentár");
+					table = InsertCell(table, 8, "Isic", "Dátum vytvorenia", "Získané body", "Vymeškané prednášky", "Vymeškané cvičenia", "Známka", "Komentár");
 				}
 				else
 				{
 					table = new Table(UnitValue.CreatePercentArray(9)).UseAllAvailableWidth();
-					table = InsertCell(table, 11, "Isic", "Školský email", "Skupina", "Ročník", "Forma štúdia", "Dátum vytvorenia", "Získané body", "Vymeškané prednášky", "Vymeškané cvičenia", "Známka", "Komentár");
+					table = InsertCell(table, 11, "Isic", "Skupina", "Ročník", "Forma štúdia", "Dátum vytvorenia", "Získané body", "Vymeškané prednášky", "Vymeškané cvičenia", "Známka", "Komentár");
 				}
 			}
 			else

@@ -11,12 +11,12 @@
 
 		public IEnumerable<Attendance> GetAttendanceByMainGroup(MainGroup group)
 		{
-			return Context.Attendances.Where(x => x.MainGroup == group);
+			return Context.Attendances.ToList().Where(x => x.MainGroup == group);
 		}
 
 		public IEnumerable<Attendance> GetAttendanceBySubGroup(SubGroup group)
 		{
-			return Context.Attendances.Where(x => x.SubGroup == group);
+			return Context.Attendances.ToList().Where(x => x.SubGroup == group);
 		}
 	}
 }

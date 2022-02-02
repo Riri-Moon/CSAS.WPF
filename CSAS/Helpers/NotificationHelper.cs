@@ -6,70 +6,77 @@ namespace CSAS.Helpers
 {
 	public class NotificationHelper
 	{
+		readonly Logger _logger = new();
 		private UnitOfWork Work { get; set; }
 		public Settings Settings { get; set; }
-		public ExcelService excel { get; set; }
+		public ExcelService Excel { get; set; }
 		private OutlookService OutlookService { get; set; }
 
 		private readonly string space = "<br/><br/>";
 
 		public NotificationHelper()
 		{
-			 excel = new();
+			Excel = new();
 			Work = new UnitOfWork(context: new AppDbContext());
 			OutlookService = new OutlookService();
-
 		}
 
 		public void SendNotification()
 		{
 			StringBuilder builder = new();
-			Settings = Work.Settings.GetAll().FirstOrDefault();
-			var act = Work.Activity.GetAll().Where(x => x.IsSendNotifications);
-			if(act==null || !act.Any())
+			try 
 			{
-				return;
-			}
-			act = act.Where(x => (x.Deadline - DateTime.Today).TotalDays <= 3 );
+				Settings = Work.Settings.GetAll().FirstOrDefault();
+				var act = Work.Activity.GetAll().Where(x => x.IsSendNotifications);
+				if (act == null || !act.Any())
+				{
+					return;
+				}
 
-			foreach (var activity in act.Where(x => x.Modified <= x.Created))
-			{
-				var email = new MailAddressCollection
+				foreach (var activity in act.Where(x => (x.Deadline - DateTime.Today).TotalDays <= 3).Where(x => x.Modified <= x.Created))
+				{
+					var email = new MailAddressCollection
 				{
 					activity.Student.SchoolEmail
 				};
-				string subject = $"Neodovzdaná aktivita - {activity.Name}";
-				builder.Append($"Dobrý deň, {space} uporňujem Vás na blížiaci sa dátum odovzdania aktivity - {activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()} zo dňa {activity.Created.ToShortDateString()}.{space}" +
-					$"Ak ste aktivitu odovzdali, pokladajte tento email za bezpredmetný.");
+					string subject = $"Neodovzdaná aktivita - {activity.Name}";
+					builder.Append($"Dobrý deň, {space} uporňujem Vás na blížiaci sa dátum odovzdania aktivity - {activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()} zo dňa {activity.Created.ToShortDateString()}.{space}" +
+						$"Ak ste aktivitu odovzdali, pokladajte tento email za bezpredmetný.");
 
-				if (activity.Attachments != null && activity.Attachments.Count > 0)
-				{
-					List<string> attachments = new();
-
-					builder.Append($"{space} V prílohe Vám posielam taktiež podklady ku aktivite.");
-					foreach (var attachment in activity.Attachments)
+					if (activity.Attachments != null && activity.Attachments.Count > 0)
 					{
-						if (File.Exists(attachment.PathToFile))
-						{
-							attachments.Add(attachment.PathToFile);
-						}
-					}
-					builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
-					OutlookService.SendEmail(new MailAddress(Settings.Email), subject, email, null, builder.ToString(), attachments, false);
-				}
-				else
-				{
-					builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
-					OutlookService.SendEmail(new MailAddress(Settings.Email), subject, email, null, builder.ToString(), null, false);
-				}
-				activity.IsSendNotifications = false;
-				Work.Activity.Update(activity);
-			}
+						List<string> attachments = new();
 
-			Work.Complete();
+						builder.Append($"{space} V prílohe Vám posielam taktiež podklady ku aktivite.");
+						foreach (var attachment in activity.Attachments)
+						{
+							if (File.Exists(attachment.PathToFile))
+							{
+								attachments.Add(attachment.PathToFile);
+							}
+						}
+						builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
+						OutlookService.SendEmail(subject, email, null, builder.ToString(), attachments, false);
+					}
+					else
+					{
+						builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
+						OutlookService.SendEmail(subject, email, null, builder.ToString(), null, false);
+					}
+					activity.IsSendNotifications = false;
+					Work.Activity.Update(activity);
+				}
+
+				Work.Complete();
+			}
+			catch (Exception ex)
+			{
+				_logger.ErrorAsync(ex.StackTrace);
+				_logger.ErrorAsync(ex.Message);
+			}
 		}
 		public void SendNotificationsToMe()
-		{	
+		{
 			int rowindex = 1;
 			string sheet = "Neohodnotene";
 			string pathToExport = Path.Combine(Path.GetTempPath(), DateTime.Now.ToString("ddMMyyHHmmss", System.Globalization.CultureInfo.CurrentCulture) + "NeohodnoteneAktivity.xlsx");
@@ -78,31 +85,38 @@ namespace CSAS.Helpers
 			mailAddresses.Add(new MailAddress(Settings.Email));
 			vs.Add(pathToExport);
 
-			excel.CreateSpreadsheetWorkbook(pathToExport, sheet);
-
-			Settings = Work.Settings.GetAll().FirstOrDefault();
-			var act = Work.Activity.GetAll().Where(x => x.IsNotifyMe && DateTime.Today > x.Deadline);
-			if (act == null || !act.Any())
+			try
 			{
-				return;
-			}
-			
+				Excel.CreateSpreadsheetWorkbook(pathToExport, sheet);
 
-			excel.WriteRow(sheet, rowindex, true, "Skupina", "Predmet", "Student", "Aktivita", "Datum odovzdania");
-			rowindex++;
-			foreach (var activity in act.Where(x=>x.Modified <= x.Created))
-			{
-				excel.WriteRow(sheet, rowindex, true, activity.Student.MainGroup.Name, activity.Student.MainGroup.Subject, activity.Student.Name, activity.Name, $"{ activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()}");
+				Settings = Work.Settings.GetAll().FirstOrDefault();
+				var act = Work.Activity.GetAll().Where(x => x.IsNotifyMe && DateTime.Today > x.Deadline);
+				if (act == null || !act.Any())
+				{
+					return;
+				}
 
-				activity.IsNotifyMe = false;
-				Work.Activity.Update(activity);
+				Excel.WriteRow(sheet, rowindex, true, "Skupina", "Predmet", "Student", "Aktivita", "Datum odovzdania");
 				rowindex++;
+				foreach (var activity in act.Where(x => x.Modified <= x.Created))
+				{
+					Excel.WriteRow(sheet, rowindex, true, activity.Student.MainGroup.Name, activity.Student.MainGroup.Subject, activity.Student.Name, activity.Name, $"{ activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()}");
+
+					activity.IsNotifyMe = false;
+					Work.Activity.Update(activity);
+					rowindex++;
+				}
+				Excel.SaveFile();
+
+				OutlookService.SendEmail("Aktivity na hodnotenie", mailAddresses, null, string.Empty, vs, false);
+
+				Work.Complete();
 			}
-			excel.SaveFile();
-
-			OutlookService.SendEmail(new MailAddress(Settings.Email), "Aktivity na hodnotenie", mailAddresses, null, string.Empty, vs, false);
-
-			Work.Complete();
+			catch (Exception ex)
+			{
+				_logger.ErrorAsync(ex.StackTrace);
+				_logger.ErrorAsync(ex.Message);
+			}
 		}
 	}
 }

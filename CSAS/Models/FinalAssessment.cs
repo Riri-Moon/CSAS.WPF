@@ -11,14 +11,13 @@ namespace CSAS.Models
 			set => SetProperty(ref _comment, value);
 		}
 		private string? _comment;
-
 		public virtual Grade Grade
 		{
 			get => _grade;
 
 			set => SetProperty(ref _grade, value);
 		}
-		private Grade _grade;
+		private Grade _grade = Grade.Empty;
 		public virtual Student Student
 		{
 			get => _student;
@@ -26,7 +25,6 @@ namespace CSAS.Models
 			set => SetProperty(ref _student, value);
 		}
 		private Student _student;
-
 		public virtual DateTime Created
 		{
 			get => _created;
@@ -40,7 +38,7 @@ namespace CSAS.Models
 
 			set => SetProperty(ref _isSendEmail, value);
 		}
-		private bool _isSendEmail;
+		private bool _isSendEmail =false;
 		public virtual bool IsSendExport
 		{
 			get => _isSendExport;
@@ -48,7 +46,6 @@ namespace CSAS.Models
 			set => SetProperty(ref _isSendExport, value);
 		}
 		private bool _isSendExport;
-
 		public virtual bool IsSendAttendanceExport
 		{
 			get => _isSendAttendanceExport;

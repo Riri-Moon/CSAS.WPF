@@ -23,7 +23,7 @@ namespace CSAS.Repositories
 
 		public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
 		{
-			return Context.Set<TEntity>().Where(predicate);
+			return Context.Set<TEntity>().Where(predicate).ToList();
 		}
 
 		public IEnumerable<TEntity> GetAll()
@@ -31,7 +31,7 @@ namespace CSAS.Repositories
 			return Context.Set<TEntity>().ToList();
 		}
 
-		public TEntity Get(int id)
+		public TEntity Get(string id)
 		{
 			return Context.Set<TEntity>().Find(id);
 		}

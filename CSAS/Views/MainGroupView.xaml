@@ -12,6 +12,7 @@
         DataContext="CSAS.MainGroupViewModel">
     <Window.Resources>
         <converters:MultiValueConverter x:Key="MultiValueConverter"/>
+        <converters:LongDateToShortConverter x:Key="LongDateToShortConverter"/>
     </Window.Resources>
     <md:DialogHost CloseOnClickAway="True">
         <md:DialogHost.DialogContent>
@@ -27,7 +28,7 @@
         <DataGrid Grid.Column="0" 
                   IsReadOnly="True" Visibility="{Binding IsCreateMainGroup, Converter={StaticResource InverseBoolToVisConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   HorizontalScrollBarVisibility="Disabled" Padding="20,20,0,0"
-                  ItemsSource="{Binding MainGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMainGroup}" CanUserResizeColumns="False" CanUserResizeRows="False"
+                  ItemsSource="{Binding MainGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMainGroup, UpdateSourceTrigger=PropertyChanged}" CanUserResizeColumns="False" CanUserResizeRows="False"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
                   HeadersVisibility="All">
@@ -42,8 +43,14 @@
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
                         MaxWidth="250"
                         EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" Binding="{Binding Subject}"/>
+                
+                <DataGridTextColumn
+                        Header="Vytvorené"
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                        MaxWidth="250"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" Binding="{Binding Created, Converter={StaticResource LongDateToShortConverter}}"/>
 
-                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Vybrať" Command="{Binding DataContext.SelectMainGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}">
@@ -66,22 +73,8 @@
                             PlacementMode="BottomAndAlignRightEdges"
                             StaysOpen="True">
 
-                                <StackPanel>
-                                    <Grid Margin="10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
-                                    </Grid>
-                                    <Button
-                                    Content="Upraviť skupinu" Command="{Binding DataContext.ModifyMainGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Id}"/>
-                                    <Separator/>
-                                    <Button
+                                    <StackPanel>
+                                        <Button
                                     Content="Vymazať skupinu" Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Id}"/>
                                 </StackPanel>
                             </md:PopupBox>
@@ -92,7 +85,25 @@
         </DataGrid>
 
         <Button Grid.Column="0"
-                VerticalAlignment="Bottom" Margin="0,0,0,20" HorizontalAlignment="Center" Command="{x:Static md:DialogHost.OpenDialogCommand}" Content="Importovať novú skupinu"/>
-    </Grid>
+                VerticalAlignment="Bottom" Margin="0,0,0,30" HorizontalAlignment="Center" Command="{x:Static md:DialogHost.OpenDialogCommand}" Content="Importovať novú skupinu"/>
+
+            <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Bottom" Margin="20, 0  0 10">
+                
+                <Run Text="Používaním aplikácie automaticky súhlasíte s "/>
+                <Hyperlink NavigateUri="https://www.privacypolicies.com/live/0ebfab13-881a-4a93-9585-12da0bed51cd"
+                           RequestNavigate="Hyperlink_RequestNavigate"
+                           ToolTip="https://www.privacypolicies.com/live/0ebfab13-881a-4a93-9585-12da0bed51cd">
+        podmienkami
+    </Hyperlink>
+                                    <Run Text="používania"/>
+            </TextBlock>
+            <ProgressBar Visibility="{Binding DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0 -50 0 0"
+  Style="{StaticResource MaterialDesignCircularProgressBar}" Width="100"
+  Value="33"
+  IsIndeterminate="True" />
+                                   
+        </Grid>
+    
     </md:DialogHost>
+    
 </Window>

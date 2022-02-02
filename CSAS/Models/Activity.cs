@@ -22,7 +22,6 @@ namespace CSAS.Models
 
 				return totalPts;
 			}
-
 		}
 		public virtual IList<Task> Tasks
 		{
@@ -49,7 +48,6 @@ namespace CSAS.Models
 			get => _isSendEmail;
 			set => SetProperty(ref _isSendEmail, value);
 		}
-
 		public virtual bool IsSendNotifications
 		{
 			get => _isSendNotifications;

@@ -1,0 +1,53 @@
+﻿<Window x:Class="CSAS.Views.Controls.YesNoMessageBoxWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CSAS.Views.Controls"
+        mc:Ignorable="d"
+        Title="" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent" Opacity="1"
+        Name="This"
+        >
+    <Window.Resources>
+
+    </Window.Resources>
+    <Border x:Name="MainBorder" Margin="10" CornerRadius="8" BorderThickness="0" BorderBrush="Black" Padding="0" Width="250">
+        <Border.Effect>
+            <DropShadowEffect x:Name="DSE" Color="Black" Direction="270" BlurRadius="20" ShadowDepth="3" Opacity="0.6" />
+        </Border.Effect>
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="Window.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="DSE" Storyboard.TargetProperty="ShadowDepth" From="0" To="3" Duration="0:0:1" AutoReverse="False" />
+                        <DoubleAnimation Storyboard.TargetName="DSE" Storyboard.TargetProperty="BlurRadius" From="0" To="20" Duration="0:0:1" AutoReverse="False" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Border.Triggers>
+        <Grid Loaded="FrameworkElement_OnLoaded">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border Name="Mask" CornerRadius="8" Background="White" />
+            <Grid x:Name="Grid" Background="White">
+                <Grid.OpacityMask>
+                    <VisualBrush Visual="{Binding ElementName=Mask}"/>
+                </Grid.OpacityMask>
+                <StackPanel Name="StackPanel" >
+                    <TextBox Style="{DynamicResource MaterialDesignTextBox}" Name="TitleBar" IsReadOnly="True" IsHitTestVisible="False" Padding="10" FontFamily="Segui" FontSize="14" 
+                             Foreground="Black" FontWeight="Normal"
+                             Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" HorizontalContentAlignment="Center" BorderThickness="0"/>
+                    <DockPanel Name="ContentHost" Margin="0,10,0,10" >
+                        <TextBlock Margin="10" Name="Textbar" HorizontalAlignment="Center"></TextBlock>
+                    </DockPanel>
+                    <DockPanel Name="ButtonHost" LastChildFill="False" HorizontalAlignment="Center" MinHeight="50"  >
+                        <Button Name="okBtn" Click="ButtonBase_OnClick" Width="70" Content="Ok" />
+                        <Button Name="yesBtn" Margin="10" Click="ButtonBase_OnClick" Width="70">Yes</Button>
+                        <Button Name="noBtn" Margin="10" Click="Cancel_Click" Width="70">No</Button>
+                    </DockPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

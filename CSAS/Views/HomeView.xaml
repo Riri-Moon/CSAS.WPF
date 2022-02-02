@@ -14,6 +14,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+        <converters:MultiValueConverter x:Key="MultiValueConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -171,26 +172,39 @@
 
                 </md:Card>
 
-                <DataGrid Grid.Row="1" MaxHeight="600" Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
+                <DataGrid Grid.Row="1" MaxHeight="600" 
+                          IsReadOnly="True" 
+                          Visibility="{Binding IsAddStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"
   ItemsSource="{Binding Students, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
   CanUserAddRows="False"
   AutoGenerateColumns="False"
   HeadersVisibility="All">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Odoslať email skupine" />
+                            <MenuItem Header="Odoslať email skupine" Command="{Binding SendEmailToAllCommand}" />
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Resources>
                     </DataGrid.Resources>
                     <DataGrid.Columns>
-                        <materialDesign:DataGridTextColumn
+                        <materialDesign:DataGridTextColumn 
       Header="Meno"
       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
                             <materialDesign:DataGridTextColumn.Binding>
                                 <Binding
           Path="Name"  Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
+
+                                </Binding>
+                            </materialDesign:DataGridTextColumn.Binding>
+                        </materialDesign:DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn
+      Header="Priezvisko"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                            <materialDesign:DataGridTextColumn.Binding>
+                                <Binding
+          Path="LastName"  Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
 
                                 </Binding>
                             </materialDesign:DataGridTextColumn.Binding>
@@ -254,6 +268,18 @@
                                 </Binding>
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>
+                        <DataGridTextColumn
+      Header="Ročník"
+      ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+          Path="Year" Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
                         <materialDesign:DataGridTextColumn
       Header="Známka"
       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
@@ -312,16 +338,37 @@
                                             <Button Content="Odoslať email študentovi" 
                                                     Command="{Binding Path=DataContext.SendEmailToStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                     CommandParameter="{Binding Id}"/>
-                                            
+
                                             <Button Content="Udeliť 1 bod za aktivitu" 
                                                     Command="{Binding Path=DataContext.GiveOnePointCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                                    CommandParameter="{Binding Id}"/>
+                                                    >
+                                                <Button.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                        <Binding Path="Id"/>
+                                                        <Binding Source="1"/>
+                                                    </MultiBinding>
+                                                </Button.CommandParameter>
+                                            </Button>
                                             <Button Content="Udeliť 2 body za aktivitu" 
-                                                    Command="{Binding Path=DataContext.GiveTwoPointsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                                    CommandParameter="{Binding Id}"/>
+                                                    Command="{Binding Path=DataContext.GiveOnePointCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    >
+                                                <Button.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                        <Binding Path="Id"/>
+                                                        <Binding Source="2"/>
+                                                    </MultiBinding>
+                                                </Button.CommandParameter>
+                                            </Button>
                                             <Button Content="Udeliť 3 body za aktivitu" 
-                                                    Command="{Binding Path=DataContext.GiveThreePointsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                                    CommandParameter="{Binding Id}"/>
+                                                    Command="{Binding Path=DataContext.GiveOnePointCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                   >
+                                                <Button.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                        <Binding Path="Id"/>
+                                                        <Binding Source="3"/>
+                                                    </MultiBinding>
+                                                </Button.CommandParameter>
+                                            </Button>
                                             <Separator/>
 
                                             <Button Content="Vymazať študenta" Command="{Binding Path=DataContext.RemoveStudentCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
@@ -337,7 +384,13 @@
                 <DockPanel Grid.Row="0">
 
                 </DockPanel>
+               
             </Grid>
+            
         </md:DialogHost>
+        <ProgressBar Visibility="{Binding DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0 -200 0 0"
+  Style="{StaticResource MaterialDesignCircularProgressBar}" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center"
+  Value="33"
+  IsIndeterminate="True" />
     </Grid>
 </UserControl>

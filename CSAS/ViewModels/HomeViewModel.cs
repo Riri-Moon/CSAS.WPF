@@ -1,12 +1,14 @@
-﻿using CSAS.Validators;
+﻿using CSAS.Helpers;
+using CSAS.Models;
+using CSAS.Validators;
 using CSAS.Views;
 using System.Net.Mail;
-using System.Windows;
 
 namespace CSAS.ViewModels
 {
 	public class HomeViewModel : BaseViewModelBindableBase
 	{
+		readonly Logger _logger = new();
 		private bool _isAddStudent;
 		public bool IsAddStudent
 		{
@@ -26,21 +28,19 @@ namespace CSAS.ViewModels
 			}
 		}
 		public DelegateCommand SetSubGroupCommand { get; }
-		public DelegateCommand<int?> ModifyStudentCommand { get; }
-		public DelegateCommand<int?> OpenModifyStudentCommand { get; }
+		public DelegateCommand<string?> ModifyStudentCommand { get; }
+		public DelegateCommand<string?> OpenModifyStudentCommand { get; }
 		public DelegateCommand AddNewStudentCommand { get; }
-		public DelegateCommand<int?> RemoveStudentCommand { get; }
-		public DelegateCommand<int?> ShowActivitiesCommand { get; }
-		public DelegateCommand<int?> IndividualStudyCommand { get; }
+		public DelegateCommand<string?> RemoveStudentCommand { get; }
+		public DelegateCommand<string?> ShowActivitiesCommand { get; }
+		public DelegateCommand<string?> IndividualStudyCommand { get; }
 		private ObservableCollection<Student> _students;
 		public DelegateCommand ShowAddStudentCommand { get; }
 		public DelegateCommand LoadStudentsCommand { get; }
-		public DelegateCommand<int?> OpenActivityCommand { get; }
-		public DelegateCommand<int?> SendEmailToStudentCommand { get; }
-		public DelegateCommand<int?> GiveOnePointCommand { get; }
-		public DelegateCommand<int?> GiveTwoPointsCommand { get; }
-		public DelegateCommand<int?> GiveThreePointsCommand { get; }
-
+		public DelegateCommand<string?> OpenActivityCommand { get; }
+		public DelegateCommand<string?> SendEmailToStudentCommand { get; }
+		public DelegateCommand<object?> GiveOnePointCommand { get; }
+		public DelegateCommand SendEmailToAllCommand { get; }
 		public ObservableCollection<Student> Students
 		{
 			get => _students;
@@ -63,7 +63,7 @@ namespace CSAS.ViewModels
 			{
 				if (value)
 				{
-					LoadStudents();
+					RefreshStudents();
 				}
 				SetProperty(ref _isActivityClosed, value);
 			}
@@ -87,35 +87,34 @@ namespace CSAS.ViewModels
 			set => SetProperty(ref _subGroups, value);
 		}
 
-
 		private ObservableCollection<Activity> _activities;
 		public ObservableCollection<Activity> Activities
 		{
 			get => _activities;
 			set => SetProperty(ref _activities, value);
 		}
-
-		private int CurrentStudentId { get; set; }
-		public HomeViewModel(int currentGroupId, ref AppDbContext context)
+		private string CurrentStudentId { get; set; }
+		public HomeViewModel(string currentGroupId, ref AppDbContext context)
 		{
-			_work = new UnitOfWork(context);
+			Work = new UnitOfWork(context);
+			CurrentMainGroupId = currentGroupId;
+
 			LoadStudents();
 			AppDbContext = context;
-			IndividualStudyCommand = new DelegateCommand<int?>(ChangeIndividualStudy);
+			IndividualStudyCommand = new DelegateCommand<string?>(ChangeIndividualStudy);
 			ShowAddStudentCommand = new DelegateCommand(ShowAddStudent);
 			AddNewStudentCommand = new DelegateCommand(AddNewStudent);
-			RemoveStudentCommand = new DelegateCommand<int?>(RemoveStudent);
-			OpenModifyStudentCommand = new DelegateCommand<int?>(LoadStudentToUpdate);
-			ModifyStudentCommand = new DelegateCommand<int?>(UpdateStudent);
+			RemoveStudentCommand = new DelegateCommand<string?>(RemoveStudent);
+			OpenModifyStudentCommand = new DelegateCommand<string?>(LoadStudentToUpdate);
+			ModifyStudentCommand = new DelegateCommand<string?>(UpdateStudent);
 			SetSubGroupCommand = new DelegateCommand(GetSubGroup);
-			LoadStudentsCommand = new DelegateCommand(LoadStudents);
-			ShowActivitiesCommand = new DelegateCommand<int?>(ShowActivities);
-			OpenActivityCommand = new DelegateCommand<int?>(OpenActivity);
-			SubGroups = new ObservableCollection<SubGroup>(_work.SubGroup.GetAll().ToList());
-			SendEmailToStudentCommand = new DelegateCommand<int?>(SendEmailToTheStudent);
-			GiveOnePointCommand = new DelegateCommand<int?>(GivePoint);
-			GiveTwoPointsCommand = new DelegateCommand<int?>(Give2Points);
-			GiveThreePointsCommand = new DelegateCommand<int?>(Give3Points);
+			LoadStudentsCommand = new DelegateCommand(RefreshStudents);
+			ShowActivitiesCommand = new DelegateCommand<string?>(ShowActivities);
+			OpenActivityCommand = new DelegateCommand<string?>(OpenActivity);
+			SubGroups = new ObservableCollection<SubGroup>(Work.SubGroup.GetAll().Where(x => x.MainGroup == Work.MainGroup.Get(currentGroupId)).ToList());
+			SendEmailToStudentCommand = new DelegateCommand<string?>(SendEmailToTheStudent);
+			GiveOnePointCommand = new DelegateCommand<object?>(GivePoint);
+			SendEmailToAllCommand = new DelegateCommand(SendEmailToAll);
 
 		}
 
@@ -124,7 +123,7 @@ namespace CSAS.ViewModels
 			NewStudent.SubGroup = SelectedGroup;
 		}
 
-		public void LoadStudentToUpdate(int? id)
+		public void LoadStudentToUpdate(string? id)
 		{
 
 			NewStudent = Students.FirstOrDefault(x => x.Id == id);
@@ -132,25 +131,25 @@ namespace CSAS.ViewModels
 			IsAddStudent = true;
 			IsModifyStudent = true;
 		}
-		public void UpdateStudent(int? id)
+		public void UpdateStudent(string? id)
 		{
-			if (NewStudent != null && NewStudent.Id == id.Value)
+			if (NewStudent != null && NewStudent.Id == id)
 			{
-				_work.Students.Update(NewStudent);
-				_work.Complete();
+				Work.Students.Update(NewStudent);
+				Work.Complete();
 			}
 			IsAddStudent = false;
 			IsModifyStudent = false;
 			NewStudent = new Student();
 		}
-		public void RemoveStudent(int? id)
+		public void RemoveStudent(string? id)
 		{
-			if (id.HasValue)
+			if (!string.IsNullOrEmpty(id))
 			{
-				_work.Students.Remove(_work.Students.Get(id.Value));
-				_work.Complete();
+				Work.Students.Remove(Work.Students.Get(id));
+				Work.Complete();
 
-				LoadStudents();
+				RefreshStudents();
 			}
 		}
 
@@ -160,27 +159,23 @@ namespace CSAS.ViewModels
 			{
 				if (StudentValidator.ValidateStudent(NewStudent))
 				{
-					// Change to CurrentMainGroupID
-					NewStudent.MainGroup = _work.MainGroup.Get(CurrentMainGroupId);
-					NewStudent.SubGroup = _work.SubGroup.Get(1);
-					_work.Students.Add(NewStudent);
-					_work.Complete();
+					NewStudent.MainGroup = Work.MainGroup.Get(CurrentMainGroupId);
+					NewStudent.SubGroup = Work.SubGroup.Get(SelectedGroup.Id);
+					Work.Students.Add(NewStudent);
+					Work.Complete();
 					Students.Add(NewStudent);
 					NewStudent = new Student();
 					IsAddStudent = false;
 				}
 				else
 				{
-					//Add error message if data are not correctly filled out
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-
-					});
+					MessageBoxHelper.Show("Nesprávne vyplnené údaje", "Niektorý z údajov nie je správne vyplnený", true);
+					return;
 				}
 			}
 			catch (Exception ex)
 			{
-
+				_logger.ErrorAsync(ex.Message);
 			}
 		}
 		public void ShowAddStudent()
@@ -188,7 +183,6 @@ namespace CSAS.ViewModels
 			if (IsAddStudent)
 			{
 				IsAddStudent = false;
-
 			}
 			else
 			{
@@ -203,125 +197,118 @@ namespace CSAS.ViewModels
 		}
 		public void LoadStudents()
 		{
-			Students = new ObservableCollection<Student>(_work.Students.GetStudentsByGroup(_work.MainGroup.Get(CurrentMainGroupId)).ToList());
-			foreach(var student in Students)
+			var grp = Work.MainGroup.Get(CurrentMainGroupId);
+			if (Students == null || !Students.Any())
 			{
-				student.FinalAssessment = _work.FinalAssessment.GetAll().FirstOrDefault(x => x.Student == student);
+				Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(grp).ToList());
+				var finalAssessments = Work.FinalAssessment.GetAll().Where(x => x.Student.MainGroup == grp);
+				foreach (var student in Students)
+				{
+					if (student.FinalAssessment == null)
+					{
+						student.FinalAssessment = finalAssessments.FirstOrDefault(x => x.Student == student);
+					}
+				}
 			}
+		}
+
+		public void RefreshStudents()
+		{
+			var grp = Work.MainGroup.Get(CurrentMainGroupId);
+
+			Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(grp).ToList());
+			var finalAssessments = Work.FinalAssessment.GetAll().Where(x => x.Student.MainGroup == grp);
+			foreach (var student in Students)
+			{
+				if (student.FinalAssessment == null)
+				{
+					student.FinalAssessment = finalAssessments.FirstOrDefault(x => x.Student == student);
+				}
+			}
+
 			IsActivityClosed = false;
 		}
-		public void ChangeIndividualStudy(int? studentId)
+		public void ChangeIndividualStudy(string? studentId)
 		{
-			if (studentId.HasValue)
+			if (!string.IsNullOrEmpty(studentId))
 			{
-				_work.Students.Update(Students.FirstOrDefault(x => x.Id == studentId));
-				_work.Complete();
+				Work.Students.Update(Students.FirstOrDefault(x => x.Id == studentId));
+				Work.Complete();
 			}
 		}
-
-		private void ShowActivities(int? id)
+		private void ShowActivities(string? id)
 		{
-			CurrentStudentId = id.Value;
+			CurrentStudentId = id;
 			SelectedStudent = new Student();
-			SelectedStudent = _work.Students.Get(CurrentStudentId);
+			SelectedStudent = Work.Students.Get(CurrentStudentId);
 		}
 
-		private void SendEmailToTheStudent(int? id)
+		private void SendEmailToTheStudent(string? id)
 		{
 			OutlookService outlookService = new();
-			string email = _work.Settings.GetAll().FirstOrDefault().Email;
-			if (string.IsNullOrEmpty(email))
-			{
-				email = string.Empty;
-			}
+
 			MailAddressCollection collection = new()
 			{
-				new MailAddress(_work.Students.Get(id.Value).SchoolEmail)
+				new MailAddress(Work.Students.Get(id).SchoolEmail)
 			};
-			outlookService.SendEmail(new MailAddress(email), "", collection, null, "", null, true);
+			outlookService.SendEmail("", collection, null, "", null, true);
+		}
+		private void SendEmailToAll()
+		{
+			OutlookService outlookService = new();
+			MailAddressCollection collection = new();
+
+			foreach (var stud in Students)
+			{
+				collection.Add(new MailAddress(stud.SchoolEmail));
+			}
+
+			outlookService.SendEmail("", collection, null, "", null, true);
 		}
 
-		private void OpenActivity(int? id)
+		private void OpenActivity(string? id)
 		{
 			SelectedActivityWindow saw = new()
 			{
-				DataContext = new SelectedActivityViewModel(CurrentMainGroupId, id.Value)
+				DataContext = new SelectedActivityViewModel(CurrentMainGroupId, id)
 			};
 			var result = saw.ShowDialog();
 
 			AppDbContext = new AppDbContext();
-			_work = new UnitOfWork(AppDbContext);
-			int selStudId = SelectedStudent.Id;
-			LoadStudents();
+			Work = new UnitOfWork(AppDbContext);
+			string selStudId = SelectedStudent.Id;
+			RefreshStudents();
 			SelectedStudent = Students.FirstOrDefault(x => x.Id == selStudId);
 		}
-
-		private void GivePoint(int? id)
+		private async void GivePoint(object? obj)
 		{
-			var act = new Activity()
+			var param = obj as object[];
+			string id = (string)param[0];
+			string count = (string)param[1];
+			IsLoading = true;
+			await System.Threading.Tasks.Task.Run(() =>
 			{
-				Name = "Body za aktivitu",
-				Student = _work.Students.Get(id.Value),
-				Deadline = DateTime.Now,
-				Tasks = new List<Models.Task>()
+				var act = new Activity()
+				{
+					Name = "Body za aktivitu",
+					Student = Work.Students.Get(id),
+					Deadline = DateTime.Now,
+					Tasks = new List<Task>()
 					{
-						 new Models.Task()
+						 new Task()
 						{
 							 Name="Aktivita na hodine",
-							 MaxPoints=1,
-							 Points=1
+							 MaxPoints=int.Parse(count),
+							 Points=int.Parse(count)
 						}
 					}
-			};
+				};
 
-			_work.Activity.Add(act);
-			_work.Complete();
-			LoadStudents();
+				Work.Activity.Add(act);
+				Work.Complete();
+				RefreshStudents();
+				IsLoading = false;
+			});
 		}
-		private void Give2Points(int? id)
-		{
-			var act = new Activity()
-			{
-				Name = "Body za aktivitu",
-				Student = _work.Students.Get(id.Value),
-				Deadline = DateTime.Now,
-				Tasks = new List<Models.Task>()
-					{
-						 new Models.Task()
-						{
-							 Name="Aktivita na hodine",
-							 MaxPoints=2,
-							 Points=2
-						}
-					}
-			};
-
-			_work.Activity.Add(act);
-			_work.Complete();
-			LoadStudents();
-		}
-		private void Give3Points(int? id)
-		{
-			var act = new Activity()
-			{
-				Name = "Body za aktivitu",
-				Student = _work.Students.Get(id.Value),
-				Deadline = DateTime.Now,
-				Tasks = new List<Models.Task>()
-					{
-						 new Models.Task()
-						{
-							 Name="Aktivita na hodine",
-							 MaxPoints=3,
-							 Points=3
-						}
-					}
-			};
-
-			_work.Activity.Add(act);
-			_work.Complete();
-			LoadStudents();
-		}
-
 	}
 }

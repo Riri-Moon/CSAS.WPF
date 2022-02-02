@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CSAS.Helpers;
+using Microsoft.Win32;
 using System.Net.Mail;
 using Process = System.Diagnostics;
 
@@ -7,7 +8,7 @@ namespace CSAS.ViewModels
 	public class ActivityViewModel : BaseViewModelBindableBase
 	{
 		public DelegateCommand RefreshCommand { get; }
-		public DelegateCommand<int?> SelectTemplateCommand { get; }
+		public DelegateCommand<string?> SelectTemplateCommand { get; }
 		public DelegateCommand CreateActivityCommand { get; }
 		public DelegateCommand SelectAttachmentsCommand { get; }
 		public DelegateCommand<string> RemoveAttachmentCommand { get; }
@@ -42,7 +43,6 @@ namespace CSAS.ViewModels
 			get => _selectedGroup;
 			set => SetProperty(ref _selectedGroup, value);
 		}
-
 
 		private ObservableCollection<SubGroup> _groups = new();
 		public ObservableCollection<SubGroup> Groups
@@ -103,7 +103,7 @@ namespace CSAS.ViewModels
 
 		}
 
-		public ActivityViewModel(int currentGroupId, ref AppDbContext context)
+		public ActivityViewModel(string currentGroupId, ref AppDbContext context)
 		{
 			Work = new UnitOfWork(context);
 
@@ -117,12 +117,11 @@ namespace CSAS.ViewModels
 			};
 
 			RefreshCommand = new(RefreshTemplates);
-			SelectTemplateCommand = new DelegateCommand<int?>(SelectActivityTemplate);
+			SelectTemplateCommand = new DelegateCommand<string?>(SelectActivityTemplate);
 			CreateActivityCommand = new(CreateActivity);
 			SelectAttachmentsCommand = new(SelectAttachments);
 			RemoveAttachmentCommand = new DelegateCommand<string>(RemoveAttachment);
 			OpenAttachmentCommand = new DelegateCommand<string>(OpenAttachment);
-
 		}
 
 		private void RefreshTemplates()
@@ -130,15 +129,21 @@ namespace CSAS.ViewModels
 			Templates = new ObservableCollection<ActivityTemplate>(Work.ActivityTemplate.GetAll().ToList());
 		}
 
-		private void SelectActivityTemplate(int? id)
+		private void SelectActivityTemplate(string? id)
 		{
-			ActivityTemplate = Templates.FirstOrDefault(x => x.Id == id.Value);
+			ActivityTemplate = Templates.FirstOrDefault(x => x.Id == id);
 			Activity.Name = ActivityTemplate.Name;
 			Activity.Tasks = GetTasksFromTemplate(ActivityTemplate, Activity);
 		}
 		// Add send email
 		private void CreateActivity()
 		{
+			if (Activity == null || string.IsNullOrEmpty(Activity.Name) || !GetStudents().Any() || GetStudents().FirstOrDefault() == null)
+			{
+				MessageBoxHelper.Show("", "Nie je vybraná žiadna aktivita alebo študent", true);
+				return;
+			}
+
 			List<Activity> activity = new();
 			MailAddressCollection mailAddresses = new();
 			MailAddressCollection ccMailAdresses = new();
@@ -147,15 +152,19 @@ namespace CSAS.ViewModels
 				Activity.Attachments = new();
 			}
 			Activity.Attachments.AddRange(Attachments);
-
+			Activity.Created = DateTime.Now;
+			Activity.Modified = Activity.Created;
 			string? subject = $"Nová úloha - {Activity.Name}";
 			string? body = $"Dobrý deň, <br/><br/> práve Vám bola pridelená nová úloha s názvom {Activity.Name}. <br/> Dátum odovzdania je { Activity.Deadline.ToShortDateString() } {Activity.Deadline.ToShortTimeString()}." +
 				$"<br/><br/> V prípade akýchkoľvek otázok ma neváhajte kontaktovať. <br/><br/> S pozdravom RB";
 
 			foreach (var student in GetStudents())
 			{
-				Activity.Created = DateTime.Now;
-				Activity.Modified = Activity.Created;
+
+				if (student == null)
+				{
+					continue;
+				}
 				Activity act = new();				
 				act = Activity.Clone();
 				act.Student = student;
@@ -173,19 +182,13 @@ namespace CSAS.ViewModels
 			Work.Activity.AddRange(activity);
 			Work.Complete();
 
-
 			List<Attachment> attachments = new();
 
 			if (Activity.IsSendEmail)
 			{
 				OutlookService outlookService = new();
 
-				var isFinished = outlookService.SendEmail(new MailAddress("r.baricic1@gmail.com"), subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), true);
-
-				if (isFinished)
-				{
-					var x = 1;
-				}
+				var isFinished = outlookService.SendEmail(subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), true);				
 			}
 
 			Activity = new();

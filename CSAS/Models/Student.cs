@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.PlatformUI;
+using Newtonsoft.Json;
 using Prism.Mvvm;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,13 +9,24 @@ namespace CSAS.Models
 {
 	public class Student : BindableBase
 	{
-		[Key]
-		public virtual int Id { get; set; }
+		//[Key]
+		[JsonProperty("id")]
+		public virtual string Id { get; set; }
 		public string _name;
 		public virtual string Name
 		{
 			get => _name;
 			set => SetProperty(ref _name, value);
+		}
+		public virtual string LastName
+		{
+			get => _lastName;
+			set => SetProperty(ref _lastName, value);
+		}
+		[NotMapped]
+		public string FullName
+		{
+			get => Name + " " + LastName;
 		}
 		public virtual string? Title
 		{
@@ -124,7 +136,6 @@ namespace CSAS.Models
 		{
 			get
 			{
-
 				var attendance = SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Seminar); ;
 				return attendance.Where(p => p.State == AttendanceEnums.NotPresent).Count();
 			}
@@ -150,17 +161,17 @@ namespace CSAS.Models
 			set => SetProperty(ref _isic, value);
 		}
 
-		public string? _title;
-		public string? _email;
-		public MainGroup? _mainGroup;
-		public SubGroup? _subGroup;
-		public List<Activity>? _listOfActivities;
-		public List<SubAttendances>? _subAttendances;
-		public string? _schoolEmail;
-		public int? _year;
-		public FormEnums _form;
-		public int? _totalPoints;
-		public string? _isic;
-		public string? _pathToFolder;
+		private string? _title;
+		private string? _email;
+		private string? _lastName;
+		private MainGroup? _mainGroup;
+		private SubGroup? _subGroup;
+		private List<Activity>? _listOfActivities;
+		private List<SubAttendances>? _subAttendances;
+		private string? _schoolEmail = "@ucm.sk";
+		private int? _year;
+		private FormEnums _form;
+		private string? _isic;
+		private string? _pathToFolder;
 	}
 }

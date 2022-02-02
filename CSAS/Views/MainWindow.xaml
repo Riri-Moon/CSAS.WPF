@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CSAS"
         mc:Ignorable="d"
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewmodels="clr-namespace:CSAS.ViewModels" xmlns:converters="clr-namespace:CSAS.Converters"
-        Title="{Binding CurrentVersion}" Width="1440" Height="810" ResizeMode="CanMinimize"
+        Title="{Binding CurrentVersion}" Width="1440" Height="810" ResizeMode="CanMinimize" 
         WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow">
     <Window.Resources>
@@ -28,20 +28,7 @@
                         HorizontalAlignment="Right" 
                         Margin="16"
                         IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"/>
-
-                        <TextBox 
-                        x:Name="ViewItemsSearchBox"
-                        Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                        DockPanel.Dock="Top"
-                        Margin="16, 4"
-                        Width="200"
-                        materialDesign:HintAssist.Hint="Search"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.HasClearButton="True"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"/>
-
+                       
                         <ListBox 
                         x:Name="ViewItemsListBox" 
                         Margin="0 16 0 16"
@@ -78,7 +65,7 @@
 
                                 <Button
                                 Margin="24,0,0,0"
-                                ToolTip="Previous Item"
+                                ToolTip="Predošlá strana"
                                 Command="{Binding MovePrevCommand}"
                                 Content="{materialDesign:PackIcon Kind=ArrowLeft, Size=24}"
                                 Style="{DynamicResource MaterialDesignToolButton}"
@@ -87,7 +74,7 @@
 
                                 <Button 
                                 Margin="16,0,0,0"
-                                ToolTip="Next Item"
+                                ToolTip="Ďalšia strana"
                                 Command="{Binding MoveNextCommand}"
                                 Content="{materialDesign:PackIcon Kind=ArrowRight, Size=24}"
                                 Style="{DynamicResource MaterialDesignToolButton}"
@@ -96,7 +83,7 @@
 
                                 <Button
                                 Margin="16,0,0,0"
-                                ToolTip="Home"
+                                ToolTip="Domov"
                                 Command="{Binding HomeCommand}"
                                 Content="{materialDesign:PackIcon Kind=Home, Size=24}"
                                 Style="{DynamicResource MaterialDesignToolButton}"
@@ -126,40 +113,6 @@
                             StaysOpen="False">
 
                                 <StackPanel>
-                                    <Grid Margin="10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
-                                        <TextBlock
-                                        Text="Light"
-                                        Margin="0 0 10 0"/>
-                                        <ToggleButton
-                                        IsChecked="{Binding IsDarkTheme,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        Grid.Column="1"/>
-                                        <TextBlock
-                                        Text="Dark"
-                                        Margin="10 0 0 0"
-                                        Grid.Column="2"/>
-                                        <TextBlock
-                                        Text="Enabled"
-                                        Margin="0 10 10 0"
-                                        Grid.Row="1"/>
-                                        <ToggleButton
-                                        x:Name="ControlsEnabledToggleButton"
-                                        Margin="0 10 0 0"
-                                        IsChecked="{Binding ControlsEnabled}"
-                                        Grid.Row="1"
-                                        Grid.Column="1"/>
-                                    </Grid>
-
-                                    <Separator/>
-
                                     <Button Content="Export údajov" Command="{Binding OpenExportCommand}"/>
                                  
                                     <Separator/>
@@ -169,10 +122,10 @@
                                 </StackPanel>
                             </materialDesign:PopupBox>
 
-                            <TextBlock
+                            <TextBlock Grid.ColumnSpan="5"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Margin="-50,0,0,0"
+                            Margin="-250,0,0,0"
                             FontSize="22"
                             AutomationProperties.Name="None"
                             Text="{Binding SelectedItem.Name}"/>
@@ -201,6 +154,9 @@
                 </DockPanel>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
-        
+        <ProgressBar Visibility="{Binding DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0 0 0 0"
+  Style="{StaticResource MaterialDesignCircularProgressBar}" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"
+  Value="33"
+  IsIndeterminate="True" />
     </Grid>
 </Window>

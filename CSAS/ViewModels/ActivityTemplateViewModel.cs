@@ -11,9 +11,9 @@
 		public DelegateCommand AddTaskCommand { get; }
 		public DelegateCommand RemoveTasksCommand { get; }
 		public DelegateCommand SaveTemplateCommand { get; }
-		public DelegateCommand<int?> DeleteTemplateCommand { get; }
-		public DelegateCommand<int?> EditTemplateCommand { get; }
-		public DelegateCommand<int?> CopyTemplateCommand { get; }
+		public DelegateCommand<string?> DeleteTemplateCommand { get; }
+		public DelegateCommand<string?> EditTemplateCommand { get; }
+		public DelegateCommand<string?> CopyTemplateCommand { get; }
 
 		private new UnitOfWork Work { get; set; }
 
@@ -60,7 +60,7 @@
 			}
 		}
 
-		public ActivityTemplateViewModel(int currentGroupId, ref AppDbContext context)
+		public ActivityTemplateViewModel(string currentGroupId, ref AppDbContext context)
 		{
 			Work = new UnitOfWork(context);
 			Templates = new ObservableCollection<ActivityTemplate>(Work.ActivityTemplate.GetAll().ToList());
@@ -69,9 +69,9 @@
 			RemoveTasksCommand = new DelegateCommand(RemoveSelectedTasks);
 			SaveTemplateCommand = new DelegateCommand(SaveTaskTemplate);
 
-			EditTemplateCommand = new DelegateCommand<int?>(EditTemplate);
-			DeleteTemplateCommand = new DelegateCommand<int?>(RemoveTemplate);
-			CopyTemplateCommand = new DelegateCommand<int?>(CopyTemplate);
+			EditTemplateCommand = new DelegateCommand<string?>(EditTemplate);
+			DeleteTemplateCommand = new DelegateCommand<string?>(RemoveTemplate);
+			CopyTemplateCommand = new DelegateCommand<string?>(CopyTemplate);
 
 			NewTemplate = new ActivityTemplate();
 			Tasks = new ObservableCollection<TaskTemplate>();
@@ -134,35 +134,33 @@
 			}
 		}
 
-		private void CopyTemplate(int? id)
+		private void CopyTemplate(string? id)
 		{
-			NewTemplate = Work.ActivityTemplate.Get(id.Value).Clone();
+			NewTemplate = Work.ActivityTemplate.Get(id).Clone();
 			Tasks = new ObservableCollection<TaskTemplate>();
 
-			var tasks = Work.TasksTemplate.GetAll().Where(x => x.ActivityTemplate.Id == id.Value);
+			var tasks = Work.TasksTemplate.GetAll().Where(x => x.ActivityTemplate.Id == id);
 			foreach (var task in tasks)
 			{
 				var taskClone = task.Clone();
-				taskClone.Id = new int();
+				taskClone.Id = new Guid().ToString();
 				Tasks.Add(taskClone);
 			}
 
-			NewTemplate.Id = new int();
-
+			NewTemplate.Id = new Guid().ToString();
 		}
 
-		private void EditTemplate(int? id)
+		private void EditTemplate(string? id)
 		{
-			NewTemplate = Work.ActivityTemplate.Get(id.Value);
+			NewTemplate = Work.ActivityTemplate.Get(id);
 			NewTemplate.IsUpdate = true;
 			Tasks = new ObservableCollection<TaskTemplate>(NewTemplate.TasksTemplate);
 		}
 
-		private void RemoveTemplate(int? id)
+		private void RemoveTemplate(string? id)
 		{
-			var act = Work.ActivityTemplate.Get(id.Value);
-
-			//_work.TaskTemplate.RemoveRange(_work.TaskTemplate.GetAll().Where(x => x.ActivityTemplate.Id==id.Value));
+			var act = Work.ActivityTemplate.Get(id);
+			Work.TasksTemplate.RemoveRange(act.TasksTemplate);
 			Work.ActivityTemplate.Remove(act);
 			Work.Complete();
 
@@ -172,7 +170,6 @@
 		private int GetMaxPoints()
 		{
 			int count = 0;
-			// var templates = _work.TasksTemplate.GetAll().Where(x => x.ActivityTemplate.Id == template.Id);
 			foreach (var task in Tasks)
 			{
 				count += task.MaxPoints.Value;

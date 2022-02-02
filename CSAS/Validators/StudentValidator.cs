@@ -6,30 +6,7 @@ namespace CSAS.Validators
 	{
 		public static bool ValidateStudent(Student student)
 		{
-			bool isValid;
-			if (!IsStringValid(student.Name) && !IsEmailValid(student.SchoolEmail))
-			{
-				isValid = false;
-				return false;
-			}
-			else
-			{
-				isValid = true;
-			}
-
-			if (IsStringValid(student.Email))
-			{
-				if (isValid && IsEmailValid(student.Email))
-				{
-					isValid = true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-
-			return isValid;
+			return IsIsicValid(student.Isic) && IsEmailValid(student.SchoolEmail) && IsStringValid(student.Name) && student.SubGroup != null && student.Year.HasValue;
 		}
 	}
 }

@@ -9,7 +9,7 @@ namespace CSAS.Services
 	{
 		private SpreadsheetDocument? _excelFile;
 		private UInt32 _sheetId = 0;
-
+		readonly static Logger _logger = new();
 		public void AddSheet(string sheetName)
 		{
 			WorksheetPart worksheetPart = _excelFile.WorkbookPart.AddNewPart<WorksheetPart>();
@@ -36,7 +36,6 @@ namespace CSAS.Services
 		}
 		public void CreateSpreadsheetWorkbook(string filepath, string sheetName)
 		{
-
 			_excelFile = SpreadsheetDocument.
 				Create(filepath, SpreadsheetDocumentType.Workbook);
 
@@ -151,7 +150,6 @@ namespace CSAS.Services
 			row.InsertAfter(newCell, refCell);
 
 			return newCell;
-
 		}
 
 		private static string GetCellValue(WorkbookPart wbPart, List<Cell> theCells, string cellColumnReference)
@@ -214,7 +212,7 @@ namespace CSAS.Services
 		}
 
 		//Only xlsx files
-		public static DataTable GetDataTableFromExcelFile(string filePath, string sheetName = "")
+		public static DataTable GetDataTableFromExcelFile(string filePath, string sheetName = "", int startRow = 1)
 		{
 			DataTable dt = new();
 			try
@@ -243,7 +241,7 @@ namespace CSAS.Services
 				}
 				foreach (Row r in sheetdata.Descendants<Row>())
 				{
-					if (r.RowIndex > 1)
+					if (r.RowIndex > startRow)
 					{
 						DataRow tempRow = dt.NewRow();
 
@@ -258,7 +256,7 @@ namespace CSAS.Services
 								}
 								catch (Exception ex)
 								{
-									var x = "sa";
+									_logger.ErrorAsync(ex.Message);
 								}
 							}
 						}
@@ -268,6 +266,7 @@ namespace CSAS.Services
 			}
 			catch (Exception ex)
 			{
+				_logger.ErrorAsync(ex.Message);
 
 			}
 			return dt;

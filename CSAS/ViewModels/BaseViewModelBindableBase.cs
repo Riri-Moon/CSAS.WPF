@@ -6,19 +6,26 @@ namespace CSAS.ViewModels
 	public class BaseViewModelBindableBase : INotifyPropertyChanged
 	{
 
-		public int CurrentMainGroupId { get; set; }
+		public string CurrentMainGroupId { get; set; }
 		public AppDbContext AppDbContext
 		{
 			get => _appDbContext;
 			set => SetProperty(ref _appDbContext, value);
 		}
 		private AppDbContext _appDbContext;
-		public UnitOfWork _work
+		public UnitOfWork Work
 		{
 			get => m_work;
 			set => SetProperty(ref m_work, value);
 		}
 		private UnitOfWork m_work;
+
+		private bool _isLoading = false;
+		public bool IsLoading
+		{
+			get => _isLoading;
+			set => SetProperty(ref _isLoading, value);
+		}
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -1,4 +1,4 @@
-﻿namespace CSAS.ViewModels
+﻿ namespace CSAS.ViewModels
 {
 	public class ApplicationViewModel : BaseViewModelBindableBase
 	{
@@ -12,12 +12,12 @@
 		public StatisticsViewModel StatisticsViewModel { get; set; }
 
 		public new AppDbContext AppDbContext;
-		public void SetCurrentGroup(int id)
+		public void SetCurrentGroup(string id)
 		{
 			HomeViewModel.CurrentMainGroupId = id;
 		}
 
-		public ApplicationViewModel(int id)
+		public ApplicationViewModel(string id)
 		{
 			AppDbContext = new AppDbContext();
 			CurrentMainGroupId = id;

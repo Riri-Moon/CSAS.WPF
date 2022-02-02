@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Prism.Mvvm;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,8 +10,8 @@ namespace CSAS.Models
 	[Table("Attendances")]
 	public class Attendance : BindableBase
 	{
-		[Key]
-		public virtual int Id { get; set; }
+		[JsonProperty("id")]
+		public virtual string Id { get; set; }
 
 		private List<SubAttendances> _subAttendances;
 		public virtual List<SubAttendances> SubAttendances

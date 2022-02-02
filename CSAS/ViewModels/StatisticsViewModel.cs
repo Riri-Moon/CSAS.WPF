@@ -10,13 +10,14 @@ using SkiaSharp;
 using static CSAS.Enums.Enums;
 using CSAS.Enums;
 using CSAS.Helpers;
+using LiveChartsCore.SkiaSharpView.Painting.Effects;
 
 namespace CSAS.ViewModels
 {
 	public class StatisticsViewModel : BaseDataViewModel
 	{
 		public DelegateCommand RefreshCommand { get; }
-		public StatisticsViewModel(int id, ref AppDbContext appDbContext)
+		public StatisticsViewModel(string id, ref AppDbContext appDbContext)
 		{
 			CurrentMainGroupId = id;
 			AppDbContext = appDbContext;
@@ -73,18 +74,23 @@ namespace CSAS.ViewModels
 			get => _avgGrade;
 			set => SetProperty(ref _avgGrade, value);
 		}
-		public IEnumerable<ISeries> PieSeries { get; set; } = new List<ISeries>
+		public List<ISeries> PieSeries
 		{
-			new PieSeries<double> { Values = new List<double> { 4 }, InnerRadius = 70 },
-			new PieSeries<double> { Values = new List<double> { 5 }, InnerRadius = 70 },
-			new PieSeries<double> { Values = new List<double> { 3 }, InnerRadius = 70 },
-			new PieSeries<double> { Values = new List<double> { 5 }, InnerRadius = 70 },
-			new PieSeries<double> { Values = new List<double> { 7 }, InnerRadius = 70 },
-		};
-
+			get => _pieSeries;
+			set => SetProperty(ref _pieSeries, value);
+		}
+		private List<ISeries> _pieSeries;
+		public List<RectangularSection> Sections
+		{
+			get => _sections;
+			set => SetProperty(ref _sections, value);
+		}
+		private List<RectangularSection> _sections ;
 		private void Refresh()
 		{
-			CreatePointsChart();
+			//CreatePointsBarChart();
+			CreateAttendanceBarChart();
+			CreateSpecificAtendance();
 			AvgPtsPerAct = GetAveragePointsForActivity();
 			AvgPtsPerTask = GetAveragePointsForTask();
 			AvgPerLecture = GetAverageAttendanceLecture();
@@ -92,31 +98,144 @@ namespace CSAS.ViewModels
 			AvgGrade = EnumExtension.GetDescriptionValue<Grade>( GetAverageGrade().ToString());
 		}
 
-		private void CreatePointsChart()
+		private void CreatePointsBarChart()
 		{
-			
-			List<Student> list = GetStudents();
-
-			if (list == null)
-				return;
-			Series = new();
-			Axis axis = new();
-			axis.Labels = new List<string>();
-			XAxes = new();
-			XAxes.Add(new Axis());
-			XAxes[0].Position = AxisPosition.Start;
-			XAxes[0].TextSize = 20;
-			XAxes[0].Labels = new List<string>();
-
-			foreach (var x in list)
+			if (!IsStudent)
 			{
-				Series.Add(new ColumnSeries<double>()
+				List<Student> list = GetStudents();
+
+				if (list == null)
+					return;
+				Series = new();
+				Axis axis = new();
+				axis.Labels = new List<string>();
+				XAxes = new();
+				XAxes.Add(new Axis());
+				XAxes[0].Position = AxisPosition.Start;
+				XAxes[0].TextSize = 20;
+				XAxes[0].Labels = new List<string>();
+
+				foreach (var x in list)
 				{
-					Name = x.Name,
-					Values = new double[] { x.TotalPoints.Value },
+					Series.Add(new ColumnSeries<double>()
+					{
+						Name = x.FullName,
+						Values = new double[] { x.TotalPoints.Value },
+					});
+				}
+
+				XAxes[0].Labels.Add("Študenti - Body");
+			}
+		}
+
+		private void CreateSpecificAtendance()
+		{
+			if (!IsStudent && SelectedAttendance != null)
+			{
+				List<Student> list = GetStudents();
+
+				if (list == null)
+					return;
+
+				PieSeries = new();
+
+				var x1 = new List<double>();
+				var x2 = new List<double>();
+				var x3 = new List<double>();
+
+				foreach (var x in list)
+				{
+					x1.Add(x.SubAttendances.Where(x => x.Attendance==SelectedAttendance && x.State == AttendanceEnums.IsPresent).Count());
+					x2.Add(x.SubAttendances.Where(x => x.Attendance == SelectedAttendance && x.State == AttendanceEnums.NotPresent).Count());
+					x3.Add(x.SubAttendances.Where(x => x.Attendance == SelectedAttendance && x.State == AttendanceEnums.Excused).Count());
+				}
+
+				PieSeries.Add(new PieSeries<double>()
+				{
+					Name = $"Pritomny",
+					Values = new double[] { x1.Sum(x => x) },
+				});
+
+				PieSeries.Add(new PieSeries<double>()
+				{
+					Name = $"Nepritomny",
+					Values = new double[] { x2.Sum(x => x) },
+				});
+
+				PieSeries.Add(new PieSeries<double>()
+				{
+					Name = $"Ospravedlnene",
+					Values = new double[] { x3.Sum(x => x) },					
 				});
 			}
-			XAxes[0].Labels.Add("Študenti - Body");
+		}
+
+		private void CreateAttendanceBarChart()
+		{
+			if (!IsStudent && IsAttendance)
+			{
+				List<Student> list = GetStudents();
+
+				if (list == null)
+					return;
+				Series = new();
+				Axis axis = new();
+				axis.Labels = new List<string>();
+				XAxes = new();
+				XAxes.Add(new Axis());
+				XAxes[0].TextSize = 20;
+				XAxes[0].Labels = new List<string>();
+
+				List<string> Labels = new();
+				var x1 = new List<double>();
+				var x2 = new List<double>();
+				var x3 = new List<double>();
+
+				var totalAttLecture = Work.Attendance.GetAttendanceByMainGroup(list.FirstOrDefault().MainGroup).Where(x => x.Form == AttendanceFormEnums.Lecture).Count();
+				Sections = new()
+				{
+					new RectangularSection
+					{
+						Yi = totalAttLecture - 2,
+						Yj = totalAttLecture - 2,
+						Stroke = new SolidColorPaint
+						{
+							Color = SKColors.Red,
+							StrokeThickness = 3,
+							PathEffect = new DashEffect(new float[] { 6, 6 })
+						}
+					}
+				};
+				foreach (var x in list)
+				{
+					x1.Add(x.SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Lecture && x.State == AttendanceEnums.IsPresent).Count());
+					x2.Add(x.SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Lecture && x.State == AttendanceEnums.NotPresent).Count());
+					x3.Add(x.SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Lecture && x.State == AttendanceEnums.Excused).Count());
+
+					Labels.Add(x.FullName);
+				}
+
+				Series.Add(new ColumnSeries<double>()
+				{
+					Name = $"Pritomny",
+					Values = x1.ToArray()
+				});
+
+				Series.Add(new ColumnSeries<double>()
+				{
+					Name = $"Nepritomny",
+					Values = x2.ToArray()
+				}) ;
+
+				Series.Add(new ColumnSeries<double>()
+				{
+					Name = $"Ospravedlnene",
+					Values = x3.ToArray()
+				});
+
+				XAxes[0].Labels = Labels.ToArray();
+				XAxes[0].LabelsRotation = 45;
+			}
 		}
 
 		private double GetAveragePointsForTask()
@@ -204,7 +323,7 @@ namespace CSAS.ViewModels
 		private double GetAveragePointsForActivity()
 		{
 			var studs = GetStudents();
-			if (studs != null)
+			if (studs != null && studs.Any())
 			{
 				var count = studs.Select(x => x.ListOfActivities).Sum(x => x.Count);
 				var studentCount = studs.Sum(i => i.TotalPoints.Value);
@@ -225,7 +344,7 @@ namespace CSAS.ViewModels
 			{
 				 assessments = Work.FinalAssessment.GetAll().Where(x => x.Student.MainGroup.Id == CurrentMainGroupId);
 			}
-			if (assessments != null)
+			if (assessments != null && assessments.Any())
 			{
 				var sum = assessments.Sum(x => (int)x.Grade);
 

@@ -1,5 +1,7 @@
-﻿using Prism.Mvvm;
+﻿using Newtonsoft.Json;
+using Prism.Mvvm;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static CSAS.Enums.Enums;
 
 namespace CSAS.Models
@@ -7,7 +9,8 @@ namespace CSAS.Models
 	public class SubAttendances : BindableBase
 	{
 		[Key]
-		public virtual int Id { get; set; }
+		[JsonProperty("id")]
+		public virtual string Id { get; set; }
 
 		private Attendance _attendance;
 		public virtual Attendance Attendance
@@ -28,5 +31,11 @@ namespace CSAS.Models
 			set => SetProperty(ref _state, value);
 		}
 		private AttendanceEnums _state;
+		[NotMapped]
+		public bool IsSelected {
+			get => _isSelected;
+			set => SetProperty(ref _isSelected, value);
+	}
+		private bool _isSelected = false;
 	}
 }

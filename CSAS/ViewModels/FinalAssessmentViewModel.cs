@@ -1,4 +1,6 @@
-﻿using System.Net.Mail;
+﻿using CSAS.Helpers;
+using IBM.Tools.Common.Helper.Logger;
+using System.Net.Mail;
 using System.Text;
 using static CSAS.Enums.Enums;
 
@@ -6,11 +8,11 @@ namespace CSAS.ViewModels
 {
 	public class FinalAssessmentViewModel : BaseViewModelBindableBase
 	{
+		readonly Logger logger = new();
 		public DelegateCommand RefreshCommand { get; }
 		public DelegateCommand SaveCommand { get; }
 
 		private ObservableCollection<Student> _students;
-
 		public ObservableCollection<Student> Students
 		{
 			get => _students;
@@ -39,65 +41,66 @@ namespace CSAS.ViewModels
 			{
 				if (value != null)
 				{
-					var assessment = _work.FinalAssessment.GetAll().FirstOrDefault(x => x.Student.Id == value.Id);
-					if (assessment != null)
-						FinalAssessment = assessment;
-					else
+					if (value.FinalAssessment == null)
 					{
-						FinalAssessment = new FinalAssessment
+						value.FinalAssessment = new FinalAssessment
 						{
-							Grade = GetGrade(value.TotalPoints.Value)
+							Grade = GetGrade(value.TotalPoints.Value),
+							IsNew = true,
+							Student = value,
+							Created= DateTime.Now,
 						};
 					}
 				}
 				SetProperty(ref _student, value);
 			}
 		}
-		private FinalAssessment _finalAssessment;
-		public FinalAssessment FinalAssessment
-		{
-			get => _finalAssessment;
-			set => SetProperty(ref _finalAssessment, value);
-		}
 
-		private new UnitOfWork _work;
-
-		public FinalAssessmentViewModel(int currentGroupId, ref AppDbContext context)
+		public FinalAssessmentViewModel(string currentGroupId, ref AppDbContext context)
 		{
-			_work = new UnitOfWork(context);
+			Work = new UnitOfWork(context);
 			CurrentMainGroupId = currentGroupId;
 			RefreshCommand = new DelegateCommand(Reload);
-			Students = new ObservableCollection<Student>(_work.Students.GetStudentsByGroup(_work.MainGroup.Get(CurrentMainGroupId)));
+			Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(Work.MainGroup.Get(CurrentMainGroupId)));
 			SaveCommand = new DelegateCommand(SaveFinalAssessment);
 		}
 
 		private void Reload()
 		{
-			_work = new UnitOfWork(new AppDbContext());
-			Students = new ObservableCollection<Student>(_work.Students.GetStudentsByGroup(_work.MainGroup.Get(CurrentMainGroupId)));
+			var mainGroup = Work.MainGroup.Get(CurrentMainGroupId);
+			Work = new UnitOfWork(new AppDbContext());
+			Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(mainGroup));
+			var finAssessments = Work.FinalAssessment.GetAll();
+			foreach (var stud in Students)
+			{
+				var finass = finAssessments.FirstOrDefault(x => x.Student == stud);
+				if (finass != null)
+					stud.FinalAssessment = finass;
+			}
 		}
 
 		private Grade GetGrade(double pts)
 		{
-			var grades = _work.Settings.GetAll().FirstOrDefault();
+			var grades = Work.Settings.GetAll().FirstOrDefault(x=>x.MainGroup.Id == CurrentMainGroupId);
+			var percentage = grades.MaxPoints.Value / 100;
 
-			if (pts >= grades.A)
+			if (pts >= grades.A * percentage)
 			{
 				return Grade.A;
 			}
-			if (pts >= grades.B)
+			if (pts >= grades.B * percentage)
 			{
 				return Grade.B;
 			}
-			if (pts >= grades.C)
+			if (pts >= grades.C * percentage)
 			{
 				return Grade.C;
 			}
-			if (pts >= grades.D)
+			if (pts >= grades.D * percentage)
 			{
 				return Grade.D;
 			}
-			if (pts >= grades.E)
+			if (pts >= grades.E * percentage)
 			{
 				return Grade.E;
 			}
@@ -109,58 +112,85 @@ namespace CSAS.ViewModels
 
 		private void SaveFinalAssessment()
 		{
-			OutlookService outlookService = new();
 			string space = "<br/><br/>";
-
-			if (FinalAssessment.IsNew)
+			if (SelectedStudent == null)
 			{
-				FinalAssessment.Student = SelectedStudent;
-				FinalAssessment.IsNew = false;
-				FinalAssessment.Created = DateTime.Now;
-				_work.FinalAssessment.Add(FinalAssessment);
+				MessageBoxHelper.Show("", "Nie je vybraný žiadny študent", true);
+				return;
+			}
+			if (SelectedStudent.FinalAssessment.IsNew)
+			{
+				SelectedStudent.FinalAssessment.IsNew = false;
+				SelectedStudent.FinalAssessment.Created = DateTime.Now;
+				if (string.IsNullOrEmpty(SelectedStudent.FinalAssessment.Id))
+				{
+					Work.FinalAssessment.Add(SelectedStudent.FinalAssessment);
+				}
+				else
+				{
+					Work.FinalAssessment.Update(SelectedStudent.FinalAssessment);
+				}
 			}
 			else
 			{
-				_work.FinalAssessment.Update(FinalAssessment);
+				Work.FinalAssessment.Update(SelectedStudent.FinalAssessment);
+
 			}
-			_work.Complete();
 
-			if (FinalAssessment.IsSendEmail)
+			Work.Complete();
+
+			if (SelectedStudent.FinalAssessment.IsSendEmail)
 			{
-				StringBuilder builder = new($"Dobrý deň, {space} Vaše hodnotenie z predmetu {FinalAssessment.Student.MainGroup.Subject} je {Enums.EnumExtension.GetDescription(FinalAssessment.Grade)}.");
+				OutlookService outlookService = new();
+				StringBuilder builder = new($"Dobrý deň, {space} Vaše hodnotenie z predmetu {SelectedStudent.FinalAssessment.Student.MainGroup.Subject} je {Enums.EnumExtension.GetDescription(SelectedStudent.FinalAssessment.Grade)}.");
 				List<string> paths = new();
-				var sett = _work.Settings.GetAll().FirstOrDefault();
-				MailAddressCollection mails = new()
+				try
 				{
-					FinalAssessment.Student.Email
-				};
-				if (FinalAssessment.IsSendExport)
-				{
-					ExportExcelService service = new()
+					var sett = Work.Settings.GetAll().FirstOrDefault();
+					MailAddressCollection mails = new()
 					{
-						AnonymizeData = false,
-						IsBasic = true,
-						SendToStudents = true,
-						Student = FinalAssessment.Student,
-						Settings = _work.Settings.GetAll().FirstOrDefault(),
+						SelectedStudent.Email
 					};
-					var pathToActivity = service.ExportActivity(_work.Activity.GetAll().Where(x => x.Student == FinalAssessment.Student).ToList());
-					builder.Append($"{space} V prílohe nájdete výpis z aktivít");
-					paths.Add(pathToActivity);
 
-					if (FinalAssessment.IsSendAttendanceExport)
+					if (SelectedStudent.FinalAssessment.IsSendExport)
 					{
-						var pathToAttendances = service.ExportAttendances(_work.Attendance.GetAll().Where(x => x.MainGroup == FinalAssessment.Student.MainGroup).ToList());
-						builder.Append($"a dochádzky.");
-						paths.Add(pathToAttendances);
+						List<Student> students = new();
+						students.Add(SelectedStudent);
+						ExportExcelService service = new()
+						{
+							AnonymizeData = false,
+							IsBasic = true,
+							SendToStudents = true,
+							Student = SelectedStudent,
+							Students = students,
+							Settings = Work.Settings.GetAll().FirstOrDefault(x=>x.MainGroup==SelectedStudent.MainGroup),
+						};
+						var pathToActivity = service.ExportActivity(Work.Activity.GetAll().Where(x => x.Student == SelectedStudent).ToList());
+						builder.Append($"{space} V prílohe nájdete výpis z aktivít");
+						paths.Add(pathToActivity);
 
+						if (SelectedStudent.FinalAssessment.IsSendAttendanceExport)
+						{
+							var pathToAttendances = service.ExportAttendances(Work.Attendance.GetAll().Where(x => x.MainGroup == SelectedStudent.MainGroup).ToList());
+							builder.Append($"a dochádzky.");
+							paths.Add(pathToAttendances);
+						}
+						builder.Append($"S pozdravom {sett.Title} {sett.Name} {sett.TitleAfterName}");
 
+						outlookService = new();
+						outlookService.SendEmail($"Konečné hodnotenie z predmetu {SelectedStudent.MainGroup.Subject}", mails, null, builder.ToString(), paths, false);
 					}
-					outlookService.SendEmail(new MailAddress(sett.Email), $"Konečné hodnotenie z predmetu {FinalAssessment.Student.MainGroup.Subject}", mails, null, builder.ToString(), paths, false);
-
+					else
+					{
+						builder.Append($"S pozdravom {sett.Title} {sett.Name} {sett.TitleAfterName}");
+						outlookService.SendEmail( $"Konečné hodnotenie z predmetu {SelectedStudent.MainGroup.Subject}", mails, null, builder.ToString(), null, false);
+					}
 				}
-				builder.Append($"S pozdravom {sett.Title} {sett.Name} {sett.TitleAfterName}");
-				outlookService.SendEmail(new MailAddress(sett.Email), $"Konečné hodnotenie z predmetu {FinalAssessment.Student.MainGroup.Subject}", mails, null, builder.ToString(),null,false);
+				catch (Exception ex)
+				{
+					logger.ErrorAsync(ex.Message);
+					logger.ErrorAsync(ex.StackTrace);
+				}
 			}
 		}
 	}

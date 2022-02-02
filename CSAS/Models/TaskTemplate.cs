@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using Newtonsoft.Json;
+using Prism.Mvvm;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,7 +7,8 @@ namespace CSAS.Models
 {
 	public class TaskTemplate : BindableBase
 	{
-		public int Id { get; set; }
+		[JsonProperty("id")]
+		public string Id { get; set; }
 		public virtual ActivityTemplate ActivityTemplate
 		{
 			get { return _activityTemplate; }

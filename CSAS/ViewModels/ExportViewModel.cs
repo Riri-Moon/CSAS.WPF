@@ -1,4 +1,6 @@
-﻿namespace CSAS.ViewModels
+﻿using CSAS.Helpers;
+
+namespace CSAS.ViewModels
 {
 	public class ExportViewModel : BaseDataViewModel
 	{
@@ -42,11 +44,10 @@
 			set => SetProperty(ref _isSendToStudents, value);
 		}
 
-
-		public ExportViewModel(int currentGroupId, ref AppDbContext appDbContext)
+		public ExportViewModel(string currentGroupId, ref AppDbContext appDbContext)
 		{
 			CurrentMainGroupId = currentGroupId;
-			Work = new UnitOfWork(new AppDbContext());
+			Work = new UnitOfWork(appDbContext);
 			Students = new ObservableCollection<Student>(Work.Students.GetAll().Where(x => x.MainGroup.Id == currentGroupId));
 			Groups = new ObservableCollection<SubGroup>(Work.SubGroup.GetAll().Where(g => g.MainGroup.Id == currentGroupId));
 
@@ -61,7 +62,7 @@
 		private async void ExportData()
 		{
 			IsExport = true;
-			IExportService exportService = Services.ExportServiceFactory.GetExportService(IsExcel);
+			IExportService exportService = ExportServiceFactory.GetExportService(IsExcel);
 
 			exportService.AnonymizeData = IsAnonymized;
 			exportService.SendToMe = IsSendMe;
@@ -70,13 +71,19 @@
 			exportService.MainGroup = Work.MainGroup.Get(CurrentMainGroupId);
 			exportService.Settings = Work.Settings.GetAll().FirstOrDefault();
 
-			if (IsGroup)
+			if (IsGroup && SelectedGroup != null &&!string.IsNullOrEmpty(SelectedGroup.Name))
 			{
 				exportService.Group = SelectedGroup;
 			}
-			else if (IsStudent)
+			else if (IsStudent && !string.IsNullOrEmpty(SelectedStudent.Name))
 			{
 				exportService.Student = SelectedStudent;
+			}
+			else if(!IsAll)
+			{
+				MessageBoxHelper.Show("Nie sú vybraté žiadne dáta", "Vyberte skupinu/študenta", true);
+				IsExport = false;
+				return;
 			}
 			try
 			{

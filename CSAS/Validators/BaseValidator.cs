@@ -15,6 +15,10 @@ namespace CSAS.Validators
 
 		public static bool IsIsicValid(string isic)
 		{
+			if (string.IsNullOrEmpty(isic))
+			{
+				return false;
+			}
 			return isic.Length == 17;
 		}
 

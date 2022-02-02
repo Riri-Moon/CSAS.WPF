@@ -6,13 +6,11 @@ namespace CSAS.ViewModels
 	public class AttendanceViewModel : BaseViewModelBindableBase
 	{
 		public DelegateCommand SelectLectureCommand { get; }
-		public DelegateCommand<int?> SelectSeminarCommand { get; }
-		public DelegateCommand<int?> SelectAttendanceCommand { get; }
+		public DelegateCommand<string?> SelectSeminarCommand { get; }
+		public DelegateCommand<string?> SelectAttendanceCommand { get; }
 		public DelegateCommand AddNewAttendanceCommand { get; }
-		public DelegateCommand<int?> RemoveAttendanceCommand { get; }
-		public DelegateCommand<int?> StudentNotPresentCommand { get; }
-		public DelegateCommand<int?> StudentPresentCommand { get; }
-		public DelegateCommand<int?> StudentSickCommand { get; }
+		public DelegateCommand<string?> RemoveAttendanceCommand { get; }
+		public DelegateCommand<object?> StudentPresentCommand { get; }
 
 		private ObservableCollection<Attendance> _lectures;
 		public ObservableCollection<Attendance> Lectures
@@ -106,14 +104,15 @@ namespace CSAS.ViewModels
 		private new UnitOfWork Work { get; set; }
 
 		private DateTime _time = DateTime.Now;
-		public DateTime Time {
+		public DateTime Time
+		{
 			get { return _time; }
 			set
 			{
 				SetProperty(ref _time, value);
 			}
 		}
-		public AttendanceViewModel(int currentMainGroupId, ref AppDbContext context)
+		public AttendanceViewModel(string currentMainGroupId, ref AppDbContext context)
 		{
 			Work = new UnitOfWork(context);
 			Attendances = new ObservableCollection<Attendance>();
@@ -125,28 +124,28 @@ namespace CSAS.ViewModels
 			SubGroups = new ObservableCollection<SubGroup>(Work.MainGroup.Get(currentMainGroupId).SubGroups);
 			SelectedSubGroup = SubGroups.FirstOrDefault();
 			SelectLectureCommand = new DelegateCommand(SelectLecture);
-			SelectSeminarCommand = new DelegateCommand<int?>(SelectSeminar);
+			SelectSeminarCommand = new DelegateCommand<string?>(SelectSeminar);
 			AddNewAttendanceCommand = new DelegateCommand(AddNewAttendance);
-			RemoveAttendanceCommand = new DelegateCommand<int?>(RemoveAttendance);
-			SelectAttendanceCommand = new DelegateCommand<int?>(SelectAttendance);
-			StudentPresentCommand = new DelegateCommand<int?>(StudentPresent);
-			StudentNotPresentCommand = new DelegateCommand<int?>(StudentNotPresent);
-			StudentSickCommand = new DelegateCommand<int?>(StudentSick);
+			RemoveAttendanceCommand = new DelegateCommand<string?>(RemoveAttendance);
+			SelectAttendanceCommand = new DelegateCommand<string?>(SelectAttendance);
+			StudentPresentCommand = new DelegateCommand<object?>(StudentPresent);
 
 		}
 
-		private void SelectAttendance(int? id)
+		private void SelectAttendance(string? id)
 		{
-			if (id.HasValue)
+
+			if (!string.IsNullOrEmpty(id))
 			{
 				IsAttendanceSelected = true;
 
-				SelectedAttendance = Work.Attendance.Get(id.Value);
+				SelectedAttendance = Work.Attendance.Get(id);
 			}
 			else
 			{
 				IsAttendanceSelected = false;
 			}
+
 		}
 
 		private void SelectLecture()
@@ -154,11 +153,11 @@ namespace CSAS.ViewModels
 			Attendances = new ObservableCollection<Attendance>(Lectures.OrderByDescending(x => x.Date.Date).ToList());
 			IsLectureSelected = true;
 		}
-		private void SelectSeminar(int? id)
+		private void SelectSeminar(string? id)
 		{
-			if (id.HasValue)
+			if (!string.IsNullOrEmpty(id))
 			{
-				SelectedSubGroup = Work.SubGroup.Get(id.Value);
+				SelectedSubGroup = Work.SubGroup.Get(id);
 				Attendances = new ObservableCollection<Attendance>(Work.Attendance.GetAttendanceBySubGroup(SelectedSubGroup).OrderByDescending(x => x.Date));
 			}
 			else if (SelectedSubGroup != null)
@@ -179,109 +178,143 @@ namespace CSAS.ViewModels
 			SelectedAttendance = new Attendance();
 			SelectedAttendance = temp;
 		}
-		private void StudentPresent(int? id)
+		private async void StudentPresent(object? obj)
 		{
-			SelectedAttendance.SubAttendances.FirstOrDefault(x => x.Id == id.Value).State = AttendanceEnums.IsPresent;
-			Work.Attendance.Update(SelectedAttendance);
-			Work.Complete();
-			ResetAttendance();
+			IsLoading = true;
+			await System.Threading.Tasks.Task.Run(() =>
+			{
+				var param = obj as object[];
+				var en = GetType((string)param[1]);
+				if (!SelectedAttendance.SubAttendances.Where(x => x.IsSelected).Any())
+				{
+					var att = SelectedAttendance.SubAttendances.FirstOrDefault(x => x.Id == (string)param[0]);
+					att.State = en;
+					Work.Attendance.Update(SelectedAttendance);
+				}
+				else
+				{
+					foreach (var subAtt in SelectedAttendance.SubAttendances.Where(x => x.IsSelected))
+					{
+						subAtt.State = en;
+						subAtt.IsSelected = false;
+						Work.Attendance.Update(SelectedAttendance);
 
-		}
-		private void StudentNotPresent(int? id)
-		{
-			SelectedAttendance.SubAttendances.FirstOrDefault(x => x.Id == id.Value).State = AttendanceEnums.NotPresent;
-			Work.Attendance.Update(SelectedAttendance);
-			Work.Complete();
-			ResetAttendance();
-		}
-		private void StudentSick(int? id)
-		{
-			SelectedAttendance.SubAttendances.FirstOrDefault(x => x.Id == id.Value).State = AttendanceEnums.Excused;
-			Work.Attendance.Update(SelectedAttendance);
-			Work.Complete();
-			ResetAttendance();
+					}
+				}
 
+				Work.Complete();
+				IsLoading = false;
+
+				ResetAttendance();
+			});
 		}
-		private void AddNewAttendance()
+	
+
+		private static AttendanceEnums GetType(string type)
 		{
-			MainGroup mainGroup = Work.MainGroup.Get(CurrentMainGroupId);			
+			return type switch
+			{
+				"Present" => AttendanceEnums.IsPresent,
+				"NotPresent" => AttendanceEnums.NotPresent,
+				"Sick" => AttendanceEnums.Excused,
+				_ => AttendanceEnums.New,
+			};
+		}
+
+		private async void AddNewAttendance()
+		{
+			IsLoading = true;
+			MainGroup mainGroup = Work.MainGroup.Get(CurrentMainGroupId);
 
 			var form = IsLectureSelected ? AttendanceFormEnums.Lecture : AttendanceFormEnums.Seminar;
 
 			IEnumerable<Student> students;
-			Attendance attendance;
-			if (!IsLectureSelected)
+			Attendance attendance = null;
+			await System.Threading.Tasks.Task.Run(() =>
 			{
-				students = Work.Students.GetStudentsBySubGroup(SelectedSubGroup);
-				attendance = new Attendance()
+				if (!IsLectureSelected)
 				{
-					Date = Time,
-					Form = form,
-					MainGroup = mainGroup,
-					StudyForm = mainGroup.Form,
-					SubGroup = SelectedSubGroup,
-				};
-			}
-			else
-			{
-				students = Work.Students.GetStudentsByGroup(Work.MainGroup.Get(CurrentMainGroupId));
-				attendance = new Attendance()
-				{
-					Date = Time,
-					Form = form,
-					MainGroup = mainGroup,
-					StudyForm = mainGroup.Form
-				};
-			}
-
-			foreach (var student in students)
-			{
-				if (attendance.SubAttendances == null)
-				{
-					attendance.SubAttendances = new List<SubAttendances>();
-				}
-				attendance.SubAttendances.Add(
-					new SubAttendances()
+					students = Work.Students.GetStudentsBySubGroup(SelectedSubGroup);
+					attendance = new Attendance()
 					{
-						Student = new Student(),
-						State = AttendanceEnums.New
-					});
+						Date = Time,
+						Form = form,
+						MainGroup = mainGroup,
+						StudyForm = mainGroup.Form,
+						SubGroup = SelectedSubGroup,
+					};
+				}
+				else
+				{
+					students = Work.Students.GetStudentsByGroup(Work.MainGroup.Get(CurrentMainGroupId));
+					attendance = new Attendance()
+					{
+						Date = Time,
+						Form = form,
+						MainGroup = mainGroup,
+						StudyForm = mainGroup.Form
+					};
+				}
 
-				attendance.SubAttendances.Last().Student = student;
-			}
+				foreach (var student in students)
+				{
+					if (attendance.SubAttendances == null)
+					{
+						attendance.SubAttendances = new List<SubAttendances>();
+					}
+					attendance.SubAttendances.Add(
+						new SubAttendances()
+						{
+							Student = new Student(),
+							State = AttendanceEnums.New
+						});
 
-			var cultureInfo = new CultureInfo("sk-SK");
-			var dateTimeInfo = cultureInfo.DateTimeFormat;
-			attendance.Day = dateTimeInfo.GetDayName(attendance.Date.DayOfWeek).ToUpper();
+					attendance.SubAttendances.Last().Student = student;
+				}
 
-			if (IsLectureSelected)
-			{
-				Lectures = Attendances;
-			}
-			else
-			{
-				Seminars = Attendances;
-			}
+				var cultureInfo = new CultureInfo("sk-SK");
+				var dateTimeInfo = cultureInfo.DateTimeFormat;
+				attendance.Day = dateTimeInfo.GetDayName(attendance.Date.DayOfWeek).ToUpper();
 
-			Work.Attendance.Add(attendance);
-			Work.Complete();
+				if (IsLectureSelected)
+				{
+					Lectures = Attendances;
+				}
+				else
+				{
+					Seminars = Attendances;
+				}
+
+				Work.Attendance.Add(attendance);
+				Work.Complete();
+				IsLoading = false;
+
+			});
+
 			Attendances.Add(attendance);
 		}
 
-		private void RemoveAttendance(int? id)
+		private async void RemoveAttendance(string? id)
 		{
-			Work.Attendance.Get(id.Value).SubAttendances.RemoveAt(0);
-			Work.Attendance.Remove(Work.Attendance.Get(id.Value));
-			Work.Complete();
-			Attendances.Remove(Attendances.FirstOrDefault(x => x.Id == id.Value));
-			if (IsLectureSelected)
+			IsLoading = true;
+			await System.Threading.Tasks.Task.Run(() =>
 			{
-				Lectures = Attendances;
-			}
-			else
-			{
-				Seminars = Attendances;
-			}
+				Work.Attendance.Get(id).SubAttendances.RemoveAt(0);
+				Work.Attendance.Remove(Work.Attendance.Get(id));
+				Work.Complete();
+
+				if (IsLectureSelected)
+				{
+					Lectures = Attendances;
+				}
+				else
+				{
+					Seminars = Attendances;
+				}
+				IsLoading = false;
+			});
+							Attendances.Remove(Attendances.FirstOrDefault(x => x.Id == id));
+
 		}
 	}
 }

@@ -3,6 +3,7 @@
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly AppDbContext _context;
+		private static Logger _logger = new();
 		public IFinalAssessmentRepository FinalAssessment { get; private set; }
 		public IStudentRepository Students { get; private set; }
 		public IMainGroupRepository MainGroup { get; private set; }
@@ -14,11 +15,11 @@
 		public IActivityRepository Activity { get; private set; }
 		public IAttachmentRepository Attachment { get; private set; }
 		public ISettingsRepository Settings { get; private set; }
-
+		 public IUserInfoRepository UserInfo { get; private set; }
 		public UnitOfWork(AppDbContext context)
 		{
 			_context = context;
-
+			_context.Database.EnsureCreated();
 			Students = new StudentRepository(_context);
 
 			MainGroup = new MainGroupRepository(_context);
@@ -40,22 +41,29 @@
 			Settings = new SettingsRepository(_context);
 
 			FinalAssessment = new FinalAssessmentRepository(_context);
+
+			UserInfo = new UserInfoRepository(_context);
 		}
 
-		public int Complete()
+		public void Complete()
 		{
-			using var dbContextTransaction = _context.Database.BeginTransaction();
-			try
+			//_context.SaveChanges();
+			
+			using (var dbContextTransaction = _context.Database.BeginTransaction())
 			{
-				var result = _context.SaveChanges();
+				try
+				{
+					var result = _context.SaveChanges();
 
-				dbContextTransaction.Commit();
-				return result;
-			}
-			catch (Exception ex)
-			{
-				dbContextTransaction.Rollback();
-				throw ex;
+					dbContextTransaction.Commit();
+					//return result;
+				}
+				catch (Exception ex)
+				{
+					dbContextTransaction.Rollback();
+					throw ex;
+					_logger.ErrorAsync(ex.Message);
+				}
 			}
 		}
 

@@ -1,24 +1,21 @@
 ﻿using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace CSAS.Converters
 {
-	public class ObjectToVisibilityConverter : IValueConverter
+	public class BoolToFinalAssessmentConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value == null)
+			if ((bool)value || value == null)
 			{
-				return Visibility.Collapsed;
+				return "Navrhované hodnotenie: ";
 			}
-
-			if (value is string input && string.IsNullOrWhiteSpace(input))
+			else
 			{
-				return Visibility.Collapsed;
+				return "Udelené hodnotenie: ";
 			}
-
-			return Visibility.Visible;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

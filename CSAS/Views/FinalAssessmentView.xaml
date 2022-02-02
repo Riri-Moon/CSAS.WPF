@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <Enums:Enums x:Key="Enums"/>
         <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+        <converter:BoolToFinalAssessmentConverter x:Key="BoolToFinalAssessmentConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -64,7 +65,7 @@
                             <ColumnDefinition Width="250"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="{Binding Name}" Grid.Row="0" Grid.Column="0" FontSize="17" HorizontalAlignment="Left"/>
+                        <Label Content="{Binding FullName}" Grid.Row="0" Grid.Column="0" FontSize="17" HorizontalAlignment="Left"/>
                             <TextBlock  Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" FontSize="15" HorizontalAlignment="Left">
                                 <Run Text="Skupina: "/>
                                 <Run Text="{Binding SubGroup.Name, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
@@ -100,24 +101,24 @@
                 <RowDefinition Height="250"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Label Content="{Binding SelectedStudent.Name}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
+            <Label Content="{Binding SelectedStudent.FullName}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
 
-            <Label Content="Navrhované hodnotenie: " Grid.Row="1" Grid.Column="0" FontSize="16" VerticalAlignment="Center" />
-            <ComboBox Text="{Binding FinalAssessment.Grade,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Grades}"
-                     SelectedItem="{Binding FinalAssessment.Grade, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+            <Label Content="{Binding SelectedStudent.FinalAssessment.IsNew, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToFinalAssessmentConverter}}" Grid.Row="1" Grid.Column="0" FontSize="16" VerticalAlignment="Center" />
+            <ComboBox Text="{Binding SelectedStudent.FinalAssessment.Grade,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Grades}"
+                     SelectedItem="{Binding SelectedStudent.FinalAssessment.Grade, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                      VerticalAlignment="Center" FontSize="17" Grid.Column="1" Grid.Row="1" Width="70" 
                      HorizontalAlignment="Left"
                      Margin="0,-10,0,0"/>
 
-            <CheckBox Content="Odoslať email o hodnotení" FontSize="16" Grid.Row="2" IsChecked="{Binding FinalAssessment.IsSendEmail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox Content="Odoslať email o hodnotení" FontSize="16" Grid.Row="2" IsChecked="{Binding SelectedStudent.FinalAssessment.IsSendEmail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
-            <CheckBox Content="Pripojiť výpis aktivít" FontSize="16" Grid.Row="3" 
-                      IsChecked="{Binding FinalAssessment.IsSendExport,  Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Content="Pripojiť výpis aktivít" FontSize="16" Grid.Row="3" Visibility="{Binding  SelectedStudent.FinalAssessment.IsSendEmail, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisConverter}}"
+                      IsChecked="{Binding SelectedStudent.FinalAssessment.IsSendExport,  Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
-            <CheckBox Content="Pripojiť výpis dochádzky" FontSize="16" Grid.Row="4"
-                      IsChecked="{Binding FinalAssessment.IsSendAttendanceExport,  Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Content="Pripojiť výpis dochádzky" FontSize="16" Grid.Row="4" Visibility="{Binding  SelectedStudent.FinalAssessment.IsSendEmail, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisConverter}}"
+                      IsChecked="{Binding SelectedStudent.FinalAssessment.IsSendAttendanceExport, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBox  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 30, 0, 0" FontSize="17" HorizontalAlignment="Left" Text="{Binding FinalAssessment.Comment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            <TextBox  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 30, 0, 0" FontSize="17" HorizontalAlignment="Left" Text="{Binding SelectedStudent.FinalAssessment.Comment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
     Style="{StaticResource MaterialDesignFilledTextBox}"
     VerticalAlignment="Top"
     Height="200"
@@ -125,7 +126,7 @@
     AcceptsReturn="True"
     TextWrapping="Wrap"
     VerticalScrollBarVisibility="Auto"
-    materialDesign:HintAssist.Hint="Komentár ku hodnoteniu"/>
+    materialDesign:HintAssist.Hint="Komentár ku hodnoteniu"/> 
 
             <Button Content="Hodnotiť" Grid.Row="6" Grid.ColumnSpan="2" Margin="10,0,50,0" Command="{Binding SaveCommand}"/>
         </Grid>
