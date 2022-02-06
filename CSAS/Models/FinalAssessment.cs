@@ -38,7 +38,7 @@ namespace CSAS.Models
 
 			set => SetProperty(ref _isSendEmail, value);
 		}
-		private bool _isSendEmail =false;
+		private bool _isSendEmail;
 		public virtual bool IsSendExport
 		{
 			get => _isSendExport;

@@ -41,15 +41,17 @@
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="70"/>
                             <RowDefinition Height="70"/>
-                            <RowDefinition Height="70"/>
-                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBox Grid.Row="1" Text="{Binding Settings.Title,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="80" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Titul" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                         <TextBox Grid.Row="2" Text="{Binding Settings.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="180" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Meno" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                         <TextBox Grid.Row="3" Text="{Binding Settings.LastName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="200" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Priezvisko" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                         <TextBox Grid.Row="1" Text="{Binding Settings.TitleAfterName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.ColumnSpan="3" FontSize="20" Width="130" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Titul za menom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-20,0,0,0"/>
-                        <TextBox Grid.Row="5" Text="{Binding Settings.Email,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="250" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Email" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                        <TextBox Grid.Row="5" Text="{Binding Settings.Email,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="250" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Email" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
+                        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0 50  0 0"
+                                HorizontalAlignment="Left" Content="Pridať cestu ku podpisu" Command="{Binding SetSignatureCommand}"/>
                     </Grid>
                 </materialDesign:Card>
                

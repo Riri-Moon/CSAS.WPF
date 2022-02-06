@@ -60,9 +60,9 @@
 			}
 		}
 
-		public ActivityTemplateViewModel(string currentGroupId, ref AppDbContext context)
+		public ActivityTemplateViewModel(string currentGroupId)
 		{
-			Work = new UnitOfWork(context);
+			Work = UoWSingleton.Instance;
 			Templates = new ObservableCollection<ActivityTemplate>(Work.ActivityTemplate.GetAll().ToList());
 
 			AddTaskCommand = new DelegateCommand(AddNewTaskTemplate);

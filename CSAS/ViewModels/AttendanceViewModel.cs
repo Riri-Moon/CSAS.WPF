@@ -112,9 +112,9 @@ namespace CSAS.ViewModels
 				SetProperty(ref _time, value);
 			}
 		}
-		public AttendanceViewModel(string currentMainGroupId, ref AppDbContext context)
+		public AttendanceViewModel(string currentMainGroupId)
 		{
-			Work = new UnitOfWork(context);
+			Work = UoWSingleton.Instance;
 			Attendances = new ObservableCollection<Attendance>();
 
 			var att = Work.Attendance.GetAttendanceByMainGroup(Work.MainGroup.Get(currentMainGroupId));
@@ -313,7 +313,8 @@ namespace CSAS.ViewModels
 				}
 				IsLoading = false;
 			});
-							Attendances.Remove(Attendances.FirstOrDefault(x => x.Id == id));
+							
+			Attendances.Remove(Attendances.FirstOrDefault(x => x.Id == id));
 
 		}
 	}

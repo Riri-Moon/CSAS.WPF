@@ -3,19 +3,9 @@ using Microsoft.Win32;
 using System.Data;
 using System.IO;
 using Squirrel;
-using IBM.Tools.Common.Helper;
-using IBM.Tools.Common.Helper.Logger;
 using System.Reflection;
-using System.Windows;
 using CSAS.Helpers;
 using static CSAS.Enums.Enums;
-using System.Diagnostics;
-using iText.Kernel.Geom;
-using IpInfo;
-using System.Net.Http;
-using System.Net;
-using System.Text.Json;
-using System.Threading;
 
 namespace CSAS.ViewModels
 {
@@ -71,7 +61,7 @@ namespace CSAS.ViewModels
 				MediaSize = 500,
 				UseUtcTime = true
 			});
-			Work = new UnitOfWork(new AppDbContext());
+			Work = UoWSingleton.Instance;
 
 			try
 			{
@@ -102,11 +92,21 @@ namespace CSAS.ViewModels
 				{
 					IsLoading = true; 
 					MainGroup mainGroup = new();
-
+																
 					await System.Threading.Tasks.Task.Run(() =>
-					{
-
+					{						
 						DataTable dt = ExcelService.GetDataTableFromExcelFile(dialog.FileName, "", 5);
+
+						int nameIndex = ReturnIndexBasedOnName(dt, "Meno");
+						int lastNameIndex = ReturnIndexBasedOnName(dt, "Priezvisko");
+						int studyProgramIndex = ReturnIndexBasedOnName(dt, "Študijný program");
+						int subGroupIndex = ReturnIndexBasedOnName(dt, "Krúžok");
+						int isicIndex = ReturnIndexBasedOnName(dt, "Číslo karty");
+						int yearIndex = ReturnIndexBasedOnName(dt, "Ročník");
+						int schoolMailIndex = ReturnIndexBasedOnName(dt, "E-mail pridelený");
+						int personalMailIndex = ReturnIndexBasedOnName(dt, "E-mail osobný");
+						int gradeIndex = ReturnIndexBasedOnName(dt, "Hodnotenie"); 
+
 						dt.BeginInit();
 						dt.Rows[0].BeginEdit();
 						dt.Rows[0].Delete();
@@ -114,7 +114,7 @@ namespace CSAS.ViewModels
 						dt.Rows[0].AcceptChanges();
 						List<Student> students = new();
 
-						string? name = dt.Rows[1].ItemArray[3].ToString();
+						string? name = dt.Rows[1].ItemArray[studyProgramIndex].ToString();
 
 						var form = name.ElementAt(name.Length - 3);
 						HashSet<string> subgroupNames = new();
@@ -124,7 +124,7 @@ namespace CSAS.ViewModels
 						mainGroup.Subject = Subject;
 						foreach (DataRow row in dt.Rows)
 						{
-							subgroupNames.Add(row.ItemArray[5].ToString());
+							subgroupNames.Add(row.ItemArray[subGroupIndex].ToString());
 						}
 
 						foreach (var group in subgroupNames)
@@ -143,17 +143,17 @@ namespace CSAS.ViewModels
 						{
 							var newStudent = new Student()
 							{
-								Name = (string)student.ItemArray[1],
-								LastName = (string)student.ItemArray[2],
+								Name = (string)student.ItemArray[nameIndex],
+								LastName = (string)student.ItemArray[lastNameIndex],
 								MainGroup = mainGroup,
 								Form = 0,
-								Email = student.ItemArray[30].ToString(),
-								SchoolEmail = student.ItemArray[31].ToString(),
-								Isic = student.ItemArray[19].ToString().Remove(0, 5),
-								Year = int.Parse((string)student.ItemArray[21]),
-								SubGroup = subGroups.FirstOrDefault(x => x.Name == student.ItemArray[5].ToString()),
+								Email = student.ItemArray[personalMailIndex].ToString(),
+								SchoolEmail = student.ItemArray[schoolMailIndex].ToString(),
+								Isic = student.ItemArray[isicIndex].ToString().Remove(0, 5),
+								Year = int.Parse((string)student.ItemArray[yearIndex]),
+								SubGroup = subGroups.FirstOrDefault(x => x.Name == student.ItemArray[subGroupIndex].ToString()),
 							};
-							var grade = student.ItemArray[8].ToString().First();
+							var grade = student.ItemArray[gradeIndex].ToString().First();
 
 							if (grades.Contains(grade))
 							{
@@ -193,8 +193,18 @@ namespace CSAS.ViewModels
 				_logger.ErrorAsync(ex.StackTrace);
 				IsLoading = false;
 			}
-
 		}
+
+		private int ReturnIndexBasedOnName(DataTable dt, string nameOfColumn)
+		{
+			if (nameOfColumn == "Meno")
+			{
+				return dt.Rows[0].ItemArray.ToList().IndexOf(nameOfColumn)+1;
+			}
+
+			return dt.Rows[0].ItemArray.ToList().IndexOf(nameOfColumn);
+		}
+
 		private async void DeleteGroup(string? id)
 		{
 			try
@@ -248,29 +258,34 @@ namespace CSAS.ViewModels
 
 		private async void SelectGroup(object? id)
 		{
-			IsLoading = true;
-			object[] param = id as object[];
-			MainViewModel mainModel = null;
-			await System.Threading.Tasks.Task.Run(() =>
-		   {
-#if (!DEBUG)
-				 mainModel = new MainViewModel((int)param[0], UpdateManager.CurrentlyInstalledVersion().ToString());
-#else
-			   mainModel = new MainViewModel((string)param[0], Assembly.GetExecutingAssembly().GetName().Version.ToString());
-#endif
-		   });
-
-			MainWindow window = new()
+			try
 			{
-				DataContext = mainModel
-			};
+				IsLoading = true;
+				object[] param = id as object[];
+				MainViewModel mainModel = null;
+				await System.Threading.Tasks.Task.Run(() =>
+			   {
 
-			window.Show();
-			MainGroupView view = new();
-			view = (MainGroupView)param[1];
-			IsLoading = false;
-			view.Close();
-			IsMainGroupWindowVisible = false;		
+				   mainModel = new MainViewModel((string)param[0], Assembly.GetExecutingAssembly().GetName().Version.ToString());
+			   });
+
+				MainWindow window = new()
+				{
+					DataContext = mainModel
+				};
+
+				window.Show();
+				MainGroupView view = new();
+				view = (MainGroupView)param[1];
+				IsLoading = false;
+				view.Close();
+				IsMainGroupWindowVisible = false;
+			}
+			catch(Exception ex)
+			{
+				_logger.ErrorAsync(ex.Message);
+				_logger.ErrorAsync(ex.StackTrace);
+			}
 		}
 
 		private void CreateDirectories(MainGroup mainGroup)

@@ -1,5 +1,6 @@
 ﻿using IBM.Tools.Common.Helper.Logger;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -36,59 +37,67 @@ namespace CSAS.Services
 			}
 		}
 
-		public bool SendEmail(string subject, MailAddressCollection to, MailAddressCollection cc, string body, IList<string> attachments, bool modal)
+		public bool SendEmail(string subject, MailAddressCollection to, MailAddressCollection cc, string body, IList<string> attachments, bool modal, string signaturePath = "")
 		{
 			bool result = false;
-		
+
+			try
+			{
 				try
 				{
+					signaturePath = File.ReadAllText(signaturePath);
+				}
+				catch (Exception ex)
+				{
+					_logger.InfoAsync("Path to signature was empty");
+				}
 
-					O.MailItem mailItem = app.CreateItem(O.OlItemType.olMailItem);
+				O.MailItem mailItem = app.CreateItem(O.OlItemType.olMailItem);
 				const string PR_SECURITY_FLAGS = "http://schemas.microsoft.com/mapi/proptag/0x6E010003";
 				var ulFlags = 0x0;
 				ulFlags |= 0x0; //  SECFLAG_ENCRYPTED
 								//ulFlags = (ulFlags | 0x2); //  SECFLAG_SIGNED
 				mailItem.PropertyAccessor.SetProperty(PR_SECURITY_FLAGS, ulFlags);
 				mailItem.Subject = subject;
-					mailItem.To = string.Join(";", to.Select(t => t.Address));
-					if (cc != null)
+				mailItem.To = string.Join(";", to.Select(t => t.Address));
+				if (cc != null)
+				{
+					mailItem.CC = string.Join(";", cc.Select(c => c.Address));
+				}
+				mailItem.HTMLBody = body + "<br></br>" + signaturePath;
+				if (attachments?.Any() ?? false)
+				{
+					foreach (var attachment in attachments)
 					{
-						mailItem.CC = string.Join(";", cc.Select(c => c.Address));
+						mailItem.Attachments.Add(attachment);
 					}
-					mailItem.HTMLBody = body;
-					if (attachments?.Any() ?? false)
-					{
-						foreach (var attachment in attachments)
-						{
-							mailItem.Attachments.Add(attachment);
-						}
-					}
+				}
 
-					if (modal)
-					{
-						mailItem.Display(true);
+				if (modal)
+				{
+					mailItem.Display(true);
 
-						try
-						{
-							var res = mailItem.Sent;
-						}
-						catch (Exception)
-						{
-							//email not found - moved to outbox/sent
-							result = true;
-						}
-					}
-					else
+					try
 					{
-						mailItem.Send();
+						var res = mailItem.Sent;
+					}
+					catch (Exception)
+					{
+						//email not found - moved to outbox/sent
 						result = true;
 					}
 				}
-				catch(Exception ex)
+				else
 				{
-					_logger.ErrorAsync($"Outlook Service - {ex.Message}");
+					mailItem.Send();
+					result = true;
 				}
-				
+			}
+			catch (Exception ex)
+			{
+				_logger.ErrorAsync($"Outlook Service - {ex.Message}");
+			}
+
 			return result;
 		}
 		public IEnumerable<string> GetEmailAddresses()

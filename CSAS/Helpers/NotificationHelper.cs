@@ -17,7 +17,7 @@ namespace CSAS.Helpers
 		public NotificationHelper()
 		{
 			Excel = new();
-			Work = new UnitOfWork(context: new AppDbContext());
+			Work = UoWSingleton.Instance;
 			OutlookService = new OutlookService();
 		}
 
@@ -26,8 +26,10 @@ namespace CSAS.Helpers
 			StringBuilder builder = new();
 			try 
 			{
-				Settings = Work.Settings.GetAll().FirstOrDefault();
 				var act = Work.Activity.GetAll().Where(x => x.IsSendNotifications);
+				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
+				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
+
 				if (act == null || !act.Any())
 				{
 					return;
@@ -55,13 +57,13 @@ namespace CSAS.Helpers
 								attachments.Add(attachment.PathToFile);
 							}
 						}
-						builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
-						OutlookService.SendEmail(subject, email, null, builder.ToString(), attachments, false);
+						//builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
+						OutlookService.SendEmail(subject, email, null, builder.ToString(), attachments, false,Settings.Signature);
 					}
 					else
 					{
-						builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
-						OutlookService.SendEmail(subject, email, null, builder.ToString(), null, false);
+						//builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
+						OutlookService.SendEmail(subject, email, null, builder.ToString(), null, false, Settings.Signature);
 					}
 					activity.IsSendNotifications = false;
 					Work.Activity.Update(activity);
@@ -89,8 +91,10 @@ namespace CSAS.Helpers
 			{
 				Excel.CreateSpreadsheetWorkbook(pathToExport, sheet);
 
-				Settings = Work.Settings.GetAll().FirstOrDefault();
+				
 				var act = Work.Activity.GetAll().Where(x => x.IsNotifyMe && DateTime.Today > x.Deadline);
+				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
+				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
 				if (act == null || !act.Any())
 				{
 					return;
@@ -108,7 +112,7 @@ namespace CSAS.Helpers
 				}
 				Excel.SaveFile();
 
-				OutlookService.SendEmail("Aktivity na hodnotenie", mailAddresses, null, string.Empty, vs, false);
+				OutlookService.SendEmail("Aktivity na hodnotenie", mailAddresses, null, string.Empty, vs, false, Settings.Signature);
 
 				Work.Complete();
 			}

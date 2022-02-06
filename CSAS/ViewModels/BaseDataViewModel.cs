@@ -101,11 +101,10 @@
 			get => _isAll;
 			set
 			{
-				if (IsAll && IsActivity)
+				if (value && IsActivity)
 				{
-					var activities = GetActivities(Work.Activity.GetAll().Where(x => x.Student.MainGroup == Work.MainGroup.Get(CurrentMainGroupId)));
-
-					ActivitiesForExport = new ObservableCollection<Activity>(activities);
+					var activities = GetActivities(Work.Activity.GetAll().Where(x => x.Student.MainGroup.Id == CurrentMainGroupId));
+					ActivitiesForExport = new ObservableCollection<Activity>(Work.Activity.GetAll().Where(x => x.Student.MainGroup.Id == CurrentMainGroupId));
 					Activities = new ObservableCollection<Activity>(activities.DistinctBy(x => new { x.Name, x.Deadline }));
 					SetProperty(ref _isSelectActivity, value);
 				}
@@ -221,9 +220,9 @@
 				}
 				else if (IsAll)
 				{
-					 newActivities = GetActivities(Work.Activity.GetAll().Where(x => x.Student.MainGroup == Work.MainGroup.Get(CurrentMainGroupId)));
+					 newActivities = GetActivities(Work.Activity.GetAll().Where(x => x.Student.MainGroup.Id == CurrentMainGroupId));
 				}
-				ActivitiesForExport = new ObservableCollection<Activity>(newActivities);
+				ActivitiesForExport = new ObservableCollection<Activity>(Work.Activity.GetAll().Where(x => x.Student.MainGroup.Id ==  CurrentMainGroupId));
 				Activities = new ObservableCollection<Activity>(newActivities.DistinctBy(x => new { x.Name, x.Deadline }));
 				SetProperty(ref _isSelectActivity, value);
 			}

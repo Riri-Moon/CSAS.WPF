@@ -12,6 +12,7 @@ using CSAS.Views;
 using System.ComponentModel;
 using System.Windows.Data;
 using CSAS.Helpers;
+using System.Windows.Threading;
 
 namespace CSAS.ViewModels
 {
@@ -28,7 +29,7 @@ namespace CSAS.ViewModels
 		public HomeViewModel HomeViewModel { get; set; }
 		public string CurrentVersion { get; set; }
 
-		//private DispatcherTimer Timer { get; set; }
+		private DispatcherTimer Timer { get; set; }
 		public MainViewModel(string currentGroupId, string version)
 		{
 			CurrentVersion = $"Komplexné hodnotenie študentov - {version}";
@@ -43,17 +44,26 @@ namespace CSAS.ViewModels
 				new ViewItem("Štatistika", typeof(StatisticsView),ApplicationViewModel.StatisticsViewModel),
 				new ViewItem("Šablóny aktivít",typeof(ActivityTemplateView),ApplicationViewModel.ActivityTemplateViewModel),
 				new ViewItem("Nastavenia",typeof(SettingsView),ApplicationViewModel.SettingsViewModel),
-            });
+			});
 
 			_viewItemsView = CollectionViewSource.GetDefaultView(ViewItems);
+#if (!DEBUG)
+			try
+			{
+				RunActivityCheck();
 
-			//RunActivityCheck(); 
-
-			//Timer = new DispatcherTimer();
-			//Timer.Interval = TimeSpan.FromHours(1);
-			//Timer.Tick += Timer_Tick;
-			//Timer.Start();
-
+				Timer = new DispatcherTimer();
+				Timer.Interval = TimeSpan.FromHours(1);
+				Timer.Tick += Timer_Tick;
+				Timer.Start();
+				_logger.InfoAsync("Activity check has successfully run");
+			}
+			catch (Exception ex)
+			{
+				_logger.ErrorAsync(ex.Message);
+				_logger.ErrorAsync(ex.StackTrace);
+			}
+#endif
 			HomeCommand = new DelegateCommand(HomeButton);
 			ImportCommand = new DelegateCommand<object?>(ChangeGroups);
 			OpenExportCommand = new DelegateCommand(OpenExport);
@@ -113,7 +123,7 @@ namespace CSAS.ViewModels
 		private void OpenExport()
 		{
 			ExportWindow exportView = new();
-			exportView.DataContext = new ExportViewModel(ApplicationViewModel.CurrentMainGroupId, ref ApplicationViewModel.AppDbContext);
+			exportView.DataContext = new ExportViewModel(ApplicationViewModel.CurrentMainGroupId);
 			exportView.ShowDialog();
 		}
 		private void MovePrevious()

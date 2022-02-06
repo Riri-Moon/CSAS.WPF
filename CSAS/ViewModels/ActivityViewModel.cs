@@ -14,7 +14,6 @@ namespace CSAS.ViewModels
 		public DelegateCommand<string> RemoveAttachmentCommand { get; }
 		public DelegateCommand<string> OpenAttachmentCommand { get; }
 
-
 		private bool _isSelectAll;
 		public bool IsSelectAll
 		{
@@ -103,9 +102,9 @@ namespace CSAS.ViewModels
 
 		}
 
-		public ActivityViewModel(string currentGroupId, ref AppDbContext context)
+		public ActivityViewModel(string currentGroupId)
 		{
-			Work = new UnitOfWork(context);
+			Work = UoWSingleton.Instance;
 
 			Students = new ObservableCollection<Student>(Work.Students.GetAll().Where(x => x.MainGroup.Id == currentGroupId));
 			Groups = new ObservableCollection<SubGroup>(Work.SubGroup.GetAll().Where(g => g.MainGroup.Id == currentGroupId));
@@ -156,7 +155,7 @@ namespace CSAS.ViewModels
 			Activity.Modified = Activity.Created;
 			string? subject = $"Nová úloha - {Activity.Name}";
 			string? body = $"Dobrý deň, <br/><br/> práve Vám bola pridelená nová úloha s názvom {Activity.Name}. <br/> Dátum odovzdania je { Activity.Deadline.ToShortDateString() } {Activity.Deadline.ToShortTimeString()}." +
-				$"<br/><br/> V prípade akýchkoľvek otázok ma neváhajte kontaktovať. <br/><br/> S pozdravom RB";
+				$"<br/><br/> V prípade akýchkoľvek otázok ma neváhajte kontaktovať";
 
 			foreach (var student in GetStudents())
 			{
@@ -165,6 +164,7 @@ namespace CSAS.ViewModels
 				{
 					continue;
 				}
+
 				Activity act = new();				
 				act = Activity.Clone();
 				act.Student = student;
@@ -174,10 +174,10 @@ namespace CSAS.ViewModels
 				{
 					act.Tasks.Add(task.Clone());
 				}
+
 				activity.Add(act);
 				mailAddresses.Add(student.SchoolEmail);
 				ccMailAdresses.Add(student.Email);
-
 			}
 			Work.Activity.AddRange(activity);
 			Work.Complete();
@@ -188,7 +188,8 @@ namespace CSAS.ViewModels
 			{
 				OutlookService outlookService = new();
 
-				var isFinished = outlookService.SendEmail(subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), true);				
+				var isFinished = outlookService.SendEmail(subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), false, 
+					Work.Settings.GetSettingsByMainGroup(Activity.Student.MainGroup.Id).Signature);				
 			}
 
 			Activity = new();

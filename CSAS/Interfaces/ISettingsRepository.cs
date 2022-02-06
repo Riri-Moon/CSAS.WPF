@@ -5,5 +5,6 @@ namespace CSAS.Repositories
 {
 	public interface ISettingsRepository : IRepository<Settings>
 	{
+		Settings GetSettingsByMainGroup(string groupId);
 	}
 }

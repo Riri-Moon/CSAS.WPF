@@ -61,8 +61,9 @@
 				catch (Exception ex)
 				{
 					dbContextTransaction.Rollback();
-					throw ex;
 					_logger.ErrorAsync(ex.Message);
+					throw ex;
+					
 				}
 			}
 		}

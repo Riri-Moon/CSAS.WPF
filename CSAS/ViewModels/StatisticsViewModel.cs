@@ -17,11 +17,11 @@ namespace CSAS.ViewModels
 	public class StatisticsViewModel : BaseDataViewModel
 	{
 		public DelegateCommand RefreshCommand { get; }
-		public StatisticsViewModel(string id, ref AppDbContext appDbContext)
+		public StatisticsViewModel(string id)
 		{
 			CurrentMainGroupId = id;
-			AppDbContext = appDbContext;
-			Work = new UnitOfWork(appDbContext);
+
+			Work = UoWSingleton.Instance;
 			IsAll = true;
 			IsActivity = true;
 			Groups = new ObservableCollection<SubGroup>(Work.SubGroup.GetAll().Where(g => g.MainGroup.Id == CurrentMainGroupId));

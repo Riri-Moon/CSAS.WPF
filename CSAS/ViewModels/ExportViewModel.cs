@@ -44,10 +44,10 @@ namespace CSAS.ViewModels
 			set => SetProperty(ref _isSendToStudents, value);
 		}
 
-		public ExportViewModel(string currentGroupId, ref AppDbContext appDbContext)
+		public ExportViewModel(string currentGroupId)
 		{
 			CurrentMainGroupId = currentGroupId;
-			Work = new UnitOfWork(appDbContext);
+			Work = UoWSingleton.Instance;
 			Students = new ObservableCollection<Student>(Work.Students.GetAll().Where(x => x.MainGroup.Id == currentGroupId));
 			Groups = new ObservableCollection<SubGroup>(Work.SubGroup.GetAll().Where(g => g.MainGroup.Id == currentGroupId));
 

@@ -56,9 +56,9 @@ namespace CSAS.ViewModels
 			}
 		}
 
-		public FinalAssessmentViewModel(string currentGroupId, ref AppDbContext context)
+		public FinalAssessmentViewModel(string currentGroupId)
 		{
-			Work = new UnitOfWork(context);
+			Work = UoWSingleton.Instance;
 			CurrentMainGroupId = currentGroupId;
 			RefreshCommand = new DelegateCommand(Reload);
 			Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(Work.MainGroup.Get(CurrentMainGroupId)));
@@ -68,7 +68,7 @@ namespace CSAS.ViewModels
 		private void Reload()
 		{
 			var mainGroup = Work.MainGroup.Get(CurrentMainGroupId);
-			Work = new UnitOfWork(new AppDbContext());
+			Work = UoWSingleton.Instance;
 			Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(mainGroup));
 			var finAssessments = Work.FinalAssessment.GetAll();
 			foreach (var stud in Students)
@@ -134,7 +134,6 @@ namespace CSAS.ViewModels
 			else
 			{
 				Work.FinalAssessment.Update(SelectedStudent.FinalAssessment);
-
 			}
 
 			Work.Complete();
@@ -175,15 +174,17 @@ namespace CSAS.ViewModels
 							builder.Append($"a dochádzky.");
 							paths.Add(pathToAttendances);
 						}
-						builder.Append($"S pozdravom {sett.Title} {sett.Name} {sett.TitleAfterName}");
+						//builder.Append($"S pozdravom {sett.Title} {sett.Name} {sett.TitleAfterName}");
 
 						outlookService = new();
-						outlookService.SendEmail($"Konečné hodnotenie z predmetu {SelectedStudent.MainGroup.Subject}", mails, null, builder.ToString(), paths, false);
+						outlookService.SendEmail($"Konečné hodnotenie z predmetu {SelectedStudent.MainGroup.Subject}", mails, null, builder.ToString(), paths, false,
+							Work.Settings.GetSettingsByMainGroup(SelectedStudent.MainGroup.Id).Signature);
 					}
 					else
 					{
-						builder.Append($"S pozdravom {sett.Title} {sett.Name} {sett.TitleAfterName}");
-						outlookService.SendEmail( $"Konečné hodnotenie z predmetu {SelectedStudent.MainGroup.Subject}", mails, null, builder.ToString(), null, false);
+						//builder.Append($"S pozdravom {sett.Title} {sett.Name} {sett.TitleAfterName}");
+						outlookService.SendEmail( $"Konečné hodnotenie z predmetu {SelectedStudent.MainGroup.Subject}", mails, null, builder.ToString(), null, false,
+							Work.Settings.GetSettingsByMainGroup(SelectedStudent.MainGroup.Id).Signature);
 					}
 				}
 				catch (Exception ex)

@@ -109,6 +109,14 @@
 			set => SetProperty(ref _name, value);
 		}
 
+		private string? _signature = "";
+		public virtual string? Signature
+		{
+			get => _signature;
+			set => SetProperty(ref _signature, value);
+		}
+
+
 		private int IsValid(int value)
 		{
 			switch (value)

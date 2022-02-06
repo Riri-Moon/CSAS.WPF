@@ -10,8 +10,6 @@
 		public SettingsViewModel SettingsViewModel { get; set; }
 		public ExportViewModel ExportViewModel { get; set; }
 		public StatisticsViewModel StatisticsViewModel { get; set; }
-
-		public new AppDbContext AppDbContext;
 		public void SetCurrentGroup(string id)
 		{
 			HomeViewModel.CurrentMainGroupId = id;
@@ -19,44 +17,43 @@
 
 		public ApplicationViewModel(string id)
 		{
-			AppDbContext = new AppDbContext();
 			CurrentMainGroupId = id;
-			HomeViewModel = new HomeViewModel(id, ref AppDbContext)
+			HomeViewModel = new HomeViewModel(id)
 			{
 				CurrentMainGroupId = id
 			};
 
-			AttendanceViewModel = new AttendanceViewModel(id, ref AppDbContext)
+			AttendanceViewModel = new AttendanceViewModel(id)
 			{
 				CurrentMainGroupId = id
 			};
 
-			ActivityTemplateViewModel = new ActivityTemplateViewModel(id, ref AppDbContext)
+			ActivityTemplateViewModel = new ActivityTemplateViewModel(id)
 			{
 				CurrentMainGroupId = id
 			};
 
-			ActivityViewModel = new ActivityViewModel(id, ref AppDbContext)
+			ActivityViewModel = new ActivityViewModel(id)
 			{
 				CurrentMainGroupId = id
 			};
 
-			SettingsViewModel = new SettingsViewModel(id, ref AppDbContext)
+			SettingsViewModel = new SettingsViewModel(id)
 			{
 				CurrentMainGroupId = id
 			};
 
-			FinalAssessmentViewModel = new FinalAssessmentViewModel(id, ref AppDbContext)
+			FinalAssessmentViewModel = new FinalAssessmentViewModel(id)
 			{
 				CurrentMainGroupId = id
 			};
 
-			ExportViewModel = new ExportViewModel(id, ref AppDbContext)
+			ExportViewModel = new ExportViewModel(id)
 			{
 				CurrentMainGroupId = id
 			};
 
-			StatisticsViewModel = new StatisticsViewModel(id, ref AppDbContext);
+			StatisticsViewModel = new StatisticsViewModel(id);
 			{
 				CurrentMainGroupId = id;
 			}

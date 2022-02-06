@@ -94,13 +94,12 @@ namespace CSAS.ViewModels
 			set => SetProperty(ref _activities, value);
 		}
 		private string CurrentStudentId { get; set; }
-		public HomeViewModel(string currentGroupId, ref AppDbContext context)
+		public HomeViewModel(string currentGroupId)
 		{
-			Work = new UnitOfWork(context);
+			Work = UoWSingleton.Instance;
 			CurrentMainGroupId = currentGroupId;
 
 			LoadStudents();
-			AppDbContext = context;
 			IndividualStudyCommand = new DelegateCommand<string?>(ChangeIndividualStudy);
 			ShowAddStudentCommand = new DelegateCommand(ShowAddStudent);
 			AddNewStudentCommand = new DelegateCommand(AddNewStudent);
@@ -246,12 +245,12 @@ namespace CSAS.ViewModels
 		private void SendEmailToTheStudent(string? id)
 		{
 			OutlookService outlookService = new();
-
+			var student = Work.Students.Get(id);
 			MailAddressCollection collection = new()
 			{
-				new MailAddress(Work.Students.Get(id).SchoolEmail)
+				new MailAddress(student.SchoolEmail)
 			};
-			outlookService.SendEmail("", collection, null, "", null, true);
+			outlookService.SendEmail("", collection, null, "", null, true, Work.Settings.GetSettingsByMainGroup(student.MainGroup.Id).Signature);
 		}
 		private void SendEmailToAll()
 		{
@@ -263,7 +262,7 @@ namespace CSAS.ViewModels
 				collection.Add(new MailAddress(stud.SchoolEmail));
 			}
 
-			outlookService.SendEmail("", collection, null, "", null, true);
+			outlookService.SendEmail("", collection, null, "", null, true, Work.Settings.GetSettingsByMainGroup(Students.FirstOrDefault().MainGroup.Id).Signature);
 		}
 
 		private void OpenActivity(string? id)
@@ -275,7 +274,7 @@ namespace CSAS.ViewModels
 			var result = saw.ShowDialog();
 
 			AppDbContext = new AppDbContext();
-			Work = new UnitOfWork(AppDbContext);
+			Work = UoWSingleton.Instance;
 			string selStudId = SelectedStudent.Id;
 			RefreshStudents();
 			SelectedStudent = Students.FirstOrDefault(x => x.Id == selStudId);

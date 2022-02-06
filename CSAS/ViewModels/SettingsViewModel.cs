@@ -1,4 +1,6 @@
-﻿using static CSAS.Enums.Enums;
+﻿using Microsoft.Win32;
+using System.IO;
+using static CSAS.Enums.Enums;
 
 namespace CSAS.ViewModels
 {
@@ -6,6 +8,7 @@ namespace CSAS.ViewModels
 	{
 		public DelegateCommand RecalculateCommand { get; }
 		public DelegateCommand SaveCommand { get; }
+		public DelegateCommand SetSignatureCommand { get; }
 
 		private Settings _settings;
 
@@ -13,16 +16,13 @@ namespace CSAS.ViewModels
 		{
 
 			get { return _settings; }
-			set
-			{
-				SetProperty(ref _settings, value);
-			}
+			set => SetProperty(ref _settings, value);
 		}
 
 		public new UnitOfWork Work { get; set; }
-		public SettingsViewModel(string currGroupId, ref AppDbContext context)
+		public SettingsViewModel(string currGroupId)
 		{
-			Work = new UnitOfWork(context);
+			Work = UoWSingleton.Instance;
 			Settings = new Settings
 			{
 				MainGroup = Work.MainGroup.Get(currGroupId)
@@ -37,6 +37,7 @@ namespace CSAS.ViewModels
 					Settings.LastName = temp.LastName;
 					Settings.Title = temp.Title;
 					Settings.TitleAfterName = temp.TitleAfterName;
+					Settings.Signature = temp.Signature;
 				}
 				Work.Settings.Add(Settings);
 				Work.Complete();
@@ -48,6 +49,7 @@ namespace CSAS.ViewModels
 			}
 			SaveCommand = new DelegateCommand(SaveSettings);
 			RecalculateCommand = new DelegateCommand(Recalculate);
+			SetSignatureCommand = new DelegateCommand(SetSignaturePath);
 		}
 
 		private Grade GetGrade(double pts)
@@ -82,7 +84,7 @@ namespace CSAS.ViewModels
 		}
 		private void Recalculate()
 		{
-			Work = new UnitOfWork(new AppDbContext());
+			Work = UoWSingleton.Instance;
 			foreach (var student in Work.Students.GetStudentsByGroup(Work.MainGroup.Get(CurrentMainGroupId)))
 			{
 				if(student.FinalAssessment != null && student.FinalAssessment.Grade != null)
@@ -92,6 +94,20 @@ namespace CSAS.ViewModels
 				}
 			}
 			Work.Complete();
+		}
+
+		private void SetSignaturePath()
+		{
+			OpenFileDialog fileDialog = new OpenFileDialog();
+
+			if (fileDialog.ShowDialog().Value)
+			{
+				if (Path.GetExtension(fileDialog.FileName) == ".htm")
+				{
+					Settings.Signature = fileDialog.FileName;
+				}
+			}
+
 		}
 
 		private void SaveSettings()

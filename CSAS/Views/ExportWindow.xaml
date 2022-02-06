@@ -7,7 +7,7 @@
           xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialDesign="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         mc:Ignorable="d"
-        Title="ExportWindow" Height="550" Width="850" ResizeMode="NoResize" WindowStyle="SingleBorderWindow"
+        Title="Export údajov" Height="550" Width="850" ResizeMode="NoResize" WindowStyle="SingleBorderWindow"
         xmlns:converters1="clr-namespace:CSAS.Converters">
     <Window.Resources>
         <converters1:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
@@ -36,11 +36,11 @@
                 <materialDesign:ToggleButton Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding IsAnonymized, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="-102 18 0 0"/>
 
                 <Label  Content="Odoslať na môj email" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="15" Margin="10 10 0 0 " />
-                <materialDesign:ToggleButton Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                <materialDesign:ToggleButton IsEnabled="False" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" 
                                          IsChecked="{Binding IsSendMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="130 18 0 0"/>
                 
                 <Label  Content="Odoslať študentom" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="15" Margin="10 0 0 0 " />
-                <materialDesign:ToggleButton Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                    <materialDesign:ToggleButton IsEnabled="False" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
                                          IsChecked="{Binding IsSendToStudents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="130 0 0 0"/>
 
                 <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Center" Grid.Row="1" Margin="0 20 0 0" >

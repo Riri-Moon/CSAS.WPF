@@ -32,8 +32,7 @@
 		{
 			CurrentMainGroupId = currentGroupId;
 			Activity = new Activity();
-			AppDbContext appDbContext = new();
-			Work = new UnitOfWork(appDbContext);
+			Work = UoWSingleton.Instance;
 			Activity = Work.Activity.Get(activityId);
 			MoveNextCommand = new DelegateCommand(MoveNext);
 			MovePrevCommand = new DelegateCommand(MovePrevious);
@@ -46,16 +45,12 @@
 			set => SetProperty(ref _selectedItem, value);
 		}
 
-		private async void SaveChanges()
+		private void SaveChanges()
 		{
-			IsLoading = true;
-			await System.Threading.Tasks.Task.Run(() =>
-			{
-				Activity.Modified = DateTime.Now;
-				Work.Activity.Update(Activity);
-				Work.Complete();
-				IsLoading = false;
-			});
+			Activity.Modified = DateTime.Now;
+			Work.Activity.Update(Activity);
+
+			Work.Complete();
 		}
 
 		private void MovePrevious()
