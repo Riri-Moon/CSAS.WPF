@@ -18,7 +18,7 @@ namespace CSAS.ViewModels
 {
 	public class MainViewModel : BaseViewModelBindableBase
 	{
-		readonly Logger _logger = new();
+		readonly static Logger _logger = new();
 		public DelegateCommand HomeCommand { get; }
 		public DelegateCommand MovePrevCommand { get; }
 		public DelegateCommand MoveNextCommand { get; }
@@ -151,13 +151,21 @@ namespace CSAS.ViewModels
 
 		private static async void RunActivityCheck()
 		{
-
-			NotificationHelper helper = new();
-			await System.Threading.Tasks.Task.Run(() =>
+			try
 			{
-				helper.SendNotificationsToMe();
-				helper.SendNotification();
-			});
+
+				NotificationHelper helper = new();
+				await System.Threading.Tasks.Task.Run(() =>
+				{
+					helper.SendNotificationsToMe();
+					helper.SendNotification();
+				});
+			}
+			catch(Exception ex)
+			{
+				_logger.ErrorAsync(ex.Message);
+				_logger.ErrorAsync(ex.StackTrace);
+			}
 		}
 	}
 }

@@ -307,18 +307,22 @@
 			{
 				foreach (var stud in students)
 				{
-					atte.AddRange(stud.SubAttendances.Select(x => x.Attendance).ToList());
+					var subAtts = stud.SubAttendances.Select(x => x.Attendance).ToList();
+					if (subAtts != null && subAtts.Any())
+						atte.AddRange(subAtts);
 				}
 			}
 			else
 			{
-				var form = IsLecture ? Enums.Enums.AttendanceFormEnums.Lecture:Enums.Enums.AttendanceFormEnums.Seminar;
+				var form = IsLecture ? Enums.Enums.AttendanceFormEnums.Lecture : Enums.Enums.AttendanceFormEnums.Seminar;
 				foreach (var stud in students)
 				{
-					atte.AddRange(stud.SubAttendances.Select(x => x.Attendance).Where(x => x.Form == form).ToList());
+					var subAtts = stud.SubAttendances.Select(x => x.Attendance).Where(x => x.Form == form).ToList();
+					if (subAtts != null && subAtts.Any())
+						atte.AddRange(subAtts);
 				}
 			}
-			
+
 			return atte;
 		}
 	}

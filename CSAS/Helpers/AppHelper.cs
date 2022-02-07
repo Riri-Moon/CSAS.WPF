@@ -26,11 +26,7 @@ namespace CSAS.Helpers
 		}
 		public static void RestartApp()
 		{
-			var start = new ProcessStartInfo(Application.ResourceAssembly.Location)
-			{
-				UseShellExecute = true
-			};
-			Process.Start(start);
+			System.Windows.Forms.Application.Restart();
 			Application.Current.Shutdown();
 		}
 
@@ -45,7 +41,11 @@ namespace CSAS.Helpers
 				{
 					await updateManager.UpdateApp();
 					_logger.InfoAsync("Version has been updated");
-					RestartApp();
+
+					if (MessageBoxHelper.Show("Reštart aplikácie", "Bol nainštalovaný update.", true).Value)
+					{
+						RestartApp();
+					}
 				}
 			}
 			catch (Exception ex)

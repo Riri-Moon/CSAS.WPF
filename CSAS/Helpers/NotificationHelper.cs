@@ -27,13 +27,15 @@ namespace CSAS.Helpers
 			try 
 			{
 				var act = Work.Activity.GetAll().Where(x => x.IsSendNotifications);
-				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
-				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
-
 				if (act == null || !act.Any())
 				{
 					return;
 				}
+
+				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
+				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
+
+				
 
 				foreach (var activity in act.Where(x => (x.Deadline - DateTime.Today).TotalDays <= 3).Where(x => x.Modified <= x.Created))
 				{
@@ -79,7 +81,9 @@ namespace CSAS.Helpers
 		}
 		public void SendNotificationsToMe()
 		{
-			int rowindex = 1;
+			try
+			{
+				int rowindex = 1;
 			string sheet = "Neohodnotene";
 			string pathToExport = Path.Combine(Path.GetTempPath(), DateTime.Now.ToString("ddMMyyHHmmss", System.Globalization.CultureInfo.CurrentCulture) + "NeohodnoteneAktivity.xlsx");
 			List<string> vs = new();
@@ -87,18 +91,19 @@ namespace CSAS.Helpers
 			mailAddresses.Add(new MailAddress(Settings.Email));
 			vs.Add(pathToExport);
 
-			try
-			{
+		
 				Excel.CreateSpreadsheetWorkbook(pathToExport, sheet);
 
 				
 				var act = Work.Activity.GetAll().Where(x => x.IsNotifyMe && DateTime.Today > x.Deadline);
-				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
-				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
 				if (act == null || !act.Any())
 				{
 					return;
 				}
+
+				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
+				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
+				
 
 				Excel.WriteRow(sheet, rowindex, true, "Skupina", "Predmet", "Student", "Aktivita", "Datum odovzdania");
 				rowindex++;
