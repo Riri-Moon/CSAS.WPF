@@ -12,6 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+    <Page Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 
@@ -38,7 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Data.Tables" Version="12.4.0" />
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
@@ -47,30 +53,30 @@
     </PackageReference>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.15.0" />
     <PackageReference Include="IpInfo" Version="1.1.14" />
-    <PackageReference Include="itext7" Version="7.2.0" />
-    <PackageReference Include="LiveChartsCore" Version="2.0.0-beta.90" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-beta.90" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.90" />
-    <PackageReference Include="MaterialDesignColors" Version="2.0.5-ci38-ci38">
+    <PackageReference Include="itext7" Version="7.2.1" />
+    <PackageReference Include="LiveChartsCore" Version="2.0.0-beta.101" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-beta.101" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.101" />
+    <PackageReference Include="MaterialDesignColors" Version="2.0.5-ci74">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
     <PackageReference Include="MaterialDesignExtensions" Version="4.0.0-a02">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-    <PackageReference Include="MaterialDesignThemes" Version="4.4.0-ci38-ci38">
+    <PackageReference Include="MaterialDesignThemes" Version="4.4.0-ci74">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="6.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.0.31902.203" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.2-mauipre.1.22054.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.0.32112.339" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
@@ -79,15 +85,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Prism.Core" Version="8.1.97" />
-    <PackageReference Include="SkiaSharp" Version="2.88.0-preview.179" />
+    <PackageReference Include="SkiaSharp" Version="2.88.0-preview.187" />
     <PackageReference Include="squirrel.windows" Version="1.9.0" />
     <PackageReference Include="System.Linq" Version="4.3.0">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -143,7 +145,7 @@
 		<NugetTools>$(PkgNuGet_CommandLine)\tools</NugetTools>
 		<SquirrelTools>$(Pkgsquirrel_windows)\tools</SquirrelTools>
 
-		<Version>1.1.2</Version>
+		<Version>1.1.4</Version>
 
 		<NuspecFile>$(SolutionDir)CSAS\CSAS.nuspec</NuspecFile>
 	</PropertyGroup>
