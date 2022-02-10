@@ -39,8 +39,11 @@ namespace CSAS.Helpers
 
 				if (isUpdate != null && isUpdate.ReleasesToApply != null && isUpdate.ReleasesToApply.Any())
 				{
-					await updateManager.UpdateApp();
-					_logger.InfoAsync("Version has been updated");
+					if (MessageBoxHelper.Show("Update", "Je k dispozícii nový update", true).Value)
+					{						
+						var releaseEntry = await updateManager.UpdateApp();
+						_logger.InfoAsync("Version has been updated");
+					}
 
 					if (MessageBoxHelper.Show("Reštart aplikácie", "Bol nainštalovaný update.", true).Value)
 					{

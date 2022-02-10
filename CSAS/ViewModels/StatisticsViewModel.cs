@@ -16,6 +16,7 @@ namespace CSAS.ViewModels
 {
 	public class StatisticsViewModel : BaseDataViewModel
 	{
+		private static readonly Logger _logger = new();
 		public DelegateCommand RefreshCommand { get; }
 		public StatisticsViewModel(string id)
 		{
@@ -245,9 +246,14 @@ namespace CSAS.ViewModels
 			{
 				return 0;
 			}
-			var count = studs.Select(x => x.ListOfActivities.Select(p => p.Tasks)).Sum(m => m.Sum(x => x.Count));
-			var studentCount = studs.Sum(i => i.TotalPoints.Value);
-			return Math.Round((studentCount / count), 2);
+
+			if (studs.Select(x=>x.ListOfActivities).Where(a => a != null).Any())
+			{
+				var count = studs.Select(x => x.ListOfActivities.Select(p => p.Tasks)).Sum(m => m.Sum(x => x.Count));
+				var studentCount = studs.Sum(i => i.TotalPoints.Value);
+				return Math.Round((studentCount / count), 2);
+			}
+			return 0;
 		}
 
 		private double GetAverageAttendanceLecture()
@@ -258,8 +264,13 @@ namespace CSAS.ViewModels
 				return 0;
 			}
 			List<Attendance> attendances = new();
+			if (!studs.Select(x => x.ListOfActivities).Where(a => a != null).Any())
+			{
+				return 0;
+			}
 			foreach (var stud in studs)
 			{
+
 				attendances.AddRange(stud.SubAttendances.Select(x => x.Attendance));
 			}
 			var attend = attendances.Distinct().Where(x => x.Form == AttendanceFormEnums.Lecture).Select(x => x.SubAttendances.Count).Sum(x => x);
@@ -289,6 +300,10 @@ namespace CSAS.ViewModels
 		{
 			var studs = GetStudents();
 			if (studs == null)
+			{
+				return 0;
+			}
+			if (!studs.Select(x => x.ListOfActivities).Where(a => a != null).Any())
 			{
 				return 0;
 			}
@@ -325,9 +340,20 @@ namespace CSAS.ViewModels
 			var studs = GetStudents();
 			if (studs != null && studs.Any())
 			{
-				var count = studs.Select(x => x.ListOfActivities).Sum(x => x.Count);
-				var studentCount = studs.Sum(i => i.TotalPoints.Value);
-				return Math.Round((studentCount / count), 2);
+				var listOfActivities = studs.Select(x => x.ListOfActivities);
+				if (listOfActivities != null && listOfActivities.Any() && listOfActivities.Where(x=>x !=null).Any())
+				{
+					try
+					{
+						var count = listOfActivities.Sum(x => x.Count);
+						var studentCount = studs.Sum(i => i.TotalPoints.Value);
+						return Math.Round((studentCount / count), 2);
+					}
+					catch (Exception)
+					{
+						_logger.InfoAsync("No activities were found");
+					}
+				}
 			}
 			
 			return 0;

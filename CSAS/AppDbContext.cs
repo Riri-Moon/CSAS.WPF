@@ -15,18 +15,18 @@ namespace CSAS
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-		
+
 			//optionsBuilder.UseLazyLoadingProxies()
 			//.UseSqlServer("workstation id=CSAS-DB.mssql.somee.com;packet size=4096;user id=rarxxx_SQLLogin_1;pwd=b2koo97jka;data source=CSAS-DB.mssql.somee.com;persist security info=False;initial catalog=CSAS-DB ");
 
 			//Offline SQL DB and Online SQL DB
-#if !DEBUG
-			optionsBuilder.UseLazyLoadingProxies()
-			.UseSqlServer("workstation id=CSAS-DB.mssql.somee.com;packet size=4096;user id=rarxxx_SQLLogin_1;pwd=b2koo97jka;data source=CSAS-DB.mssql.somee.com;persist security info=False;initial catalog=CSAS-DB ");
+			#if !DEBUG
+						optionsBuilder.UseLazyLoadingProxies()
+						.UseSqlServer("workstation id=CSAS-DB.mssql.somee.com;packet size=4096;user id=rarxxx_SQLLogin_1;pwd=b2koo97jka;data source=CSAS-DB.mssql.somee.com;persist security info=False;initial catalog=CSAS-DB ");
 
 #else
 			optionsBuilder.UseLazyLoadingProxies()
-				.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ZZ03XZ693\Documents\CSASDatabase.mdf;Integrated Security=True;Connect Timeout=30");
+							.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ZZ03XZ693\Documents\CSASDatabase.mdf;Integrated Security=True;Connect Timeout=30");
 #endif
 		}
 

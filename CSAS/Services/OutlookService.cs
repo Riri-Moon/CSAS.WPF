@@ -45,6 +45,7 @@ namespace CSAS.Services
 			{
 				try
 				{
+					if (signaturePath != string.Empty)
 					signaturePath = File.ReadAllText(signaturePath);
 				}
 				catch (Exception ex)

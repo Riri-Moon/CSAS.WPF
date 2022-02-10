@@ -126,8 +126,12 @@ namespace CSAS.Models
 		{
 			get
 			{
-				var attendance = SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Lecture);
-				return attendance.Where(p => p.State == AttendanceEnums.NotPresent).Count();
+				if (SubAttendances != null)
+				{
+					var attendance = SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Lecture);
+					return attendance.Where(p => p.State == AttendanceEnums.NotPresent).Count();
+				}
+				return 0;
 			}
 		}
 		[NotMapped]
@@ -136,8 +140,12 @@ namespace CSAS.Models
 		{
 			get
 			{
-				var attendance = SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Seminar); ;
-				return attendance.Where(p => p.State == AttendanceEnums.NotPresent).Count();
+				if (SubAttendances != null)
+				{
+					var attendance = SubAttendances.Where(x => x.Attendance.Form == AttendanceFormEnums.Seminar); ;
+					return attendance.Where(p => p.State == AttendanceEnums.NotPresent).Count();
+				}
+				return 0;
 			}
 		}
 

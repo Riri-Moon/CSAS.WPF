@@ -109,7 +109,7 @@
 			set => SetProperty(ref _name, value);
 		}
 
-		private string? _signature = "";
+		private string? _signature = string.Empty;
 		public virtual string? Signature
 		{
 			get => _signature;

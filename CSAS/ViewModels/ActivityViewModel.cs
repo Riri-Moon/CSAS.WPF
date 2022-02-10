@@ -187,9 +187,13 @@ namespace CSAS.ViewModels
 			if (Activity.IsSendEmail)
 			{
 				OutlookService outlookService = new();
-
-				var isFinished = outlookService.SendEmail(subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), false, 
-					Work.Settings.GetSettingsByMainGroup(Activity.Student.MainGroup.Id).Signature);				
+				var signature = string.Empty;
+				var settings = Work.Settings.GetSettingsByMainGroup(activity.FirstOrDefault().Student.MainGroup.Id);
+				if (settings !=null && settings.Signature !=null)
+				{
+					signature = settings.Signature;
+				}
+				var isFinished = outlookService.SendEmail(subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), false, signature);				
 			}
 
 			Activity = new();

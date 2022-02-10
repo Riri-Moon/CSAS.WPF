@@ -307,9 +307,12 @@
 			{
 				foreach (var stud in students)
 				{
-					var subAtts = stud.SubAttendances.Select(x => x.Attendance).ToList();
-					if (subAtts != null && subAtts.Any())
-						atte.AddRange(subAtts);
+					if (stud.SubAttendances!= null && stud.SubAttendances.Any())
+					{
+						var subAtts = stud.SubAttendances.Select(x => x.Attendance).ToList();
+						if (subAtts != null && subAtts.Any())
+							atte.AddRange(subAtts);
+					}
 				}
 			}
 			else
@@ -317,9 +320,12 @@
 				var form = IsLecture ? Enums.Enums.AttendanceFormEnums.Lecture : Enums.Enums.AttendanceFormEnums.Seminar;
 				foreach (var stud in students)
 				{
-					var subAtts = stud.SubAttendances.Select(x => x.Attendance).Where(x => x.Form == form).ToList();
-					if (subAtts != null && subAtts.Any())
-						atte.AddRange(subAtts);
+					if (stud.SubAttendances != null && stud.SubAttendances.Any())
+					{
+						var subAtts = stud.SubAttendances.Select(x => x.Attendance).Where(x => x.Form == form).ToList();
+						if (subAtts != null && subAtts.Any())
+							atte.AddRange(subAtts);
+					}
 				}
 			}
 
