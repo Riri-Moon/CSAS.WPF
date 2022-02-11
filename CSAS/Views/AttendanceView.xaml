@@ -18,7 +18,7 @@
         <converters:MultiValueConverter x:Key="MultiValueConverter"/>
     </UserControl.Resources>
     <Grid>
-        <Button Content="Späť na výber skupín" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,60,0"
+        <Button Content="Späť" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,60,0"
                 Visibility="{Binding IsAttendanceSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"
                Command="{Binding Path=DataContext.SelectAttendanceCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
 
@@ -30,11 +30,12 @@
             </Grid.RowDefinitions>
 
             <Label Content="{Binding SelectedAttendance.Date, Converter={StaticResource dateTimeAgoConverter}}" Grid.Row="1" HorizontalAlignment="Center" FontWeight="Heavy" FontSize="20"/>
+
             <ListView Width="820" ItemsSource="{Binding SelectedAttendance.SubAttendances}" Grid.Row="2" Height="580">
                 <ListView.ItemTemplate>
                     <DataTemplate>
 
-                        <Grid  Height="70">
+                        <Grid  Height="55">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -47,44 +48,47 @@
                                 <ColumnDefinition Width="100"/>
 
                             </Grid.ColumnDefinitions>
-                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" VerticalAlignment="Center" Grid.RowSpan="2"/>
-                            <Label Content="{Binding Student.FullName}" Height="40" Grid.Row="0" FontSize="18" FontWeight="Bold" Grid.Column="1"/>
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Height="62" Width="50" VerticalAlignment="Center" Grid.RowSpan="2"/>
+                            <Label Content="{Binding Student.FullName}" Height="40" Grid.Row="0" FontSize="16" FontWeight="Bold" Grid.Column="1"/>
                             <Label Content="{Binding Student.Isic}" Grid.Row="1" Margin="0,-10,0,0" Grid.Column="1"/>
                             <Label Content="{Binding State,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AttendanceEnumConverter}}" 
                                    Grid.Column="1" FontWeight="Bold" Margin="100,0,0,0" HorizontalAlignment="Center"  Grid.RowSpan="2" FontSize="15" VerticalAlignment="Center"/>
 
                             <Button Grid.Column="2" Background="Transparent" BorderBrush="Transparent" Height="70" Width="90" Grid.RowSpan="2" HorizontalAlignment="Right" Foreground="Black"
+                                    ToolTip="Prítomný"
                                     Command="{Binding Path=DataContext.StudentPresentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                    IsEnabled="{Binding  Path=DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertBooleanConverter}}"
-                                    >
+                                    IsEnabled="{Binding  Path=DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},
+                                Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertBooleanConverter}}">
                                 <Button.CommandParameter>
                                     <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                         <Binding Path="Id"/>
                                         <Binding Source="Present"/>
                                     </MultiBinding>
                                 </Button.CommandParameter>
-                            <StackPanel>
-                                    <md:PackIcon Kind="Done" Height="65" Width="65" Margin="-20,-15,0,0" />
+                                <StackPanel>
+                                    <md:PackIcon Kind="Done" Height="60" Width="60" Margin="-20,-15,0,0" />
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="3" Background="Transparent" BorderBrush="Transparent" Height="70" Width="90" Grid.RowSpan="2" HorizontalAlignment="Center"
+                                    ToolTip="Neprítomný"
                                     Command="{Binding Path=DataContext.StudentPresentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Foreground="Black"
-                                    IsEnabled="{Binding  Path=DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertBooleanConverter}}"
-                                    >
+                                    IsEnabled="{Binding  Path=DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},
+                                    Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertBooleanConverter}}">
                                 <Button.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiValueConverter}"> 
+                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                         <Binding Path="Id"/>
                                         <Binding Source="NotPresent"/>
                                     </MultiBinding>
                                 </Button.CommandParameter>
                                 <StackPanel>
-                                    <md:PackIcon Kind="Close" Height="65" Width="65" Margin="-0,-15,0,0" />
+                                    <md:PackIcon Kind="Close" Height="60" Width="60" Margin="-0,-15,0,0" />
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="4" Background="Transparent" BorderBrush="Transparent" Height="70" Width="90" Grid.RowSpan="2" HorizontalAlignment="Center"
+                                    ToolTip="Ospravedlnené"
                                     Command="{Binding Path=DataContext.StudentPresentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
-                                    IsEnabled="{Binding  Path=DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertBooleanConverter}}"
-                                    >
+                                    IsEnabled="{Binding  Path=DataContext.IsLoading, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},
+                                    Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertBooleanConverter}}">
                                 <Button.CommandParameter>
                                     <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                         <Binding Path="Id"/>
@@ -92,7 +96,7 @@
                                     </MultiBinding>
                                 </Button.CommandParameter>
                                 <StackPanel>
-                                    <Image Source="C:\Users\ZZ03XZ693\source\repos\MauiApp1\CSAS\Images\icons8-being-sick-100.png" Height="50" Width="50" Margin="0,-22,0,0"/>
+                                    <md:PackIcon Kind="EmoticonSick" Height="55" Width="55" Margin="-10,-15,0,0" Foreground="Black"/>
                                 </StackPanel>
                             </Button>
 
@@ -100,7 +104,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
         </Grid>
 
         <Grid Visibility="{Binding IsAttendanceSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}">
@@ -175,9 +178,7 @@
 
                     <DataTemplate>
                         <Border Height="30" CornerRadius="10 ">
-                            <Label Content="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="0,0,0,0" Width="30" HorizontalAlignment="Center" SnapsToDevicePixels="True">
-
-                            </Label>
+                            <Label Content="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="0,0,0,0" Width="30" HorizontalAlignment="Center" SnapsToDevicePixels="True"/>
                         </Border>
                     </DataTemplate>
 
@@ -194,7 +195,6 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
-
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="{Binding Date, Converter={StaticResource LongDateToShortConverter}}" FontSize="16" FontWeight="Bold"/>

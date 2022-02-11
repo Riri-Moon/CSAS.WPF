@@ -15,108 +15,66 @@ namespace CSAS.ViewModels
 		private ObservableCollection<Attendance> _lectures;
 		public ObservableCollection<Attendance> Lectures
 		{
-			get { return _lectures; }
-			set
-			{
-				SetProperty(ref _lectures, value);
-			}
+			get => _lectures;
+			set => SetProperty(ref _lectures, value);
 		}
 
 		private ObservableCollection<Attendance> _seminars;
 		public ObservableCollection<Attendance> Seminars
 		{
-			get { return _seminars; }
-			set
-			{
-				SetProperty(ref _seminars, value);
-			}
+			get => _seminars;
+			set => SetProperty(ref _seminars, value);
 		}
 
 		private Attendance _selectedAttendance;
 		public Attendance SelectedAttendance
 		{
-			get { return _selectedAttendance; }
-			set
-			{
-				SetProperty(ref _selectedAttendance, value);
-			}
+			get => _selectedAttendance;
+			set => SetProperty(ref _selectedAttendance, value);
 		}
 
 		private ObservableCollection<SubGroup> _subGroups;
 		public ObservableCollection<SubGroup> SubGroups
 		{
-			get { return _subGroups; }
-			set
-			{
-				SetProperty(ref _subGroups, value);
-			}
+			get => _subGroups;
+			set => SetProperty(ref _subGroups, value);
 		}
 
 		private SubGroup _selectedSubGroup;
-
 		public SubGroup SelectedSubGroup
 		{
-			get { return _selectedSubGroup; }
-			set
-			{
-				SetProperty(ref _selectedSubGroup, value);
-			}
+			get => _selectedSubGroup; set => SetProperty(ref _selectedSubGroup, value);
 		}
 		private ObservableCollection<Attendance> _attendances;
 		public ObservableCollection<Attendance> Attendances
 		{
-			get { return _attendances; }
-			set
-			{
-				SetProperty(ref _attendances, value);
-			}
+			get => _attendances; set => SetProperty(ref _attendances, value);
 		}
 
 		private bool _isLectureSelected = true;
 		public bool IsLectureSelected
 		{
-			get { return _isLectureSelected; }
-			set
-			{
-				SetProperty(ref _isLectureSelected, value);
-			}
+			get => _isLectureSelected; set => SetProperty(ref _isLectureSelected, value);
 		}
 
 		private bool _isAttendanceSelected;
 		public bool IsAttendanceSelected
 		{
-			get { return _isAttendanceSelected; }
-			set
-			{
-				SetProperty(ref _isAttendanceSelected, value);
-			}
+			get => _isAttendanceSelected; set => SetProperty(ref _isAttendanceSelected, value);
 		}
 
-		private string _numberOfStudents;
-		public string NumberOfStudents
-		{
-			get { return _numberOfStudents; }
-			set
-			{
-				SetProperty(ref _numberOfStudents, value);
-			}
-		}
 		private new UnitOfWork Work { get; set; }
 
 		private DateTime _time = DateTime.Now;
+
 		public DateTime Time
 		{
-			get { return _time; }
-			set
-			{
-				SetProperty(ref _time, value);
-			}
+			get => _time; set => SetProperty(ref _time, value);
 		}
 		public AttendanceViewModel(string currentMainGroupId)
 		{
 			Work = UoWSingleton.Instance;
 			Attendances = new ObservableCollection<Attendance>();
-
 			var att = Work.Attendance.GetAttendanceByMainGroup(Work.MainGroup.Get(currentMainGroupId));
 			Lectures = new ObservableCollection<Attendance>(att.Where(x => x.Form == AttendanceFormEnums.Lecture));
 			Seminars = new ObservableCollection<Attendance>(att.Where(x => x.Form == AttendanceFormEnums.Seminar));
@@ -129,12 +87,10 @@ namespace CSAS.ViewModels
 			RemoveAttendanceCommand = new DelegateCommand<string?>(RemoveAttendance);
 			SelectAttendanceCommand = new DelegateCommand<string?>(SelectAttendance);
 			StudentPresentCommand = new DelegateCommand<object?>(StudentPresent);
-
 		}
 
 		private void SelectAttendance(string? id)
 		{
-
 			if (!string.IsNullOrEmpty(id))
 			{
 				IsAttendanceSelected = true;
@@ -145,11 +101,14 @@ namespace CSAS.ViewModels
 			{
 				IsAttendanceSelected = false;
 			}
-
 		}
 
 		private void SelectLecture()
 		{
+			if (Attendances == null)
+			{
+				Attendances = new ObservableCollection<Attendance>();
+			}
 			Attendances = new ObservableCollection<Attendance>(Lectures.OrderByDescending(x => x.Date.Date).ToList());
 			IsLectureSelected = true;
 		}
@@ -174,7 +133,6 @@ namespace CSAS.ViewModels
 		private void ResetAttendance()
 		{
 			var temp = SelectedAttendance;
-
 			SelectedAttendance = new Attendance();
 			SelectedAttendance = temp;
 		}
@@ -266,7 +224,8 @@ namespace CSAS.ViewModels
 						new SubAttendances()
 						{
 							Student = new Student(),
-							State = AttendanceEnums.New
+							State = AttendanceEnums.New,
+							
 						});
 
 					attendance.SubAttendances.Last().Student = student;

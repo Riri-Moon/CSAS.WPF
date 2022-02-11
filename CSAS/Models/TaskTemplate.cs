@@ -46,7 +46,6 @@ namespace CSAS.Models
 		}
 		public TaskTemplate Clone()
 		{
-
 			return MemberwiseClone() as TaskTemplate;
 		}
 

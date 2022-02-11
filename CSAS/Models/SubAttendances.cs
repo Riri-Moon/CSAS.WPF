@@ -32,10 +32,11 @@ namespace CSAS.Models
 		}
 		private AttendanceEnums _state;
 		[NotMapped]
-		public bool IsSelected {
+		public bool IsSelected
+		{
 			get => _isSelected;
 			set => SetProperty(ref _isSelected, value);
-	}
+		}
 		private bool _isSelected = false;
 	}
 }

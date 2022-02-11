@@ -114,6 +114,9 @@
     <None Update="Fonts\ARIAL.TTF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Images\icons8-being-sick-100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Images\Logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -145,7 +148,7 @@
 		<NugetTools>$(PkgNuGet_CommandLine)\tools</NugetTools>
 		<SquirrelTools>$(Pkgsquirrel_windows)\tools</SquirrelTools>
 
-		<Version>1.1.4</Version>
+		<Version>1.1.5</Version>
 
 		<NuspecFile>$(SolutionDir)CSAS\CSAS.nuspec</NuspecFile>
 	</PropertyGroup>

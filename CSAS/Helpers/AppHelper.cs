@@ -24,11 +24,6 @@ namespace CSAS.Helpers
 			Work.UserInfo.Add(userInfo);
 			Work.Complete();
 		}
-		public static void RestartApp()
-		{
-			System.Windows.Forms.Application.Restart();
-			Application.Current.Shutdown();
-		}
 
 		public static async void CheckForUpdates()
 		{
@@ -47,7 +42,7 @@ namespace CSAS.Helpers
 
 					if (MessageBoxHelper.Show("Reštart aplikácie", "Bol nainštalovaný update.", true).Value)
 					{
-						RestartApp();
+						UpdateManager.RestartApp();
 					}
 				}
 			}
