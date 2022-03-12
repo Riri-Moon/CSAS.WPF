@@ -30,19 +30,6 @@
                         Margin="16"
                         IsChecked="{Binding ElementName=ToggleBtn1, Path=IsChecked, Mode=TwoWay}"/>
 
-                        <TextBox  Panel.ZIndex="2"
-                        x:Name="ViewItemsSearchBox"
-                        Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                        DockPanel.Dock="Top"
-                        Margin="16, 4"
-                        Width="200"
-                        materialDesign:HintAssist.Hint="Search"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.HasClearButton="True"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"/>
-
                         <ListBox Panel.ZIndex="2"
                         x:Name="ViewItemsListBox" 
                         Margin="0 16 0 16"
@@ -117,7 +104,7 @@
                             <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Margin="-180,0,0,0"
+                            Margin="-30,0,0,0"
                             FontSize="22"
                             AutomationProperties.Name="None"
                             Text="{Binding Activity.Name}"/>
@@ -145,7 +132,7 @@
                 </DockPanel>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
-        <Grid Panel.ZIndex="1">
+        <Grid Panel.ZIndex="1" Visibility="{Binding ElementName=ToggleBtn1, Path=IsChecked, Converter={StaticResource InverseBoolToVisConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="Auto"/>
@@ -156,20 +143,21 @@
 
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="0"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="200" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Label Content="Názov úlohy: " Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" FontSize="20"  />
-            <Label Content="{Binding SelectedItem.Name}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" FontSize="20" Margin="-150,0,0,0" />
+            <Label Content="Názov úlohy: " Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" FontSize="20"  />
+            <Label Content="{Binding SelectedItem.Name}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" FontSize="20" Margin="0,0,0,0" Grid.ColumnSpan="2" />
 
-            <Label Content="Maximálny počet bodov: " Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" FontSize="20" />
-            <Label Content="{Binding SelectedItem.MaxPoints}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" FontSize="20" Margin="-150,0,0,0"  />
+            <Label Content="Maximálny počet bodov: " Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" FontSize="20" />
+            <Label Content="{Binding SelectedItem.MaxPoints}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" FontSize="20" Margin="0,0,0,0"  />
+           
             <TextBox materialDesign:HintAssist.HelperText="Ziskany počet bodov" materialDesign:HintAssist.HelperTextFontSize="14" FontSize="20"
                      Text="{Binding SelectedItem.Points,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                     Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Width="130" HorizontalAlignment="Left" />
-            <TextBox  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0, 50, 0, 0" FontSize="17" Text="{Binding SelectedItem.Comment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Width="130" HorizontalAlignment="Left" />
+            <TextBox  Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="0, 50, 0, 0" FontSize="17" Text="{Binding SelectedItem.Comment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
     Style="{StaticResource MaterialDesignFilledTextBox}"
     VerticalAlignment="Top"
     Height="200"

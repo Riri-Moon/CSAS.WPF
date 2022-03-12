@@ -20,26 +20,26 @@
     <Grid>
         <md:DialogHost CloseOnClickAway="True">
             <md:DialogHost.DialogContent>
-                <ListView ItemsSource="{Binding SelectedStudent.ListOfActivities,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="700" Height="600">
+                <ListView ItemsSource="{Binding SelectedStudent.ListOfActivities,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="750" Height="600">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="200"/>
-                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="120"/>
                                         <ColumnDefinition Width="200"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Column="0" Content="{Binding Name}" FontSize="20" Grid.RowSpan="2" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.Row="0">
+                                    <Label Grid.Column="0" Content="{Binding Name}" FontSize="20" Grid.RowSpan="1" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="0" FontSize="15" VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Left">
                                         <Run Text="Dátum odovzdania: "/>
                                     <Run Text="{Binding Deadline}"/>
                                     </TextBlock>
-                                    <TextBlock Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.Row="1">
+                                    <TextBlock Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Center">
                                         <Run Text="Počet bodov: "/>
                                     <Run Text="{Binding EarnedPoints,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </TextBlock>

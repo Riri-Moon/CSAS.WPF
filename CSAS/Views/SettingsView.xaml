@@ -41,7 +41,7 @@
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="70"/>
                             <RowDefinition Height="70"/>
-                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="40"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBox Grid.Row="1" Text="{Binding Settings.Title,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" FontSize="20" Width="80" materialDesign:HintAssist.HelperTextFontSize="18" materialDesign:HintAssist.HelperText="Titul" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
