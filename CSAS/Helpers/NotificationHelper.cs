@@ -24,7 +24,7 @@ namespace CSAS.Helpers
 		public void SendNotification()
 		{
 			StringBuilder builder = new();
-			try 
+			try
 			{
 				var act = Work.Activity.GetAll().Where(x => x.IsSendNotifications);
 				if (act == null || !act.Any())
@@ -35,15 +35,13 @@ namespace CSAS.Helpers
 				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
 				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
 
-				
-
 				foreach (var activity in act.Where(x => (x.Deadline - DateTime.Today).TotalDays <= 3).Where(x => x.Modified <= x.Created))
 				{
 					var email = new MailAddressCollection
 				{
 					activity.Student.SchoolEmail
 				};
-					string subject = $"Neodovzdaná aktivita - {activity.Name}";
+					string subject = $"Aktivita - {activity.Name}";
 					builder.Append($"Dobrý deň, {space} uporňujem Vás na blížiaci sa dátum odovzdania aktivity - {activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()} zo dňa {activity.Created.ToShortDateString()}.{space}" +
 						$"Ak ste aktivitu odovzdali, pokladajte tento email za bezpredmetný.");
 
@@ -60,7 +58,7 @@ namespace CSAS.Helpers
 							}
 						}
 						//builder.Append($"{space} S pozdravom {Settings.Title} {Settings.Name} {Settings.TitleAfterName}");
-						OutlookService.SendEmail(subject, email, null, builder.ToString(), attachments, false,Settings.Signature);
+						OutlookService.SendEmail(subject, email, null, builder.ToString(), attachments, false, Settings.Signature);
 					}
 					else
 					{
@@ -84,32 +82,30 @@ namespace CSAS.Helpers
 			try
 			{
 				int rowindex = 1;
-			string sheet = "Neohodnotene";
-			string pathToExport = Path.Combine(Path.GetTempPath(), DateTime.Now.ToString("ddMMyyHHmmss", System.Globalization.CultureInfo.CurrentCulture) + "NeohodnoteneAktivity.xlsx");
-			List<string> vs = new();
-			MailAddressCollection mailAddresses = new();
-			mailAddresses.Add(new MailAddress(Settings.Email));
-			vs.Add(pathToExport);
+				string sheet = "Neohodnotene";
+				string pathToExport = Path.Combine(Path.GetTempPath(), DateTime.Now.ToString("ddMMyyHHmmss", System.Globalization.CultureInfo.CurrentCulture) + "NeohodnoteneAktivity.xlsx");
+				List<string> vs = new();
+				MailAddressCollection mailAddresses = new();
+				vs.Add(pathToExport);
 
-		
-				Excel.CreateSpreadsheetWorkbook(pathToExport, sheet);
-
-				
 				var act = Work.Activity.GetAll().Where(x => x.IsNotifyMe && DateTime.Today > x.Deadline);
+
 				if (act == null || !act.Any())
 				{
 					return;
 				}
 
+				Excel.CreateSpreadsheetWorkbook(pathToExport, sheet);
+
 				var grpId = act.FirstOrDefault().Student.MainGroup.Id;
 				Settings = Work.Settings.GetSettingsByMainGroup(grpId);
-				
+				mailAddresses.Add(new MailAddress(Settings.Email));
 
 				Excel.WriteRow(sheet, rowindex, true, "Skupina", "Predmet", "Student", "Aktivita", "Datum odovzdania");
 				rowindex++;
 				foreach (var activity in act.Where(x => x.Modified <= x.Created))
 				{
-					Excel.WriteRow(sheet, rowindex, true, activity.Student.MainGroup.Name, activity.Student.MainGroup.Subject, activity.Student.Name, activity.Name, $"{ activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()}");
+					Excel.WriteRow(sheet, rowindex, true, activity.Student.MainGroup.Name, activity.Student.MainGroup.Subject, activity.Student.FullName, activity.Name, $"{ activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()}");
 
 					activity.IsNotifyMe = false;
 					Work.Activity.Update(activity);

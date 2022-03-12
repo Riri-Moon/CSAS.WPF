@@ -20,7 +20,7 @@ namespace CSAS
 			//.UseSqlServer("workstation id=CSAS-DB.mssql.somee.com;packet size=4096;user id=rarxxx_SQLLogin_1;pwd=b2koo97jka;data source=CSAS-DB.mssql.somee.com;persist security info=False;initial catalog=CSAS-DB ");
 
 			//Offline SQL DB and Online SQL DB
-			#if !DEBUG
+#if !DEBUG
 						optionsBuilder.UseLazyLoadingProxies()
 						.UseSqlServer("workstation id=CSAS-DB.mssql.somee.com;packet size=4096;user id=rarxxx_SQLLogin_1;pwd=b2koo97jka;data source=CSAS-DB.mssql.somee.com;persist security info=False;initial catalog=CSAS-DB ");
 

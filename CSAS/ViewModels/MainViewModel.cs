@@ -50,13 +50,13 @@ namespace CSAS.ViewModels
 #if (!DEBUG)
 			try
 			{
-				RunActivityCheck();
+				 RunActivityCheck();
 
 				Timer = new DispatcherTimer();
 				Timer.Interval = TimeSpan.FromHours(1);
 				Timer.Tick += Timer_Tick;
 				Timer.Start();
-				_logger.InfoAsync("Activity check has successfully run");
+				//_logger.InfoAsync("Activity check has successfully run");
 			}
 			catch (Exception ex)
 			{
@@ -76,7 +76,7 @@ namespace CSAS.ViewModels
 		{
 			try
 			{
-				 RunActivityCheck();
+				RunActivityCheck();
 			}
 			catch (Exception ex)
 			{
@@ -153,7 +153,6 @@ namespace CSAS.ViewModels
 		{
 			try
 			{
-
 				NotificationHelper helper = new();
 				await System.Threading.Tasks.Task.Run(() =>
 				{
