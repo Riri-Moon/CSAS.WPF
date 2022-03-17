@@ -155,7 +155,7 @@
             <Label Content="{Binding SelectedItem.MaxPoints}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" FontSize="20" Margin="0,0,0,0"  />
            
             <TextBox materialDesign:HintAssist.HelperText="Ziskany počet bodov" materialDesign:HintAssist.HelperTextFontSize="14" FontSize="20"
-                     Text="{Binding SelectedItem.Points,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding SelectedItem.Points,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" 
                      Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Width="130" HorizontalAlignment="Left" />
             <TextBox  Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="0, 50, 0, 0" FontSize="17" Text="{Binding SelectedItem.Comment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
     Style="{StaticResource MaterialDesignFilledTextBox}"

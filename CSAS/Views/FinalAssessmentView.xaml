@@ -71,7 +71,7 @@
                                 <Run Text="Skupina: "/>
                                 <Run Text="{Binding SubGroup.Name, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </TextBlock>
-                            <TextBlock  Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="60,0,0,0" Grid.Column="1" FontSize="17">
+                            <TextBlock  Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="30,0,0,0" Grid.Column="1" FontSize="17">
                                 <Run Text="Celkový počet bodov: "/>
                                 <Run Text="{Binding TotalPoints, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </TextBlock>

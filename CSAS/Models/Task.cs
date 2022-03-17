@@ -24,7 +24,7 @@ namespace CSAS.Models
 				SetProperty(ref _name, value);
 			}
 		}
-		[MaxLength(3), MinLength(1)]
+		[MaxLength(5), MinLength(1)]
 		public virtual double? MaxPoints
 		{
 			get { return _maxPoints; }
@@ -33,12 +33,11 @@ namespace CSAS.Models
 				SetProperty(ref _maxPoints, value);
 			}
 		}
-		[MaxLength(3), MinLength(1)]
+		[MaxLength(5), MinLength(1)]
 		public virtual double? Points
 		{
 			get
 			{
-
 				if (_points == null)
 				{
 					return 0;
@@ -50,7 +49,6 @@ namespace CSAS.Models
 				if (value > MaxPoints.Value)
 				{
 					SetProperty(ref _points, MaxPoints.Value);
-
 				}
 				else if (value < 0)
 				{

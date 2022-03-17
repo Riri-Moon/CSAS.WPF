@@ -67,7 +67,9 @@ namespace CSAS.ViewModels
 			{
 				AppHelper.LogUserDetails(Work);
 #if (!DEBUG)
+				IsLoading = true;
 			AppHelper.CheckForUpdates();
+				IsLoading = false;
 #endif
 			}
 			catch (Exception ex)

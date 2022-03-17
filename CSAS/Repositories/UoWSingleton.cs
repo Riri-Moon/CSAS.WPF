@@ -10,7 +10,7 @@ namespace CSAS.Repositories
 	public sealed class UoWSingleton
 	{
 		private static readonly Lazy<UnitOfWork> lazy =
-		new Lazy<UnitOfWork>(() => new UnitOfWork(new AppDbContext()));
+		new(() => new UnitOfWork(new AppDbContext()));
 		public static UnitOfWork Instance { get { return lazy.Value; } }
 
 		private UoWSingleton()

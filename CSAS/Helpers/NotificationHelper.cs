@@ -41,7 +41,7 @@ namespace CSAS.Helpers
 				{
 					activity.Student.SchoolEmail
 				};
-					string subject = $"Aktivita - {activity.Name}";
+					string subject = $"[{act.FirstOrDefault().Student.MainGroup.Subject}] Aktivita - {activity.Name}";
 					builder.Append($"Dobrý deň, {space} uporňujem Vás na blížiaci sa dátum odovzdania aktivity - {activity.Deadline.ToShortDateString()} {activity.Deadline.ToShortTimeString()} zo dňa {activity.Created.ToShortDateString()}.{space}" +
 						$"Ak ste aktivitu odovzdali, pokladajte tento email za bezpredmetný.");
 

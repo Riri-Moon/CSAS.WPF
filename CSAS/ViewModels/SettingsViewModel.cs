@@ -98,7 +98,7 @@ namespace CSAS.ViewModels
 
 		private void SetSignaturePath()
 		{
-			OpenFileDialog fileDialog = new OpenFileDialog();
+			OpenFileDialog fileDialog = new();
 
 			if (fileDialog.ShowDialog().Value)
 			{
@@ -107,7 +107,6 @@ namespace CSAS.ViewModels
 					Settings.Signature = fileDialog.FileName;
 				}
 			}
-
 		}
 
 		private void SaveSettings()

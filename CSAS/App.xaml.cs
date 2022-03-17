@@ -52,8 +52,6 @@ namespace CSAS
 		void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			_logger.ErrorAsync(e.ExceptionObject.ToString());
-
-			var isTerminating = e.IsTerminating;
 		}
 	}
 }

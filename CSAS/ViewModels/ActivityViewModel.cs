@@ -7,6 +7,7 @@ namespace CSAS.ViewModels
 {
 	public class ActivityViewModel : BaseViewModelBindableBase
 	{
+		public static Logger _logger = new();
 		public DelegateCommand RefreshCommand { get; }
 		public DelegateCommand<string?> SelectTemplateCommand { get; }
 		public DelegateCommand CreateActivityCommand { get; }
@@ -91,7 +92,6 @@ namespace CSAS.ViewModels
 		{
 			get => _date;
 			set => SetProperty(ref _date, value);
-
 		}
 
 		private Student _student = new();
@@ -99,7 +99,6 @@ namespace CSAS.ViewModels
 		{
 			get => _student;
 			set => SetProperty(ref _student, value);
-
 		}
 
 		public ActivityViewModel(string currentGroupId)
@@ -137,68 +136,76 @@ namespace CSAS.ViewModels
 		// Add send email
 		private void CreateActivity()
 		{
-			if (Activity == null || string.IsNullOrEmpty(Activity.Name) || !GetStudents().Any() || GetStudents().FirstOrDefault() == null)
+			try
 			{
-				MessageBoxHelper.Show("", "Nie je vybraná žiadna aktivita alebo študent", true);
-				return;
-			}
-
-			List<Activity> activity = new();
-			MailAddressCollection mailAddresses = new();
-			MailAddressCollection ccMailAdresses = new();
-			if (Activity.Attachments == null)
-			{
-				Activity.Attachments = new();
-			}
-			Activity.Attachments.AddRange(Attachments);
-			Activity.Created = DateTime.Now;
-			Activity.Modified = Activity.Created;
-			string? subject = $"Nová úloha - {Activity.Name}";
-			string? body = $"Dobrý deň, <br/><br/> práve Vám bola pridelená nová úloha s názvom {Activity.Name}. <br/> Dátum odovzdania je { Activity.Deadline.ToShortDateString() } {Activity.Deadline.ToShortTimeString()}." +
-				$"<br/><br/> V prípade akýchkoľvek otázok ma neváhajte kontaktovať";
-
-			foreach (var student in GetStudents())
-			{
-
-				if (student == null)
+				if (Activity == null || string.IsNullOrEmpty(Activity.Name) || !GetStudents().Any() || GetStudents().FirstOrDefault() == null)
 				{
-					continue;
+					MessageBoxHelper.Show("", "Nie je vybraná žiadna aktivita alebo študent", true);
+					return;
 				}
 
-				Activity act = new();				
-				act = Activity.Clone();
-				act.Student = student;
-				act.Tasks = new List<Task>();
-
-				foreach (var task in Activity.Tasks)
+				List<Activity> activity = new();
+				MailAddressCollection mailAddresses = new();
+				MailAddressCollection ccMailAdresses = new();
+				if (Activity.Attachments == null)
 				{
-					act.Tasks.Add(task.Clone());
+					Activity.Attachments = new();
+				}
+				Activity.Attachments.AddRange(Attachments);
+				Activity.Created = DateTime.Now;
+				Activity.Modified = Activity.Created;
+				string? subject = $"[{Work.MainGroup.Get(CurrentMainGroupId).Subject}] Nová úloha - {Activity.Name}";
+				string? body = $"Dobrý deň, <br/><br/> práve Vám bola pridelená nová úloha s názvom {Activity.Name}. <br/> Dátum odovzdania je { Activity.Deadline.ToShortDateString() } {Activity.Deadline.ToShortTimeString()}." +
+					$"<br/><br/> V prípade akýchkoľvek otázok ma neváhajte kontaktovať";
+
+				foreach (var student in GetStudents())
+				{
+
+					if (student == null)
+					{
+						continue;
+					}
+
+					Activity act = new();
+					act = Activity.Clone();
+					act.Student = student;
+					act.Tasks = new List<Task>();
+
+					foreach (var task in Activity.Tasks)
+					{
+						act.Tasks.Add(task.Clone());
+					}
+
+					activity.Add(act);
+					mailAddresses.Add(student.SchoolEmail);
+					ccMailAdresses.Add(student.Email);
+				}
+				Work.Activity.AddRange(activity);
+				Work.Complete();
+
+				List<Attachment> attachments = new();
+
+				if (Activity.IsSendEmail)
+				{
+					OutlookService outlookService = new();
+					var signature = string.Empty;
+					var settings = Work.Settings.GetSettingsByMainGroup(activity.FirstOrDefault().Student.MainGroup.Id);
+					if (settings != null && settings.Signature != null)
+					{
+						signature = settings.Signature;
+					}
+					var isFinished = outlookService.SendEmail(subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), false, signature);
 				}
 
-				activity.Add(act);
-				mailAddresses.Add(student.SchoolEmail);
-				ccMailAdresses.Add(student.Email);
+				Activity = new();
+				Activity.Deadline = DateTime.Now;
+				ActivityTemplate = new();
 			}
-			Work.Activity.AddRange(activity);
-			Work.Complete();
-
-			List<Attachment> attachments = new();
-
-			if (Activity.IsSendEmail)
+			catch(Exception ex)
 			{
-				OutlookService outlookService = new();
-				var signature = string.Empty;
-				var settings = Work.Settings.GetSettingsByMainGroup(activity.FirstOrDefault().Student.MainGroup.Id);
-				if (settings !=null && settings.Signature !=null)
-				{
-					signature = settings.Signature;
-				}
-				var isFinished = outlookService.SendEmail(subject, mailAddresses, ccMailAdresses, body, Activity.Attachments.Select(x => x.PathToFile).ToList(), false, signature);				
+				_logger.ErrorAsync(ex.Message);
+				_logger.ErrorAsync(ex.StackTrace);
 			}
-
-			Activity = new();
-			Activity.Deadline = DateTime.Now;
-			ActivityTemplate = new();
 		}
 
 		private List<Student> GetStudents()
@@ -219,9 +226,9 @@ namespace CSAS.ViewModels
 			}
 		}
 
-		private static List<Models.Task> GetTasksFromTemplate(ActivityTemplate activityTemplate, Activity act)
+		private static List<Task> GetTasksFromTemplate(ActivityTemplate activityTemplate, Activity act)
 		{
-			List<Models.Task> tasks = new();
+			List<Task> tasks = new();
 
 			foreach (var tskTemp in activityTemplate.TasksTemplate)
 			{
