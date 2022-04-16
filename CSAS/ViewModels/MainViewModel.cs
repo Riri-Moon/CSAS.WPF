@@ -47,23 +47,23 @@ namespace CSAS.ViewModels
 			});
 
 			_viewItemsView = CollectionViewSource.GetDefaultView(ViewItems);
-#if (!DEBUG)
-			try
-			{
-				 RunActivityCheck();
+//#if (!DEBUG)
+//			try
+//			{
+//				 RunActivityCheck();
 
-				Timer = new DispatcherTimer();
-				Timer.Interval = TimeSpan.FromHours(1);
-				Timer.Tick += Timer_Tick;
-				Timer.Start();
-				//_logger.InfoAsync("Activity check has successfully run");
-			}
-			catch (Exception ex)
-			{
-				_logger.ErrorAsync(ex.Message);
-				_logger.ErrorAsync(ex.StackTrace);
-			}
-#endif
+//				Timer = new DispatcherTimer();
+//				Timer.Interval = TimeSpan.FromHours(1);
+//				Timer.Tick += Timer_Tick;
+//				Timer.Start();
+//				//_logger.InfoAsync("Activity check has successfully run");
+//			}
+//			catch (Exception ex)
+//			{
+//				_logger.ErrorAsync(ex.Message);
+//				_logger.ErrorAsync(ex.StackTrace);
+//			}
+//#endif
 			HomeCommand = new DelegateCommand(HomeButton);
 			ImportCommand = new DelegateCommand<object?>(ChangeGroups);
 			OpenExportCommand = new DelegateCommand(OpenExport);

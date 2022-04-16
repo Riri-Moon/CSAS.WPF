@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CSAS.ViewModels.HomeViewModel">
+    <Position X="12" Y="2.25" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gEIkAAIESCAUBAASWAAQYQAQIIQCABAQIpEIQKECgMA=</HashCode>
+      <FileName>ViewModels\HomeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SelectedStudent" />
+      <Property Name="NewStudent" />
+      <Property Name="SelectedGroup" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="SubGroups" />
+      <Property Name="Students" />
+      <Property Name="Activities" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
+    <Position X="7.25" Y="1.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
+      <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CSAS.Models.SubGroup">
+    <Position X="19.5" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SubGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Students" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.Student">
+    <Position X="19.5" Y="4.75" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAACIEQSBKACAMgAAAEIAg4AAAEAAiABAAAKAQUABEk=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.Activity">
+    <Position X="13" Y="10.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAgAAAICQQAgAAFAAFAEAAAAgACAAgQACAEoAAAQABA=</HashCode>
+      <FileName>Models\Activity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Student" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

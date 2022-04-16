@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CSAS.Models.MainGroup">
+    <Position X="23.5" Y="1.25" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAIAAAQAAACAAAgQAAAAAAAEABEA=</HashCode>
+      <FileName>Models\MainGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SubGroups" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.SubGroup">
+    <Position X="18.75" Y="3.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SubGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Students" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.Student">
+    <Position X="21" Y="6" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAACIEQSBKACAMgAAAEIAg4AAAEAAiABAAAKAQUABEk=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FinalAssessment" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ListOfActivities" />
+      <Property Name="SubAttendances" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.FinalAssessment">
+    <Position X="18" Y="7.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAgAAIEcAAgAADAgAAAAAABAAAAAgQAAEAAAAEAACA=</HashCode>
+      <FileName>Models\FinalAssessment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.Activity">
+    <Position X="14" Y="3.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAgAAAICQQAgAAFAAFAEAAAAgACAAgQACAEoAAAQABA=</HashCode>
+      <FileName>Models\Activity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tasks" />
+      <Property Name="Attachments" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.BaseWithNameModelBindableBaseBindableBase">
+    <Position X="18" Y="1.25" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\BaseWithNameModelBindableBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.Attachments">
+    <Position X="14.75" Y="7.75" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\Attachments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.Task">
+    <Position X="11.5" Y="3.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACIAAEEACAgAAAgAAAAASAABAAAAAEAAAAAEAAABA=</HashCode>
+      <FileName>Models\Task.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.SubAttendances">
+    <Position X="24.75" Y="9" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAEIAQAAAEAAAAAAACACAAAAAAAAAAAAABAAAAEA=</HashCode>
+      <FileName>Models\SubAttendances.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Attendance" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CSAS.Models.Attendance">
+    <Position X="24.5" Y="5.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="SubGroup" Type="CSAS.Models.SubGroup" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="24.5" Y="5.719" />
+        <Point X="24.125" Y="5.719" />
+        <Point X="24.125" Y="4.875" />
+        <Point X="21.5" Y="4.875" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACgAACIAAAACAABAkAAgAAAAAAAgABAAAAAAUABEA=</HashCode>
+      <FileName>Models\Attendance.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SubGroup" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CSAS.Models.ActivityTemplate">
+    <Position X="9.5" Y="2.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAiAAAAAAIAAAICAACAAAgQkAAAAAAAEABA=</HashCode>
+      <FileName>Models\ActivityTemplate.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="TasksTemplate" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.TaskTemplate">
+    <Position X="9.5" Y="6.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AQACIAAAAAAAEAAAAAAAAASAAAAAQAAEAAAAAAAAABA=</HashCode>
+      <FileName>Models\TaskTemplate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

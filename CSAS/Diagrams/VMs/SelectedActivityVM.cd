@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CSAS.ViewModels.SelectedActivityViewModel">
+    <Position X="11" Y="6" Width="3.25" />
+    <AssociationLine Name="Tasks" Type="CSAS.Models.Task" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="12.75" Y="10.252" />
+        <Point X="12.75" Y="11.875" />
+        <Point X="11.25" Y="11.875" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="SelectedItem" Type="CSAS.Models.Task" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.531" Y="10.252" />
+        <Point X="13.531" Y="13.75" />
+        <Point X="11.25" Y="13.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>kAgAAAAAAAQAAEAAgIAAAABAARAAAAAAIJAIAEAAAAA=</HashCode>
+      <FileName>ViewModels\SelectedActivityViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Activity" />
+      <Property Name="SelectedItem" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tasks" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
+    <Position X="10.5" Y="1.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
+      <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CSAS.Models.Activity">
+    <Position X="7" Y="6.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAgAAAICQQAgAAFAAFAEAAAAgACAAgQACAEoAAAQABA=</HashCode>
+      <FileName>Models\Activity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Student" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tasks" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.Task">
+    <Position X="9.5" Y="11.75" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACIAAEEACAgAAAgAAAAASAABAAAAAEAAAAAEAAABA=</HashCode>
+      <FileName>Models\Task.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.Student">
+    <Position X="2.75" Y="5.75" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAACIEQSBKACAMgAAAEIAg4AAAEAAiABAAAKAQUABEk=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CSAS.ViewModels.ExportViewModel">
+    <Position X="12" Y="8.25" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAARACAAAIECAIAAAAACIAACQAAAgAEAAA=</HashCode>
+      <FileName>ViewModels\ExportViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.ViewModels.BaseDataViewModel">
+    <Position X="3.25" Y="5" Width="4" />
+    <Members>
+      <Property Name="ActivitiesForExport" Hidden="true" />
+      <Property Name="AttendancesForExport" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AQoEHEKAAEAQAOAQIFACAIYgCAAGABAIAJCITKEYBEA=</HashCode>
+      <FileName>ViewModels\BaseDataViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SelectedActivity" />
+      <Property Name="SelectedAttendance" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Students" />
+      <Property Name="Groups" />
+      <Property Name="Activities" />
+      <Property Name="Attendances" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.Activity">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAgAAAICQQAgAAFAAFAEAAAAgACAAgQACAEoAAAQABA=</HashCode>
+      <FileName>Models\Activity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.Attendance">
+    <Position X="8.5" Y="6.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACgAACIAAAACAABAkAAgAAAAAAAgABAAAAAAUABEA=</HashCode>
+      <FileName>Models\Attendance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.Student">
+    <Position X="8.5" Y="10" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAACIEQSBKACAMgAAAEIAg4AAAEAAiABAAAKAQUABEk=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.SubGroup">
+    <Position X="8.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SubGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
+    <Position X="4.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
+      <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

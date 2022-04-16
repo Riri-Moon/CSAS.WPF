@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.Drawing;
+﻿using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using static CSAS.Enums.Enums;
 using CSAS.Enums;
-using CSAS.Helpers;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
 
 namespace CSAS.ViewModels
@@ -28,7 +23,6 @@ namespace CSAS.ViewModels
 			Groups = new ObservableCollection<SubGroup>(Work.SubGroup.GetAll().Where(g => g.MainGroup.Id == CurrentMainGroupId));
 			Refresh();
 			RefreshCommand = new DelegateCommand(Refresh);
-
 
 		}
 		private List<ISeries> _series = new();

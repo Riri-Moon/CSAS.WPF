@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CSAS.Repositories.UoWSingleton">
+    <Position X="17" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAAAA=</HashCode>
+      <FileName>Repositories\UoWSingleton.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Instance" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CSAS.Repositories.UnitOfWork">
+    <Position X="20" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAEACACAABAIAAAAIAAAAIAAAQBAggEAAAEAAAEA=</HashCode>
+      <FileName>Repositories\UnitOfWork.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Activity" />
+      <Property Name="ActivityTemplate" />
+      <Property Name="Attendance" />
+      <Property Name="FinalAssessment" />
+      <Property Name="Attachment" />
+      <Property Name="MainGroup" />
+      <Property Name="Students" />
+      <Property Name="Settings" />
+      <Property Name="SubGroup" />
+      <Property Name="TasksTemplate" />
+      <Property Name="Task" />
+      <Property Name="UserInfo" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="CSAS.Repositories.IActivityRepository" Collapsed="true">
+    <Position X="18.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IActivityRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.IActivityTemplateRepository" Collapsed="true">
+    <Position X="14.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IActivityTemplateRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.IAttendanceRepository" Collapsed="true">
+    <Position X="27.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Interfaces\IAttendanceRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Repositories.IFinalAssessmentRepository" Collapsed="true">
+    <Position X="16.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IFinalAssessmentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Repositories.IAttachmentRepository" Collapsed="true">
+    <Position X="23.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IAttachmentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.IMainGroupRepository" Collapsed="true">
+    <Position X="7.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IMainGroupRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.IStudentRepository" Collapsed="true">
+    <Position X="30" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IStudentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Repositories.ISettingsRepository" Collapsed="true">
+    <Position X="9.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ISettingsRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.ISubGroupRepository" Collapsed="true">
+    <Position X="32.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ISubGroupRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.ITaskTemplateRepository" Collapsed="true">
+    <Position X="12" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITaskTemplateRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.ITaskRepository" Collapsed="true">
+    <Position X="21" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITaskRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Repositories.IUserInfoRepository" Collapsed="true">
+    <Position X="25.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IUserInfoRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CSAS.Interfaces.IRepository&lt;TEntity&gt;">
+    <Position X="19.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAAABAAAAABAAAAAAIAAAAAgAAAIAEAAA=</HashCode>
+      <FileName>Interfaces\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

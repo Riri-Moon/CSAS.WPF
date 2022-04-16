@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CSAS.ViewModels.FinalAssessmentViewModel">
+    <Position X="15" Y="7" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAIAAAAAAAACgAAAAAAAAAAAAABACAAIAAEEEAA=</HashCode>
+      <FileName>ViewModels\FinalAssessmentViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SelectedStudent" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Students" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
+    <Position X="14.75" Y="1.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
+      <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CSAS.Models.Student">
+    <Position X="7.75" Y="3.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>CAACIEQSBKACAMgAAAEIAg4AAAEAAiABAAAKAQUABEk=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

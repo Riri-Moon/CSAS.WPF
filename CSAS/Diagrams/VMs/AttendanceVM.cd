@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CSAS.ViewModels.AttendanceViewModel">
+    <Position X="11.75" Y="7.75" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAhAQACAACAoAAgAAAJAAQAARABYAAkARAIAhIQJEUA=</HashCode>
+      <FileName>ViewModels\AttendanceViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Work" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Attendances" />
+      <Property Name="Lectures" />
+      <Property Name="Seminars" />
+      <Property Name="SubGroups" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
+    <Position X="11.5" Y="3" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
+      <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CSAS.Models.Attendance">
+    <Position X="8.75" Y="9.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACgAACIAAAACAABAkAAgAAAAAAAgABAAAAAAUABEA=</HashCode>
+      <FileName>Models\Attendance.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SubAttendances" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.SubAttendances">
+    <Position X="8.75" Y="6" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAEIAQAAAEAAAAAAACACAAAAAAAAAAAAABAAAAEA=</HashCode>
+      <FileName>Models\SubAttendances.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Models.SubGroup">
+    <Position X="20.5" Y="7.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SubGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Students" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.Models.Student">
+    <Position X="20.5" Y="9.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAACIEQSBKACAMgAAAEIAg4AAAEAAiABAAAKAQUABEk=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSAS.Repositories.UnitOfWork">
+    <Position X="16.75" Y="10.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAICAEACACAABAIAAAAIAAAAIAAAQBAggEAAAEAAAEA=</HashCode>
+      <FileName>Repositories\UnitOfWork.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

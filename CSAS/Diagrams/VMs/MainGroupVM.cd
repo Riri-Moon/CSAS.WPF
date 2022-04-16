@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CSAS.ViewModels.MainGroupViewModel">
+    <Position X="11.25" Y="7.25" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AoAYAAIABABAAAAAAIBgAAAAISgAAAACgAAAACABADQ=</HashCode>
+      <FileName>ViewModels\MainGroupViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SelectedMainGroup" />
+      <Property Name="UpdateManager" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="MainGroups" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
+    <Position X="11.5" Y="3" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
+      <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CSAS.Models.MainGroup">
+    <Position X="6.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAIAAAQAAACAAAgQAAAAAAAEABEA=</HashCode>
+      <FileName>Models\MainGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Squirrel.UpdateManager">
+    <Position X="17.25" Y="7.25" Width="2.5" />
+    <NestedTypes>
+      <Class Name="Squirrel.UpdateManager.Release" Collapsed="true">
+        <TypeIdentifier />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
