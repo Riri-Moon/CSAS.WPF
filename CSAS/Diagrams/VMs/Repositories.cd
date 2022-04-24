@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="CSAS.Repositories.ActivityRepository">
-    <Position X="24.75" Y="9.25" Width="1.5" />
+    <Position X="33.5" Y="9.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\ActivityRepository.cs</FileName>
@@ -9,7 +9,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.ActivityTemplateRepository">
-    <Position X="23.5" Y="6" Width="2.25" />
+    <Position X="31.75" Y="6.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\ActivityTemplateRepository.cs</FileName>
@@ -17,7 +17,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.AttachmentRepository">
-    <Position X="34.5" Y="9.25" Width="1.75" />
+    <Position X="48" Y="9" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\AttachmentRepository.cs</FileName>
@@ -25,7 +25,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.AttendanceRepository">
-    <Position X="36.5" Y="6" Width="1.75" />
+    <Position X="53.25" Y="6.25" Width="4" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAIAAAAAAAAAAAAAAAAABAAA=</HashCode>
       <FileName>Repositories\AttendanceRepository.cs</FileName>
@@ -33,7 +33,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.FinalAssessmentRepository">
-    <Position X="26.25" Y="6" Width="2.25" />
+    <Position X="35" Y="6.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\FinalAssessmentRepository.cs</FileName>
@@ -41,7 +41,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.MainGroupRepository">
-    <Position X="29.25" Y="6" Width="1.75" />
+    <Position X="40.5" Y="8.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\MainGroupRepository.cs</FileName>
@@ -49,7 +49,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.Repository&lt;TEntity&gt;">
-    <Position X="30.5" Y="2.25" Width="1.75" />
+    <Position X="42.25" Y="2.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAYAAAAAAgAAAABAAAAABAAAAAAIAAAAAgAAAIAEAAA=</HashCode>
       <FileName>Repositories\Repository.cs</FileName>
@@ -57,7 +57,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.SettingsRepository">
-    <Position X="34.25" Y="6" Width="1.75" />
+    <Position X="49.5" Y="6" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\SettingsRepository.cs</FileName>
@@ -65,7 +65,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.StudentRepository">
-    <Position X="31.75" Y="6" Width="1.75" />
+    <Position X="45.25" Y="6" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIAAAQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\StudentRepository.cs</FileName>
@@ -73,7 +73,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.SubGroupRepository">
-    <Position X="26.75" Y="9.25" Width="1.75" />
+    <Position X="36" Y="8.75" Width="3.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\SubGroupRepository.cs</FileName>
@@ -81,7 +81,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.TaskRepository">
-    <Position X="37" Y="9.25" Width="1.5" />
+    <Position X="51.25" Y="9" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\TaskRepository.cs</FileName>
@@ -89,7 +89,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.TaskTemplateRepository">
-    <Position X="31.75" Y="9.25" Width="2" />
+    <Position X="42.25" Y="6" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\TaskTemplateRepository.cs</FileName>
@@ -97,7 +97,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.Repositories.UserInfoRepository">
-    <Position X="29.25" Y="9.25" Width="1.75" />
+    <Position X="39" Y="6" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\UserInfoRepository.cs</FileName>

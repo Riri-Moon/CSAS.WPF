@@ -3,29 +3,26 @@
 	public class SelectedActivityViewModel : BaseViewModelBindableBase
 	{
 		public Action CloseAction { get; set; }
+		
+		//Command definitions
 		public DelegateCommand SaveChangesCommand { get; }
 		public DelegateCommand MoveNextCommand { get; }
 		public DelegateCommand MovePrevCommand { get; }
+		
 		public new UnitOfWork Work { get; set; }
 
 		private ObservableCollection<Task> _tasks;
 		public ObservableCollection<Task> Tasks
 		{
 			get { return _tasks; }
-			set
-			{
-				SetProperty(ref _tasks, value);
-			}
+			set => SetProperty(ref _tasks, value);
 		}
 
 		private Activity _activity;
 		public Activity Activity
 		{
 			get { return _activity; }
-			set
-			{
-				SetProperty(ref _activity, value);
-			}
+			set => SetProperty(ref _activity, value);
 		}
 
 		public SelectedActivityViewModel(string currentGroupId, string activityId)
@@ -34,6 +31,8 @@
 			Activity = new Activity();
 			Work = UoWSingleton.Instance;
 			Activity = Work.Activity.Get(activityId);
+		
+			//Command initialization
 			MoveNextCommand = new DelegateCommand(MoveNext);
 			MovePrevCommand = new DelegateCommand(MovePrevious);
 			SaveChangesCommand = new DelegateCommand(SaveChanges);

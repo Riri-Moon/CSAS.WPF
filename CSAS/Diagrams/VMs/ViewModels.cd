@@ -51,7 +51,18 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.ViewModels.HomeViewModel">
-    <Position X="20.5" Y="9" Width="4" />
+    <Position X="21.25" Y="8.25" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="CSAS.ViewModels.BaseViewModelBindableBase" FixedToPoint="true">
+      <Path>
+        <Point X="16.375" Y="1.062" />
+        <Point X="16.375" Y="1.719" />
+        <Point X="22.812" Y="1.719" />
+        <Point X="22.812" Y="8.25" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>gEIkAAIESCAUBAASWAAQYQAQIIQCABAQIpEIQKECgMA=</HashCode>
       <FileName>ViewModels\HomeViewModel.cs</FileName>

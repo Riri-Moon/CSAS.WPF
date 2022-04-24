@@ -158,14 +158,8 @@ namespace CSAS.ViewModels
 				string? body = $"Dobrý deň, <br/><br/> práve Vám bola pridelená nová úloha s názvom {Activity.Name}. <br/> Dátum odovzdania je { Activity.Deadline.ToShortDateString() } {Activity.Deadline.ToShortTimeString()}." +
 					$"<br/><br/> V prípade akýchkoľvek otázok ma neváhajte kontaktovať";
 
-				foreach (var student in GetStudents())
+				foreach (var student in GetStudents().Where(x => x != null))
 				{
-
-					if (student == null)
-					{
-						continue;
-					}
-
 					Activity act = new();
 					act = Activity.Clone();
 					act.Student = student;

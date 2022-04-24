@@ -15,7 +15,7 @@
 		public IActivityRepository Activity { get; private set; }
 		public IAttachmentRepository Attachment { get; private set; }
 		public ISettingsRepository Settings { get; private set; }
-		 public IUserInfoRepository UserInfo { get; private set; }
+		public IUserInfoRepository UserInfo { get; private set; }
 		public UnitOfWork(AppDbContext context)
 		{
 			_context = context;
@@ -47,8 +47,6 @@
 
 		public void Complete()
 		{
-			//_context.SaveChanges();
-			
 			using (var dbContextTransaction = _context.Database.BeginTransaction())
 			{
 				try
@@ -56,14 +54,12 @@
 					var result = _context.SaveChanges();
 
 					dbContextTransaction.Commit();
-					//return result;
 				}
 				catch (Exception ex)
 				{
 					dbContextTransaction.Rollback();
 					_logger.ErrorAsync(ex.Message);
-					throw ex;
-					
+					throw;
 				}
 			}
 		}

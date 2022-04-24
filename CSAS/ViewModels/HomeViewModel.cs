@@ -3,6 +3,7 @@ using CSAS.Models;
 using CSAS.Validators;
 using CSAS.Views;
 using System.Net.Mail;
+using System.Linq;
 
 namespace CSAS.ViewModels
 {
@@ -201,12 +202,9 @@ namespace CSAS.ViewModels
 			{
 				Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(grp).ToList());
 				var finalAssessments = Work.FinalAssessment.GetAll().Where(x => x.Student.MainGroup == grp);
-				foreach (var student in Students)
+				foreach (var student in Students.Where(student => student.FinalAssessment == null))
 				{
-					if (student.FinalAssessment == null)
-					{
-						student.FinalAssessment = finalAssessments.FirstOrDefault(x => x.Student == student);
-					}
+					student.FinalAssessment = finalAssessments.FirstOrDefault(x => x.Student == student);
 				}
 			}
 		}
@@ -217,12 +215,9 @@ namespace CSAS.ViewModels
 
 			Students = new ObservableCollection<Student>(Work.Students.GetStudentsByGroup(grp).ToList());
 			var finalAssessments = Work.FinalAssessment.GetAll().Where(x => x.Student.MainGroup == grp);
-			foreach (var student in Students)
+			foreach (var student in Students.Where(student => student.FinalAssessment == null))
 			{
-				if (student.FinalAssessment == null)
-				{
-					student.FinalAssessment = finalAssessments.FirstOrDefault(x => x.Student == student);
-				}
+				student.FinalAssessment = finalAssessments.FirstOrDefault(x => x.Student == student);
 			}
 
 			IsActivityClosed = false;

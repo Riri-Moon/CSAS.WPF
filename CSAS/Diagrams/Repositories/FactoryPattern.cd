@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="CSAS.Services.ExportExcelService">
+    <Position X="5" Y="3" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>BgIAAEAiQJAAAAAAAAIAAAAAIAACAAAAgQAAAgACGAA=</HashCode>
+      <FileName>Services\ExportExcelService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CSAS.Services.ExportPDFService">
+    <Position X="10.5" Y="3" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>BgIACEBiQJAAAAAAAAIAAAAAAAACAAACgQAAAgAAGAA=</HashCode>
+      <FileName>Services\ExportPDFService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

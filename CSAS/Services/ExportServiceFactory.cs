@@ -4,14 +4,7 @@
 	{
 		public static IExportService GetExportService(bool isExcel)
 		{
-			if (isExcel)
-			{
-				return new ExportExcelService();
-			}
-			else
-			{
-				return new ExportPDFService();
-			}
+			return isExcel ? new ExportExcelService() : new ExportPDFService();
 		}
 	}
 }

@@ -6,49 +6,24 @@ namespace CSAS.Repositories
 	{
 		protected readonly AppDbContext Context;
 
-		public Repository(AppDbContext context)
-		{
-			Context = context;
-		}
+		public Repository(AppDbContext context) => Context = context;
 
-		public void Add(TEntity entity)
-		{
-			Context.Set<TEntity>().Add(entity);
-		}
+		public void Add(TEntity entity) => Context.Set<TEntity>().Add(entity);
 
-		public void AddRange(IEnumerable<TEntity> entities)
-		{
-			Context.Set<TEntity>().AddRange(entities);
-		}
+		public void AddRange(IEnumerable<TEntity> entities) => Context.Set<TEntity>().AddRange(entities);
 
-		public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
-		{
-			return Context.Set<TEntity>().Where(predicate).ToList();
-		}
+		public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) => Context.Set<TEntity>().Where(predicate).ToList();
 
-		public IEnumerable<TEntity> GetAll()
-		{
-			return Context.Set<TEntity>().ToList();
-		}
+		public IEnumerable<TEntity> GetAll() => Context.Set<TEntity>().ToList();
 
-		public TEntity Get(string id)
-		{
-			return Context.Set<TEntity>().Find(id);
-		}
+		public TEntity Get(string id) => string.IsNullOrEmpty(id)
+				? throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id))
+				: Context.Set<TEntity>().Find(id);
 
-		public void Remove(TEntity entity)
-		{
-			Context.Set<TEntity>().Remove(entity);
-		}
+		public void Remove(TEntity entity) => Context.Set<TEntity>().Remove(entity);
 
-		public void RemoveRange(IEnumerable<TEntity> entities)
-		{
-			Context.Set<TEntity>().RemoveRange(entities);
-		}
+		public void RemoveRange(IEnumerable<TEntity> entities) => Context.Set<TEntity>().RemoveRange(entities);
 
-		public void Update(TEntity entity)
-		{
-			Context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-		}
+		public void Update(TEntity entity) => Context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 	}
 }
