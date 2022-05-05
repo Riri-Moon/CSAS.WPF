@@ -10,13 +10,13 @@
       <FileName>ViewModels\HomeViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="SelectedStudent" />
-      <Property Name="NewStudent" />
       <Property Name="SelectedGroup" />
+      <Property Name="NewStudent" />
+      <Property Name="SelectedStudent" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="SubGroups" />
       <Property Name="Students" />
+      <Property Name="SubGroups" />
       <Property Name="Activities" />
     </ShowAsCollectionAssociation>
   </Class>
@@ -49,7 +49,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.Models.Activity">
-    <Position X="13" Y="10.5" Width="2.75" />
+    <Position X="12.75" Y="10.75" Width="2.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>

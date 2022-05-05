@@ -16,7 +16,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>CQoCAGIAxEBAACEQhAGAAIAIJRAAQBABAKAAAkAQIAQ=</HashCode>
+      <HashCode>CQICAGIAxEBAACEQhAGAAIAIJRAAQBABAKAAAkAQIAQ=</HashCode>
       <FileName>ViewModels\ActivityViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -36,7 +36,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAhAQACAACAoAAgAAAJAAQAARABYAAkARAIAhIQJEUA=</HashCode>
+      <HashCode>AABAQACAACAoAAgAAAJAAQAARABYAAkARAIAhIQJEUA=</HashCode>
       <FileName>ViewModels\AttendanceViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -81,7 +81,7 @@
   <Class Name="CSAS.ViewModels.SettingsViewModel">
     <Position X="23.25" Y="1.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>AAiAAQAAAAAAAAAggAAIAAAAAAAAAAEAgAAAAAAEEAA=</HashCode>
+      <HashCode>AACAAQAAAAAAAAAggAAIAAAAAAAAAAEAgAAAAAAEEAA=</HashCode>
       <FileName>ViewModels\SettingsViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>

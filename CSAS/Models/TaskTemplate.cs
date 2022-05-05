@@ -34,6 +34,14 @@ namespace CSAS.Models
 				SetProperty(ref _maxPoints, value);
 			}
 		}
+		public virtual DateTime? CreateDate
+		{
+			get { return _createDate; }
+			set
+			{
+				SetProperty(ref _createDate, value);
+			}
+		}
 
 		[NotMapped]
 		public bool IsSelected
@@ -49,6 +57,7 @@ namespace CSAS.Models
 			return MemberwiseClone() as TaskTemplate;
 		}
 
+		private DateTime? _createDate;
 		private string _name;
 		private int? _maxPoints;
 		private ActivityTemplate? _activityTemplate;

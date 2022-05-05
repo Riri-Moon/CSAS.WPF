@@ -69,6 +69,16 @@ namespace CSAS.Models
 				SetProperty(ref _comment, value);
 			}
 		}
+		public virtual DateTime? CreateDate
+		{
+			get { return _createDate; }
+			set
+			{
+				SetProperty(ref _createDate, value);
+			}
+		}
+
+		private DateTime? _createDate;
 		private string _name;
 		private double? _maxPoints;
 		private Activity? _activity;

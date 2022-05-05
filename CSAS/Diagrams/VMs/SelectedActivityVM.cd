@@ -2,18 +2,18 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="CSAS.ViewModels.SelectedActivityViewModel">
     <Position X="11" Y="6" Width="3.25" />
+    <InheritanceLine Type="CSAS.ViewModels.BaseViewModelBindableBase" FixedToPoint="true">
+      <Path>
+        <Point X="12.5" Y="4.612" />
+        <Point X="12.5" Y="6" />
+      </Path>
+    </InheritanceLine>
     <AssociationLine Name="Tasks" Type="CSAS.Models.Task" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="12.75" Y="10.252" />
-        <Point X="12.75" Y="11.875" />
-        <Point X="11.25" Y="11.875" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="SelectedItem" Type="CSAS.Models.Task" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="13.531" Y="10.252" />
-        <Point X="13.531" Y="13.75" />
-        <Point X="11.25" Y="13.75" />
+        <Point X="14.25" Y="9.188" />
+        <Point X="14.625" Y="9.188" />
+        <Point X="14.625" Y="12.549" />
+        <Point X="11" Y="12.549" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -29,7 +29,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
-    <Position X="10.5" Y="1.75" Width="3.5" />
+    <Position X="10.75" Y="1" Width="3.5" />
     <TypeIdentifier>
       <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
       <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
@@ -53,7 +53,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="CSAS.Models.Task">
-    <Position X="9.5" Y="11.75" Width="1.75" />
+    <Position X="9.25" Y="11" Width="1.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>

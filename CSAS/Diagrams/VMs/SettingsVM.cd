@@ -6,16 +6,15 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAiAAQAAAAAAAAAggAAIAAAAAAAAAAEAgAAAAAAEEAA=</HashCode>
+      <HashCode>AACAAQAAAAAAAAAggAAIAAAAAAAAAAEAgAAAAAAEEAA=</HashCode>
       <FileName>ViewModels\SettingsViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Work" />
       <Property Name="Settings" />
     </ShowAsAssociation>
   </Class>
   <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
-    <Position X="6" Y="2" Width="3.5" />
+    <Position X="1" Y="5.75" Width="3.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -25,16 +24,8 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="CSAS.Repositories.UnitOfWork">
-    <Position X="10.25" Y="4.75" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>AAICAEACACAABAIAAAAIAAAAIAAAQBAggEAAAEAAAEA=</HashCode>
-      <FileName>Repositories\UnitOfWork.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="CSAS.Models.Settings">
-    <Position X="2.75" Y="3.75" Width="2" />
+    <Position X="12" Y="6.25" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>

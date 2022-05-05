@@ -12,7 +12,7 @@ namespace CSAS.Models
 		}
 		public virtual IList<TaskTemplate> TasksTemplate
 		{
-			get => _tasksTemplate;
+			get => _tasksTemplate.OrderBy(x=>x.CreateDate).ToList();
 			set => SetProperty(ref _tasksTemplate, value);
 		}
 

@@ -63,8 +63,6 @@ namespace CSAS.ViewModels
 			get => _isAttendanceSelected; set => SetProperty(ref _isAttendanceSelected, value);
 		}
 
-		private new UnitOfWork Work { get; set; }
-
 		private DateTime _time = DateTime.Now;
 
 		public DateTime Time

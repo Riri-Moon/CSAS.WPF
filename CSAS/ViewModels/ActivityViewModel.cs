@@ -35,8 +35,6 @@ namespace CSAS.ViewModels
 			set => SetProperty(ref _isSelectIndividual, value);
 		}
 
-		private new UnitOfWork Work { get; set; }
-
 		private SubGroup _selectedGroup;
 		public SubGroup SelectedGroup
 		{
@@ -76,7 +74,6 @@ namespace CSAS.ViewModels
 		{
 			get => _activity;
 			set => SetProperty(ref _activity, value);
-
 		}
 
 		private ActivityTemplate _activityTemplate;
@@ -84,7 +81,6 @@ namespace CSAS.ViewModels
 		{
 			get => _activityTemplate;
 			set => SetProperty(ref _activityTemplate, value);
-
 		}
 
 		private DateTime _date;
@@ -226,11 +222,12 @@ namespace CSAS.ViewModels
 
 			foreach (var tskTemp in activityTemplate.TasksTemplate)
 			{
-				var task = new Models.Task
+				var task = new Task
 				{
 					Activity = act,
 					Name = tskTemp.Name,
-					MaxPoints = tskTemp.MaxPoints
+					MaxPoints = tskTemp.MaxPoints,
+					CreateDate = DateTime.Now
 				};
 				tasks.Add(task);
 			}

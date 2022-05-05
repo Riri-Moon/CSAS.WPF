@@ -19,7 +19,6 @@ namespace CSAS.ViewModels
 			set => SetProperty(ref _settings, value);
 		}
 
-		public new UnitOfWork Work { get; set; }
 		public SettingsViewModel(string currGroupId)
 		{
 			Work = UoWSingleton.Instance;

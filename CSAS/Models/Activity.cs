@@ -25,7 +25,7 @@ namespace CSAS.Models
 		}
 		public virtual IList<Task> Tasks
 		{
-			get => _tasks;
+			get => _tasks.OrderBy(x=>x.CreateDate).ToList();
 			set => SetProperty(ref _tasks, value);
 		}
 		public virtual DateTime Deadline

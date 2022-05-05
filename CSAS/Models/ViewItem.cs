@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace CSAS.Models
 {
-	public class ViewItem : ViewModels.BaseViewModelBindableBase
+	public class ViewItem : BaseModelBindableBase
 	{
 		private readonly Type _contentType;
 		private readonly object? _dataContext;

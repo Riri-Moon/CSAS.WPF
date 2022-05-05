@@ -11,7 +11,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.ViewModels.BaseDataViewModel">
-    <Position X="3.25" Y="5" Width="4" />
+    <Position X="3.25" Y="5.75" Width="4" />
     <Members>
       <Property Name="ActivitiesForExport" Hidden="true" />
       <Property Name="AttendancesForExport" Hidden="true" />
@@ -19,6 +19,13 @@
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
+    <AssociationLine Name="Activities" Type="CSAS.Models.Activity" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.75" Y="10.771" />
+        <Point X="3.75" Y="12.188" />
+        <Point X="4.25" Y="12.188" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AQoEHEKAAEAQAOAQIFACAIYgCAAGABAIAJCITKEYBEA=</HashCode>
       <FileName>ViewModels\BaseDataViewModel.cs</FileName>
@@ -28,14 +35,14 @@
       <Property Name="SelectedAttendance" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Students" />
-      <Property Name="Groups" />
       <Property Name="Activities" />
       <Property Name="Attendances" />
+      <Property Name="Groups" />
+      <Property Name="Students" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="CSAS.Models.Activity">
-    <Position X="0.5" Y="5.75" Width="1.5" />
+    <Position X="4.25" Y="11.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -45,7 +52,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.Models.Attendance">
-    <Position X="8.5" Y="6.25" Width="1.5" />
+    <Position X="11" Y="4.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -55,7 +62,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.Models.Student">
-    <Position X="8.5" Y="10" Width="1.5" />
+    <Position X="10" Y="10" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>

@@ -8,11 +8,10 @@
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="NewTemplate" />
-      <Property Name="Work" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Tasks" />
       <Property Name="Templates" />
+      <Property Name="Tasks" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
@@ -39,14 +38,6 @@
       <HashCode>AAAAAAAAAAiAAAAAAIAAAICAACAAAgQkAAAAAAAEABA=</HashCode>
       <FileName>Models\ActivityTemplate.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="CSAS.Repositories.UnitOfWork">
-    <Position X="2" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAICAEACACAABAIAAAAIAAAAIAAAQBAggEAAAEAAAEA=</HashCode>
-      <FileName>Repositories\UnitOfWork.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

@@ -20,14 +20,14 @@
     <Grid>
         <md:DialogHost CloseOnClickAway="True">
             <md:DialogHost.DialogContent>
-                <ListView ItemsSource="{Binding SelectedStudent.ListOfActivities,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="750" Height="600">
+                <ListView ItemsSource="{Binding SelectedStudent.ListOfActivities,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="950" Height="600">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="400"/>
-                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="550"/>
+                                        <ColumnDefinition Width= "150"/>
                                         <ColumnDefinition Width="200"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>

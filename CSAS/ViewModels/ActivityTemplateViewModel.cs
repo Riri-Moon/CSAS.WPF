@@ -1,11 +1,5 @@
 ﻿namespace CSAS.ViewModels
 {
-	//[ArtifactsPath(@"C:\Users\ZZ03XZ693\source\repos\MauiApp1")]
-	//[MemoryDiagnoser]
-	//[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.Method)]
-	//[RankColumn]  
-	//[SimpleJob(RunStrategy.Monitoring)]
-	//[SkewnessColumn, KurtosisColumn]
 	public class ActivityTemplateViewModel : BaseViewModelBindableBase
 	{
 		public DelegateCommand AddTaskCommand { get; }
@@ -14,8 +8,6 @@
 		public DelegateCommand<string?> DeleteTemplateCommand { get; }
 		public DelegateCommand<string?> EditTemplateCommand { get; }
 		public DelegateCommand<string?> CopyTemplateCommand { get; }
-
-		private new UnitOfWork Work { get; set; }
 
 		private ObservableCollection<ActivityTemplate> _templates;
 		public ObservableCollection<ActivityTemplate> Templates
@@ -31,10 +23,11 @@
 			set => SetProperty(ref _newTemplate, value);
 		}
 
-		private ObservableCollection<TaskTemplate> _tasks;
+		private ObservableCollection<TaskTemplate> _tasks;//= new ObservableCollection<TaskTemplate>(_tasks.OrderByDescending(x=>x.CreateDate).ToList());
 		public ObservableCollection<TaskTemplate> Tasks
 		{
 			get => _tasks;
+			//get => new ObservableCollection<TaskTemplate>(_tasks.OrderByDescending(x=>x.CreateDate).ToList());
 			set => SetProperty(ref _tasks, value);
 		}
 
@@ -76,24 +69,18 @@
 			NewTemplate = new ActivityTemplate();
 			Tasks = new ObservableCollection<TaskTemplate>();
 		}
-		// Use for Benchmarking of the functions
-		//public void RunTask()
-		//{
-		//    var result = BenchmarkRunner.Run<ActivityTemplateViewModel>();
-		//}
 
-		//[Benchmark]
 		public void AddNewTaskTemplate()
 		{
 			Tasks.Add(
 				new TaskTemplate()
 				{
 					ActivityTemplate = NewTemplate,
+					CreateDate = DateTime.Now
 				});
 
 			IsSelectAllVisible = true;
 		}
-		//[Benchmark]
 		public void RemoveSelectedTasks()
 		{
 			foreach (var task in Tasks.Where(x => x.IsSelected).ToList())
@@ -138,23 +125,24 @@
 		{
 			NewTemplate = Work.ActivityTemplate.Get(id).Clone();
 			Tasks = new ObservableCollection<TaskTemplate>();
-
+			NewTemplate.IsUpdate = false;
 			var tasks = Work.TasksTemplate.GetAll().Where(x => x.ActivityTemplate.Id == id);
 			foreach (var task in tasks)
 			{
 				var taskClone = task.Clone();
-				taskClone.Id = new Guid().ToString();
+				taskClone.Id = Guid.NewGuid().ToString();
 				Tasks.Add(taskClone);
 			}
 
-			NewTemplate.Id = new Guid().ToString();
+			Tasks = new ObservableCollection<TaskTemplate>(Tasks.OrderBy(x => x.CreateDate));
+			NewTemplate.Id = Guid.NewGuid().ToString();
 		}
 
 		private void EditTemplate(string? id)
 		{
 			NewTemplate = Work.ActivityTemplate.Get(id);
 			NewTemplate.IsUpdate = true;
-			Tasks = new ObservableCollection<TaskTemplate>(NewTemplate.TasksTemplate);
+			Tasks = new ObservableCollection<TaskTemplate>(NewTemplate.TasksTemplate.OrderBy(x=>x.CreateDate));
 		}
 
 		private void RemoveTemplate(string? id)
@@ -165,6 +153,7 @@
 			Work.Complete();
 
 			RefreshTemplateList();
+			NewTemplate = new ActivityTemplate();
 		}
 
 		private int GetMaxPoints()

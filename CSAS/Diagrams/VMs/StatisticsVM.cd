@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="CSAS.ViewModels.BaseDataViewModel">
-    <Position X="3.25" Y="5" Width="4" />
+    <Position X="4.75" Y="5" Width="4" />
     <Members>
       <Property Name="ActivitiesForExport" Hidden="true" />
       <Property Name="AttendancesForExport" Hidden="true" />
@@ -9,6 +9,13 @@
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
+    <AssociationLine Name="Students" Type="CSAS.Models.Student" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.625" Y="10.021" />
+        <Point X="6.625" Y="10.812" />
+        <Point X="8.5" Y="10.812" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AQoEHEKAAEAQAOAQIFACAIYgCAAGABAIAJCITKEYBEA=</HashCode>
       <FileName>ViewModels\BaseDataViewModel.cs</FileName>
@@ -35,7 +42,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.Models.Attendance">
-    <Position X="8.5" Y="6.25" Width="1.5" />
+    <Position X="12.75" Y="9.25" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -45,7 +52,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.Models.Student">
-    <Position X="8.5" Y="10" Width="1.5" />
+    <Position X="8.5" Y="10.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -55,14 +62,17 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.Models.SubGroup">
-    <Position X="8.5" Y="3.75" Width="1.5" />
+    <Position X="15.25" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\SubGroup.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
-    <Position X="4.5" Y="0.75" Width="1.5" />
+    <Position X="6" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>IIgAAAAAAACAAAAAIAAAAAAAggEAAAAAAAAACAAAAAI=</HashCode>
       <FileName>ViewModels\BaseViewModelBindableBase.cs</FileName>
@@ -70,7 +80,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CSAS.ViewModels.StatisticsViewModel">
-    <Position X="14" Y="4" Width="3" />
+    <Position X="12.75" Y="2.25" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>

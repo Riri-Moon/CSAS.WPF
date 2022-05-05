@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="AssessmentDatabase.mdf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +38,9 @@
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AssessmentDatabase.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="logo_Ges_icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -107,6 +111,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="AssessmentDatabase_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="DataAccessLayer.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DataAccessLayer.Context.cs</LastGenOutput>
@@ -148,7 +155,7 @@
 		<NugetTools>$(PkgNuGet_CommandLine)\tools</NugetTools>
 		<SquirrelTools>$(Pkgsquirrel_windows)\tools</SquirrelTools>
 
-		<Version>1.1.9</Version>
+		<Version>1.2.0</Version>
 
 		<NuspecFile>$(SolutionDir)CSAS\CSAS.nuspec</NuspecFile>
 	</PropertyGroup>

@@ -1,30 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="CSAS.ViewModels.ActivityViewModel">
-    <Position X="5" Y="4.25" Width="2.25" />
+    <Position X="7.25" Y="1.75" Width="4" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
+    <AssociationLine Name="Students" Type="CSAS.Models.Student" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.734" Y="6.963" />
+        <Point X="8.734" Y="8.125" />
+        <Point X="6.125" Y="8.125" />
+        <Point X="6.125" Y="8.5" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>CQoCAGIAxEBAACEQhAGAAIAIJRAAQBABAKAAAkAQIAQ=</HashCode>
+      <HashCode>CQICAGIAxEBAACEQhAGAAIAIJRAAQBABAKAAAkAQIAQ=</HashCode>
       <FileName>ViewModels\ActivityViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Activity" />
       <Property Name="ActivityTemplate" />
       <Property Name="SelectedGroup" />
+      <Property Name="Activity" />
       <Property Name="Student" />
-      <Property Name="Work" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Attachments" />
       <Property Name="Groups" />
-      <Property Name="Templates" />
       <Property Name="Students" />
+      <Property Name="Attachments" />
+      <Property Name="Templates" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="CSAS.ViewModels.BaseViewModelBindableBase">
-    <Position X="5.25" Y="0.5" Width="1.5" />
+    <Position X="2.25" Y="0.5" Width="3.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -34,24 +41,8 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="CSAS.Models.Activity">
-    <Position X="10.75" Y="5" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AAgAAAICQQAgAAFAAFAEAAAAgACAAgQACAEoAAAQABA=</HashCode>
-      <FileName>Models\Activity.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Student" />
-    </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Property Name="Attachments" />
-    </ShowAsCollectionAssociation>
-  </Class>
   <Class Name="CSAS.Models.ActivityTemplate">
-    <Position X="2.25" Y="2.5" Width="1.5" />
+    <Position X="14.75" Y="1.5" Width="2.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -60,25 +51,25 @@
       <FileName>Models\ActivityTemplate.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CSAS.Models.Attachments">
-    <Position X="11" Y="2" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAEAAAAA=</HashCode>
-      <FileName>Models\Attachments.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="CSAS.Models.SubGroup">
-    <Position X="2.25" Y="6" Width="1.5" />
+    <Position X="1.5" Y="4.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAIAAAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\SubGroup.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="CSAS.Models.Activity">
+    <Position X="14.5" Y="5.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAgAAAICQQAgAAFAAFAEAAAAgACAAgQACAEoAAAQABA=</HashCode>
+      <FileName>Models\Activity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="CSAS.Models.Student">
-    <Position X="8.25" Y="4.25" Width="1.5" />
+    <Position X="4.5" Y="8.5" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -87,13 +78,15 @@
       <FileName>Models\Student.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CSAS.Repositories.UnitOfWork">
-    <Position X="2.25" Y="8.5" Width="1.5" />
+  <Class Name="CSAS.Models.Attachments">
+    <Position X="17.75" Y="4.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAICAEACACAABAIAAAAIAAAAIAAAQBAggEAAAEAAAEA=</HashCode>
-      <FileName>Repositories\UnitOfWork.cs</FileName>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\Attachments.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

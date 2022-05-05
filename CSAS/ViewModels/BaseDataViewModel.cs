@@ -71,7 +71,6 @@
 			get => _groups;
 			set => SetProperty(ref _groups, value);
 		}
-		protected new UnitOfWork Work { get; set; }
 
 		private ObservableCollection<Student> _students;
 		public ObservableCollection<Student> Students

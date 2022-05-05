@@ -9,12 +9,10 @@
 		public DelegateCommand MoveNextCommand { get; }
 		public DelegateCommand MovePrevCommand { get; }
 		
-		public new UnitOfWork Work { get; set; }
-
 		private ObservableCollection<Task> _tasks;
 		public ObservableCollection<Task> Tasks
 		{
-			get { return _tasks; }
+			get => new ObservableCollection<Task>(_tasks.OrderByDescending(x => x.Name));
 			set => SetProperty(ref _tasks, value);
 		}
 

@@ -27,6 +27,19 @@
       <HashCode>CAACIEQSBKACAMgAAAEIAg4AAAEAAiABAAAKAQUABEk=</HashCode>
       <FileName>Models\Student.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FinalAssessment" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CSAS.Models.FinalAssessment">
+    <Position X="3.25" Y="3.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAgAAIEcAAgAADAgAAAAAABAAAAAgQAAEAAAAEAACA=</HashCode>
+      <FileName>Models\FinalAssessment.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
